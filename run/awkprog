@@ -1,0 +1,3 @@
+/photon with author/ {print $0}
+/Number of silicon hits/ {print $0}
+/start processing event/ {print $0}
