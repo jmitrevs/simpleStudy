@@ -1,16 +1,13 @@
-package InsituAnalysis
+package simpleStudy
 
-author Matthias Schott <mschott@cern.ch>
+author Jovan Mitrevski <Jovan.Mitrevski@cern.ch>
 
 public
 use  AtlasPolicy                AtlasPolicy-*
 use  GaudiInterface             GaudiInterface-*                External
 use  AtlasGSL                   AtlasGSL-*                      External
-use  AtlasCLHEP                 AtlasCLHEP-*                    External
-use  InsituEvent                InsituEvent-*                   PhysicsAnalysis/AnalysisCommon/InsituPerformance
 use  Particle                   Particle-*                      Reconstruction
 use  ParticleTruth		ParticleTruth-*			Reconstruction
-use  ParticleEvent              ParticleEvent-*                 PhysicsAnalysis/AnalysisCommon
 use  StoreGate                  StoreGate-*                     Control
 use  MCTruthClassifier		MCTruthClassifier-*             PhysicsAnalysis
 use  AthenaBaseComps            AthenaBaseComps-*               Control
@@ -31,12 +28,10 @@ use TrkTrackLink		TrkTrackLink-*			Tracking/TrkEvent
 use TrkParticleBase		TrkParticleBase-*		Tracking/TrkEvent
 use VxVertex			VxVertex-*			Tracking/TrkEvent
 use TrkNeutralParameters	TrkNeutralParameters-*		Tracking/TrkEvent
-use TrkEventPrimitives		TrkEventPrimitives-*		Tracking/TrkEvent
 use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
 use TrkTrack			TrkTrack-*			Tracking/TrkEvent
 use InDetSecVxFinderTool	InDetSecVxFinderTool-*		InnerDetector/InDetRecTools
 
-use FourMom                    FourMom-*               Event
 use FourMomUtils               FourMomUtils-*          Event
 
 use PhotonAnalysisUtils        PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
@@ -44,7 +39,7 @@ use PhotonAnalysisUtils        PhotonAnalysisUtils-*           PhysicsAnalysis/S
 public
 
 
-library InsituAnalysis *.cxx components/*.cxx
+library simpleStudy *.cxx components/*.cxx
 apply_pattern component_library
 apply_pattern declare_joboptions files="*.py"
 

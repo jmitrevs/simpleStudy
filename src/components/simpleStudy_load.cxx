@@ -1,5 +1,3 @@
-
 #include "GaudiKernel/LoadFactoryEntries.h"
-
-LOAD_FACTORY_ENTRIES( InsituAnalysis )
+LOAD_FACTORY_ENTRIES( simpleStudy )
 
