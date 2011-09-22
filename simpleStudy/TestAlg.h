@@ -6,8 +6,8 @@
 */
 
 
-#ifndef INSITUANALYSIS_TESTALG_H
-#define INSITUANALYSIS_TESTALG_H
+#ifndef SIMPLESTUDY_TESTALG_H
+#define SIMPLESTUDY_TESTALG_H
 
 /// Gaudi Tools
 #include "GaudiKernel/ToolHandle.h"

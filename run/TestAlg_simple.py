@@ -17,7 +17,7 @@ topSequence = AlgSequence()
 # ToolSvc += mycaloisolationtool
 
 # Add top algorithms to be run
-from InsituAnalysis.InsituAnalysisConf import TestAlg
+from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
                   ElectronContainerName = "ElectronAODCollection",
                   PhotonContainerName = "PhotonAODCollection",
@@ -31,13 +31,6 @@ testAlg.OutputLevel = DEBUG
 topSequence += testAlg
 
 #--------------------------------------------------------------
-# Add Dictionary for writing out in PoolDPDs
-#--------------------------------------------------------------
-#AthenaSealSvc = Service( "AthenaSealSvc" )
-#include( "AthenaSealSvc/AthenaSealSvc_joboptions.py" )
-#include ( "InsituEvent/InsituEventDict_joboptions.py" )
-
-#--------------------------------------------------------------
 # Event related parameters
 #--------------------------------------------------------------
 
@@ -46,7 +39,7 @@ ServiceMgr.MessageSvc.OutputLevel = WARNING
 import MCTruthClassifier.MCTruthClassifierBase
 print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
 
-from InsituAnalysis.InsituAnalysisConf import TruthUtils
+from simpleStudy.simpleStudyConf import TruthUtils
 TruthUtils = TruthUtils(name                    = "TruthUtils",
                         MCTruthClassifierTool   = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.getFullName(),
                         TruthConeMatch          = .2,

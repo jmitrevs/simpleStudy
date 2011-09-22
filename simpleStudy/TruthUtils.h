@@ -1,5 +1,5 @@
-#ifndef   TRUTHUTILS_H
-#define   TRUTHUTILS_H
+#ifndef   SIMPLESTUDY_TRUTHUTILS_H
+#define   SIMPLESTUDY_TRUTHUTILS_H
 
 #include "AthenaBaseComps/AthAlgTool.h"
 #include "GaudiKernel/ToolHandle.h"
