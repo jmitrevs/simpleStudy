@@ -19,7 +19,7 @@ topSequence = AlgSequence()
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
-                  ElectronContainerName = "ElectronAODCollection",
+                  ElectronContainerName = "GSFElectronAODCollection",
                   PhotonContainerName = "PhotonAODCollection",
                   egammaContainerName = "HLT_egamma_Electrons",
                   PAUcaloIsolationTool = None

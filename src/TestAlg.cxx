@@ -484,13 +484,13 @@ StatusCode TestAlg::execute()
     if ((*el)->author(egammaParameters::AuthorElectron)) numElectronsAuthorElectron++;
     if ((*el)->author(egammaParameters::AuthorSofte)) numElectronsAuthorSofte++;
     if ((*el)->author(egammaParameters::AuthorFrwd)) numElectronsAuthorFrwd++;
-    
-    //    if ((*el)->author(egammaParameters::AuthorElectron) && (*el)->isElectron(egammaPID::ElectronMedium_WithTrackMatch)) {
-    {
-      numElPass++;
-      ATH_MSG_INFO("Electron with author " << (*el)->author() << ", isem == " << std::hex << (*el)->isem() 
-		   << ", cluster = " << (*el)->cluster());
+
+    numElPass++;
+    ATH_MSG_INFO("Electron with author " << (*el)->author() << ", isem == " << std::hex << (*el)->isem() 
+		 << ", eta = " << (*el)->eta() << ", phi = " << (*el)->phi());
       
+    if (!((*el)->author(egammaParameters::AuthorFrwd))) {
+      //    if ((*el)->author(egammaParameters::AuthorElectron) && (*el)->isElectron(egammaPID::ElectronMedium_WithTrackMatch)) {
       // const double elPt = (*el)->pt();
       // if (elPt > leadPt) {
       // 	second = leading;
@@ -532,13 +532,17 @@ StatusCode TestAlg::execute()
       // 		      << ", et = " << (*el)->cluster()->et()
       // 		      << ", E = " << (*el)->cluster()->e());
 
-      //     const Rec::TrackParticle * trParticle = (*el)->trackParticle();
-      //     if (trParticle) {
-      // 	ATH_MSG_WARNING("   Track phi = " << trParticle->phi() 
-      // 			<< ", eta = "<< trParticle->eta() 
-      // 			<< ", et = " << trParticle->et()
-      // 			<< ", E = " << trParticle->e());
+      const Rec::TrackParticle * trParticle = (*el)->trackParticle();
+      if (!trParticle) {
+	ATH_MSG_WARNING("Electron has no track-particle");
+	continue;
+      }
 
+      ATH_MSG_DEBUG("   Track phi = " << trParticle->phi() 
+		    << ", eta = "<< trParticle->eta() 
+		    << ", et = " << trParticle->et()
+		    << ", E = " << trParticle->e());
+      
       // 	const Trk::TrackParticleBase* trkbase = dynamic_cast<const Trk::TrackParticleBase* >(trParticle);
       // 	const Trk::MeasuredPerigee* perigee = dynamic_cast<const Trk::MeasuredPerigee*>( &(trkbase->definingParameters()) );
 	
@@ -572,11 +576,14 @@ StatusCode TestAlg::execute()
 
       
 
-      //     // const Trk::TrackSummary* sum = (*el)->trackParticle()->trackSummary();
-      //     // int nSiliconHits_trk = -999;
-      //     // if (sum != NULL)  nSiliconHits_trk = sum->get(Trk::numberOfSCTHits)+ sum->get(Trk::numberOfPixelHits);
+      const Trk::TrackSummary* sum = (*el)->trackParticle()->trackSummary();
+      if (!sum) {
+	ATH_MSG_WARNING("trackParticle has no summary!");
+	continue;
+      }
+      int nSiliconHits_trk = sum->get(Trk::numberOfSCTHits)+ sum->get(Trk::numberOfPixelHits);
       
-      //     // ATH_MSG_WARNING("   Number of silicon hits = " << nSiliconHits_trk);
+      ATH_MSG_DEBUG("   Number of silicon hits = " << nSiliconHits_trk);
 
       //   } // if (fabs((*el)->phi()) > M_PI)
 

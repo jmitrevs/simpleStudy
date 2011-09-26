@@ -7,7 +7,7 @@ from glob import glob
 #InputList = glob('/data3/jmitrevs/data10_7TeV.00155073.physics_L1Calo.merge.DESDM_EGAMMA.r1299_p161_p165_tid143766_00/*')
 #InputList = glob('/data3/jmitrevs/mc09_7TeV.114007.SPS8_110_jimmy_susy.merge.AOD.e530_s765_s767_r1302_r1306_tid140030_00/AOD*')
 #InputList = glob('../../run/ESD.pool.root')
-#InputList = glob('../../run_*/copy_AOD*.pool.root')
+InputList = glob('../../run/copy_AOD*.pool.root')
 #InputList = glob('../../run/AOD.pool.root')
 #InputList = glob('/data/jmitrevs/AtlasProduction-15.8.0.2/run/ESD.pool.root')
 #InputList = glob('/data3/jmitrevs/AtlasOffline-rel_3/run/ESD.pool.root')
@@ -15,7 +15,7 @@ from glob import glob
 #InputList = glob('/data3/jmitrevs/dataskims/ee_merge/*periodI*/*.pool.root*')
 #InputList = glob('../../run_lb358/myESD.pool.root')
 #InputList = glob('/data3/jmitrevs/mcskims/mc10_7TeV.118441.Pythia_GGM_Bino600_300.merge.AOD.e640_s933_s946_r1831_r1700_tid222610_00/AOD.222610._000001.pool.root.1')
-InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.AOD.f351_m765/*AOD*')
+#InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.AOD.f351_m765/*AOD*')
 
 from AthenaCommon.AthenaCommonFlags import athenaCommonFlags
 athenaCommonFlags.FilesInput = InputList
