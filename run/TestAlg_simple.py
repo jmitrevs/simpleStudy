@@ -16,13 +16,20 @@ topSequence = AlgSequence()
 # mycaloisolationtool.DoAreaCorrections = True
 # ToolSvc += mycaloisolationtool
 
+import MCTruthClassifier.MCTruthClassifierBase
+print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
+
+MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
+MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
+
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
                   ElectronContainerName = "GSFElectronAODCollection",
                   PhotonContainerName = "PhotonAODCollection",
                   egammaContainerName = "HLT_egamma_Electrons",
-                  PAUcaloIsolationTool = None
+                  MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
+                  DoTruth = True
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG
@@ -36,16 +43,14 @@ topSequence += testAlg
 
 ServiceMgr.MessageSvc.OutputLevel = WARNING
 
-import MCTruthClassifier.MCTruthClassifierBase
-print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
 
-from simpleStudy.simpleStudyConf import TruthUtils
-TruthUtils = TruthUtils(name                    = "TruthUtils",
-                        MCTruthClassifierTool   = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.getFullName(),
-                        TruthConeMatch          = .2,
-                        OutputLevel = DEBUG)
-ToolSvc += TruthUtils
-print      TruthUtils
+# from simpleStudy.simpleStudyConf import TruthUtils
+# TruthUtils = TruthUtils(name                    = "TruthUtils",
+#                         MCTruthClassifierTool   = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.getFullName(),
+#                         TruthConeMatch          = .2,
+#                         OutputLevel = DEBUG)
+# ToolSvc += TruthUtils
+# print      TruthUtils
 
 #==============================================================
 #==============================================================

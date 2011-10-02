@@ -24,12 +24,13 @@
 
 //class AtlasDetectorID;
 //class Identifier;
-class TruthUtils;
+//class TruthUtils;
 class StoreGateSvc;
 //class IEMBremsstrahlungBuilder;
 //class IEMFourMomBuilder;
 //class EMErrorDetail;
-class IPAUcaloIsolationTool;
+//class IPAUcaloIsolationTool;
+class IMCTruthClassifier;
 
 namespace Analysis {
   class Electron;
@@ -67,14 +68,17 @@ private:
   /// a handle on Store Gate 
   StoreGateSvc* m_storeGate;
 
-  ToolHandle<TruthUtils> m_TruthUtils;
-  ToolHandle<IPAUcaloIsolationTool> m_PAUcaloIsolationTool;
+  //ToolHandle<TruthUtils> m_TruthUtils;
+  ToolHandle<IMCTruthClassifier> m_MCTruthClassifier;
+  //ToolHandle<IPAUcaloIsolationTool> m_PAUcaloIsolationTool;
 
   /// a handle on the Hist/TTree registration service
   ITHistSvc * m_thistSvc;
   std::string m_histFileName;
 
   std::map<std::string, TH1*> m_histograms;
+
+  bool m_doTruth;
 
   /** Electron selection */
   std::string m_ElectronContainerName;
@@ -104,7 +108,7 @@ private:
   std::string m_ConversionsName;
 //   std::string m_EMTrackFitContainerName;
 //   std::string m_EMErrorDetailContainerName;
-  std::string m_McEventCollectionContainerName;
+//   std::string m_McEventCollectionContainerName;
 
   int numPhotons;
   int numUnconverted;
@@ -125,7 +129,9 @@ private:
   int numConversionsNotTPTRTOnly;
 
   int numElectrons;
+  int numTightElectrons;
   int numElectronsAuthorElectron;
+  int numTightElectronsAuthorElectron;
   int numElectronsAuthorSofte;
   int numElectronsAuthorFrwd;
   int numElConversions;
