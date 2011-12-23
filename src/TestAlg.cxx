@@ -514,7 +514,9 @@ StatusCode TestAlg::execute()
        el++) {
     
     // try the selector
-    if (m_electronSelector->accept(*el)) {
+
+
+    if (m_electronSelector->getTool()->accept(const_cast<const Analysis::Electron*>(*el))) {
       ATH_MSG_DEBUG("Passed electron selector.");
     } else {
       ATH_MSG_DEBUG("Failed electron selector.");
