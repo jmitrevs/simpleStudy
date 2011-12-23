@@ -69,7 +69,7 @@ private:
   /// a handle on Store Gate 
   StoreGateSvc* m_storeGate;
 
-  //ToolHandle<AthElectronIsEMSelector> m_electronSelector;
+  ToolHandle<AthElectronIsEMSelector> m_electronSelector;
   //ToolHandle<AthSelectorToolBase> m_electronSelector;
 
   //ToolHandle<TruthUtils> m_TruthUtils;
