@@ -22,12 +22,21 @@ print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
 MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
 MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
+import PyCintex
+PyCintex.loadDictionary('egammaEnumsDict')
+from ROOT import egammaPID
+
+from ElectronPhotonSelectorTools.ConfiguredAthElectronIsEMSelectors import ConfiguredAthElectronIsEMSelector
+electronSelector = ConfiguredAthElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMedium)
+ToolSvc += electronSelector
+
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
-                  ElectronContainerName = "GSFElectronAODCollection",
+                  ElectronContainerName = "ElectronAODCollection",
                   PhotonContainerName = "PhotonAODCollection",
                   egammaContainerName = "HLT_egamma_Electrons",
+                  ElectronSelector = electronSelector,
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
                   DoTruth = True
                   )   # 1 alg, named "HelloWorld"
