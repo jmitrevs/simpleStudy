@@ -44,6 +44,7 @@
 #include "MCTruthClassifier/IMCTruthClassifier.h"
 #include "MCTruthClassifier/MCTruthClassifierDefs.h"
 
+
 #include "simpleStudy/TestAlg.h"
 
 // #include "egammaInterfaces/IEMBremsstrahlungBuilder.h"
@@ -69,6 +70,7 @@ TestAlg::TestAlg(const std::string& name,
   //  declareProperty("TruthUtils", m_TruthUtils);
   //  declareProperty("PAUcaloIsolationTool", m_PAUcaloIsolationTool);
   declareProperty("MCTruthClassifier", m_MCTruthClassifier);
+  declareProperty("ElectronSelector", m_electronSelector);
 
   declareProperty("DoTruth", m_doTruth = false);
 
@@ -157,6 +159,14 @@ StatusCode TestAlg::initialize()
     else {
       ATH_MSG_DEBUG("Retrieved MCTruthClassifier " << m_MCTruthClassifier);   
     }
+  }
+
+  if(m_electronSelector.retrieve().isFailure()) {
+    ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
+    return StatusCode::FAILURE; // why success?
+  }
+  else {
+    ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
   }
 
   // if(m_TruthUtils.retrieve().isFailure()) {
@@ -501,6 +511,13 @@ StatusCode TestAlg::execute()
        el != electrons->end();
        el++) {
     
+    // try the selector
+    if (m_electronSelector->accept(*el)) {
+      ATH_MSG_DEBUG("Passed electron selector.");
+    } else {
+      ATH_MSG_DEBUG("Failed electron selector.");
+    }
+
     bool passTruth = true;
     if (m_doTruth) {
       std::pair<MCTruthPartClassifier::ParticleType, MCTruthPartClassifier::ParticleOrigin> res =

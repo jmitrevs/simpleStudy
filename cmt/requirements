@@ -22,6 +22,10 @@ use  AtlasHepMC			AtlasHepMC-* 			External
 use  McParticleEvent            McParticleEvent-*               PhysicsAnalysis/TruthParticleID
 use  McParticleUtils            McParticleUtils-*               PhysicsAnalysis/TruthParticleID
 use  GeneratorObjects		GeneratorObjects-01-*		Generators
+
+use ElectronPhotonSelectorTools ElectronPhotonSelectorTools-*   PhysicsAnalysis/ElectronPhotonID
+use ObjectSelectorCore          ObjectSelectorCore-*    PhysicsAnalysis/AnalysisCommon
+
 private
 use  AtlasROOT                  AtlasROOT-*                     External
 use TrkTrackLink		TrkTrackLink-*			Tracking/TrkEvent
@@ -32,9 +36,9 @@ use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
 use TrkTrack			TrkTrack-*			Tracking/TrkEvent
 use InDetSecVxFinderTool	InDetSecVxFinderTool-*		InnerDetector/InDetRecTools
 
-use FourMomUtils               FourMomUtils-*          Event
+use FourMomUtils                FourMomUtils-*          Event
 
-use PhotonAnalysisUtils        PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
+use PhotonAnalysisUtils         PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
 
 public
 
