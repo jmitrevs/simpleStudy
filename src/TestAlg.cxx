@@ -44,8 +44,8 @@
 #include "MCTruthClassifier/IMCTruthClassifier.h"
 #include "MCTruthClassifier/MCTruthClassifierDefs.h"
 
-#include "ElectronPhotonSelectorTools/AthElectronIsEMSelector.h"
-#include "ObjectSelectorCore/AthSelectorToolBase.h"
+//#include "ElectronPhotonSelectorTools/AthElectronIsEMSelector.h"
+//#include "ObjectSelectorCore/AthSelectorToolBase.h"
 
 #include "simpleStudy/TestAlg.h"
 
@@ -72,7 +72,7 @@ TestAlg::TestAlg(const std::string& name,
   //  declareProperty("TruthUtils", m_TruthUtils);
   //  declareProperty("PAUcaloIsolationTool", m_PAUcaloIsolationTool);
   declareProperty("MCTruthClassifier", m_MCTruthClassifier);
-  declareProperty("ElectronSelector", m_electronSelector);
+  //declareProperty("ElectronSelector", m_electronSelector);
 
   declareProperty("DoTruth", m_doTruth = false);
 
@@ -163,13 +163,13 @@ StatusCode TestAlg::initialize()
     }
   }
 
-  if(m_electronSelector.retrieve().isFailure()) {
-    ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
-    return StatusCode::FAILURE; // why success?
-  }
-  else {
-    ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
-  }
+  // if(m_electronSelector.retrieve().isFailure()) {
+  //   ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
+  //   return StatusCode::FAILURE; // why success?
+  // }
+  // else {
+  //   ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
+  // }
 
   // if(m_TruthUtils.retrieve().isFailure()) {
   //   ATH_MSG_ERROR("Failed to retrieve " << m_TruthUtils);
@@ -516,11 +516,11 @@ StatusCode TestAlg::execute()
     // try the selector
 
 
-    if (m_electronSelector->getTool()->accept(const_cast<const Analysis::Electron*>(*el))) {
-      ATH_MSG_DEBUG("Passed electron selector.");
-    } else {
-      ATH_MSG_DEBUG("Failed electron selector.");
-    }
+    // if (m_electronSelector->getTool()->accept(const_cast<const Analysis::Electron*>(*el))) {
+    //   ATH_MSG_DEBUG("Passed electron selector.");
+    // } else {
+    //   ATH_MSG_DEBUG("Failed electron selector.");
+    // }
 
     bool passTruth = true;
     if (m_doTruth) {
@@ -580,9 +580,9 @@ StatusCode TestAlg::execute()
 
 	m_histograms["ElEtaReco"]->Fill((*el)->eta());
 
-	// const EMShower* shower = (*el)->detail<EMShower>();
+	const EMShower* shower = (*el)->detail<EMShower>();
 	// std::cout << "About to print out electron shower" << std::endl;
-	// shower->print();
+	shower->print();
 
 	//   if (fabs((*el)->phi()) > M_PI) {
 	//     ATH_MSG_WARNING("Looking at electron (author = " << (*el)->author() 
@@ -875,9 +875,8 @@ StatusCode TestAlg::execute()
       
       // 	// Then, to calculate the "corrected" isolation variables:
     
-      // 	const double etcone20 = shower->etcone20();
-      // 	const double etcone30 = shower->etcone30();
-      // 	const double etcone40 = shower->etcone40();
+      ATH_MSG_INFO("isos: " << shower->etcone20() << ", " << shower->etconoisedR03SigAbs3());
+
     
       // 	m_histograms["etcone20"]->Fill(etcone20);
       // 	m_histograms["etcone30"]->Fill(etcone30);

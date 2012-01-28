@@ -30,8 +30,8 @@ class StoreGateSvc;
 //class EMErrorDetail;
 //class IPAUcaloIsolationTool;
 class IMCTruthClassifier;
-class AthElectronIsEMSelector;
-class AthSelectorToolBase;
+//class AthElectronIsEMSelector;
+//class AthSelectorToolBase;
 
 namespace Analysis {
   class Electron;
@@ -70,7 +70,7 @@ private:
   StoreGateSvc* m_storeGate;
 
   //ToolHandle<AthElectronIsEMSelector> m_electronSelector;
-  ToolHandle<AthSelectorToolBase> m_electronSelector;
+  //ToolHandle<AthSelectorToolBase> m_electronSelector;
 
   //ToolHandle<TruthUtils> m_TruthUtils;
   ToolHandle<IMCTruthClassifier> m_MCTruthClassifier;
