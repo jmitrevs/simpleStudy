@@ -38,7 +38,7 @@ testAlg = TestAlg(name = "TestAlg",
                   egammaContainerName = "HLT_egamma_Electrons",
                   #ElectronSelector = electronSelector,
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
-                  DoTruth = True
+                  DoTruth = False
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG
