@@ -17,7 +17,7 @@ InputList = glob('../../run/AOD.pool.root')
 #InputList = glob('../../run_lb358/myESD.pool.root')
 #InputList = glob('/data3/jmitrevs/mcskims/mc10_7TeV.118441.Pythia_GGM_Bino600_300.merge.AOD.e640_s933_s946_r1831_r1700_tid222610_00/AOD.222610._000001.pool.root.1')
 #InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.AOD.f351_m765/*AOD*')
-
+#InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.D2AOD_DIPHO.r2603_p659_p682_p683*/*pool.root*')
 from AthenaCommon.AthenaCommonFlags import athenaCommonFlags
 athenaCommonFlags.FilesInput = InputList
 #athenaCommonFlags.SkipEvents=2

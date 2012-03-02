@@ -26,9 +26,15 @@ import PyCintex
 PyCintex.loadDictionary('egammaEnumsDict')
 from ROOT import egammaPID
 
-# from ElectronPhotonSelectorTools.ConfiguredAthElectronIsEMSelectors import ConfiguredAthElectronIsEMSelector
-# electronSelector = ConfiguredAthElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMedium)
-# ToolSvc += electronSelector
+from ElectronPhotonSelectorTools.ConfiguredAthElectronIsEMSelectors import ConfiguredAthElectronIsEMSelector
+electronSelector = ConfiguredAthElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMediumPP,
+                                                     OutputLevel = DEBUG)
+ToolSvc += electronSelector
+
+from ElectronPhotonSelectorTools.ConfiguredAthPhotonIsEMSelectors import ConfiguredAthPhotonIsEMSelector
+photonSelector = ConfiguredAthPhotonIsEMSelector("myPhotonSelector", egammaPID.PhotonIDTightAR,
+                                                 OutputLevel = DEBUG)
+ToolSvc += photonSelector
 
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
@@ -36,7 +42,8 @@ testAlg = TestAlg(name = "TestAlg",
                   ElectronContainerName = "ElectronAODCollection",
                   PhotonContainerName = "PhotonAODCollection",
                   egammaContainerName = "HLT_egamma_Electrons",
-                  #ElectronSelector = electronSelector,
+                  ElectronSelector = electronSelector,
+                  PhotonSelector = photonSelector,
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
                   DoTruth = False
                   )   # 1 alg, named "HelloWorld"
