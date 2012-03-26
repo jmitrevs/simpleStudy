@@ -8,7 +8,8 @@ from glob import glob
 #InputList = glob('/data3/jmitrevs/mc09_7TeV.114007.SPS8_110_jimmy_susy.merge.AOD.e530_s765_s767_r1302_r1306_tid140030_00/AOD*')
 #InputList = glob('../../run/ESD.pool.root')
 #InputList = glob('../../run/copy_AOD*.pool.root')
-InputList = glob('../../run/AOD.pool.root')
+#InputList = glob('../../run/AOD.pool.root')
+InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
 #InputList = glob('../../run_9/AOD.pool.root')
 #InputList = glob('/data/jmitrevs/AtlasProduction-15.8.0.2/run/ESD.pool.root')
 #InputList = glob('/data3/jmitrevs/AtlasOffline-rel_3/run/ESD.pool.root')
@@ -21,8 +22,8 @@ InputList = glob('../../run/AOD.pool.root')
 from AthenaCommon.AthenaCommonFlags import athenaCommonFlags
 athenaCommonFlags.FilesInput = InputList
 #athenaCommonFlags.SkipEvents=2
-athenaCommonFlags.EvtMax=-1
-#athenaCommonFlags.EvtMax=200
+#athenaCommonFlags.EvtMax=-1
+athenaCommonFlags.EvtMax=200
 
 
 # # use closest DB replica
@@ -78,5 +79,17 @@ rec.doPerfMon.set_Value_and_Lock(False)
 #InDetFlags.preProcessing.set_Value_and_Lock(True)
 #InDetFlags.doSpacePointFormation.set_Value_and_Lock(True)
 
+
+
 # main jobOption - must always be included
 include ("RecExCommon/RecExCommon_topOptions.py")
+
+# if not hasattr( ServiceMgr, "AthenaEventLoopMgr" ):
+#    from AthenaServices.AthenaServicesConf import AthenaEventLoopMgr
+#    ServiceMgr += AthenaEventLoopMgr()
+# ServiceMgr.AthenaEventLoopMgr.EventPrintoutInterval = 1
+
+if not hasattr(svcMgr, theApp.EventLoop):
+   svcMgr += getattr(CfgMgr, theApp.EventLoop)() 
+evtloop = getattr(svcMgr, theApp.EventLoop)
+evtloop.EventPrintoutInterval = 1
