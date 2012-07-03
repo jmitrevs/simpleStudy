@@ -599,7 +599,7 @@ StatusCode TestAlg::execute()
 
 	const EMShower* shower = (*el)->detail<EMShower>();
 	// std::cout << "About to print out electron shower" << std::endl;
-	// shower->print();
+	shower->print();
 
 	//   if (fabs((*el)->phi()) > M_PI) {
 	//     ATH_MSG_WARNING("Looking at electron (author = " << (*el)->author() 
@@ -778,9 +778,9 @@ StatusCode TestAlg::execute()
       //     }
 
 
-      // const EMShower* shower = (*ph)->detail<EMShower>();
-      // std::cout << "About to print out photon shower" << std::endl;
-      // shower->print();
+      const EMShower* shower = (*ph)->detail<EMShower>();
+      std::cout << "About to print out photon shower" << std::endl;
+      shower->print();
 
 
 
@@ -885,7 +885,7 @@ StatusCode TestAlg::execute()
 
       //ATH_MSG_DEBUG("(*ph)->conversion() = " << (*ph)->conversion());
 
-      const EMShower* shower = (*ph)->detail<EMShower>();
+      //const EMShower* shower = (*ph)->detail<EMShower>();
 
       // if ((*ph)->pt() > 20*GeV && (*ph)->isPhoton(egammaPID::PhotonTightAR)) { 
       // 	// do isolation test

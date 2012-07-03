@@ -9,7 +9,7 @@ from glob import glob
 #InputList = glob('../../run/ESD.pool.root')
 #InputList = glob('../../run/copy_AOD*.pool.root')
 #InputList = glob('../../run/AOD.pool.root')
-InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
+#InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
 #InputList = glob('../../run_9/AOD.pool.root')
 #InputList = glob('/data/jmitrevs/AtlasProduction-15.8.0.2/run/ESD.pool.root')
 #InputList = glob('/data3/jmitrevs/AtlasOffline-rel_3/run/ESD.pool.root')
@@ -19,6 +19,7 @@ InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tc
 #InputList = glob('/data3/jmitrevs/mcskims/mc10_7TeV.118441.Pythia_GGM_Bino600_300.merge.AOD.e640_s933_s946_r1831_r1700_tid222610_00/AOD.222610._000001.pool.root.1')
 #InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.AOD.f351_m765/*AOD*')
 #InputList = glob('/data3/jmitrevs/data11_7TeV.00178109.physics_Egamma.merge.D2AOD_DIPHO.r2603_p659_p682_p683*/*pool.root*')
+InputList = glob('/data3/jmitrevs/mc12_8TeV.147770.Sherpa_CT10_Zee.merge.AOD.e1161_s1469_s1470_r3542_r3549_tid785493_00/AOD.785493._001465.pool.root.1')
 from AthenaCommon.AthenaCommonFlags import athenaCommonFlags
 athenaCommonFlags.FilesInput = InputList
 #athenaCommonFlags.SkipEvents=2
