@@ -6,10 +6,11 @@ from glob import glob
 #InputList = glob('/data3/jmitrevs/mc09_7TeV.106050.PythiaZee_1Lepton.merge.AOD.e468_s765_s767_r1250_r1260_tid129729_00/AOD.129729._000001.pool.root.1')
 #InputList = glob('/data3/jmitrevs/data10_7TeV.00155073.physics_L1Calo.merge.DESDM_EGAMMA.r1299_p161_p165_tid143766_00/*')
 #InputList = glob('/data3/jmitrevs/mc09_7TeV.114007.SPS8_110_jimmy_susy.merge.AOD.e530_s765_s767_r1302_r1306_tid140030_00/AOD*')
-InputList = glob('../../q121/myAOD.pool.root')
+#InputList = glob('../../q121/myAOD.pool.root')
 #InputList = glob('../../run/copy_AOD*.pool.root')
 #InputList = glob('../../run/AOD.pool.root')
 #InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
+InputList = ['root://eosatlas//eos/atlas/user/j/jcosta/PROC/myAOD_RECOFIX_Muons.pool.root']
 #InputList = glob('../../run_9/AOD.pool.root')
 #InputList = glob('/data/jmitrevs/AtlasProduction-15.8.0.2/run/ESD.pool.root')
 #InputList = glob('/data3/jmitrevs/AtlasOffline-rel_3/run/ESD.pool.root')
