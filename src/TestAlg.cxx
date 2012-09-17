@@ -44,9 +44,9 @@
 #include "MCTruthClassifier/IMCTruthClassifier.h"
 #include "MCTruthClassifier/MCTruthClassifierDefs.h"
 
-#include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
-#include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
-#include "ObjectSelectorCore/IAthSelectorTool.h"
+// #include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
+// #include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
+// #include "ObjectSelectorCore/IAthSelectorTool.h"
 
 #include "simpleStudy/TestAlg.h"
 
@@ -73,8 +73,8 @@ TestAlg::TestAlg(const std::string& name,
   //  declareProperty("TruthUtils", m_TruthUtils);
   //  declareProperty("PAUcaloIsolationTool", m_PAUcaloIsolationTool);
   declareProperty("MCTruthClassifier", m_MCTruthClassifier);
-  declareProperty("ElectronSelector", m_electronSelector);
-  declareProperty("PhotonSelector", m_photonSelector);
+  // declareProperty("ElectronSelector", m_electronSelector);
+  // declareProperty("PhotonSelector", m_photonSelector);
 
   declareProperty("DoTruth", m_doTruth = false);
 
@@ -165,21 +165,21 @@ StatusCode TestAlg::initialize()
     }
   }
 
-  if(m_electronSelector.retrieve().isFailure()) {
-    ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
-    return StatusCode::FAILURE; // why success?
-  }
-  else {
-    ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
-  }
+  // if(m_electronSelector.retrieve().isFailure()) {
+  //   ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
+  //   return StatusCode::FAILURE; // why success?
+  // }
+  // else {
+  //   ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
+  // }
 
-  if(m_photonSelector.retrieve().isFailure()) {
-    ATH_MSG_ERROR("Failed to retrieve " << m_photonSelector);
-    return StatusCode::FAILURE; // why success?
-  }
-  else {
-    ATH_MSG_DEBUG("Retrieved PhotonSelector " << m_photonSelector);   
-  }
+  // if(m_photonSelector.retrieve().isFailure()) {
+  //   ATH_MSG_ERROR("Failed to retrieve " << m_photonSelector);
+  //   return StatusCode::FAILURE; // why success?
+  // }
+  // else {
+  //   ATH_MSG_DEBUG("Retrieved PhotonSelector " << m_photonSelector);   
+  // }
 
   // if(m_TruthUtils.retrieve().isFailure()) {
   //   ATH_MSG_ERROR("Failed to retrieve " << m_TruthUtils);
@@ -526,18 +526,18 @@ StatusCode TestAlg::execute()
     // try the selector
 
     if (EMType::isElectronNotForward(*el)) {
-      const Root::TAccept& acc = m_electronSelector->accept(*el);
-      const bool passid = (*el)->passID(egammaPID::ElectronIDMediumPP);
+      // const Root::TAccept& acc = m_electronSelector->accept(*el);
+      // const bool passid = (*el)->passID(egammaPID::ElectronIDMediumPP);
       
-      if (acc && passid) {
-	ATH_MSG_DEBUG("Passed electron selector and passID.");
-      } else if (acc) {
-	ATH_MSG_WARNING("Passed electron selector but not passID.");
-      } else if (passid) {
-	ATH_MSG_WARNING("Failed electron selector but passed passID.");
-      } else {
-	ATH_MSG_DEBUG("Failed electron selector.");
-      }
+      // if (acc && passid) {
+      // 	ATH_MSG_DEBUG("Passed electron selector and passID.");
+      // } else if (acc) {
+      // 	ATH_MSG_WARNING("Passed electron selector but not passID.");
+      // } else if (passid) {
+      // 	ATH_MSG_WARNING("Failed electron selector but passed passID.");
+      // } else {
+      // 	ATH_MSG_DEBUG("Failed electron selector.");
+      // }
     }
     bool passTruth = true;
     if (m_doTruth) {
@@ -857,20 +857,20 @@ StatusCode TestAlg::execute()
       numPhotons++;
 
       if ((*ph)->author(egammaParameters::AuthorPhoton | egammaParameters::AuthorRConv)) {
-	const Root::TAccept& acc = m_photonSelector->accept(*ph);
-	const bool passid = (*ph)->passID(egammaPID::PhotonIDTightAR);
+	// const Root::TAccept& acc = m_photonSelector->accept(*ph);
+	// const bool passid = (*ph)->passID(egammaPID::PhotonIDTightAR);
       
-	if (acc && passid) {
-	  ATH_MSG_DEBUG("Passed photon selector and passID.");
-	} else if (acc) {
-	  ATH_MSG_WARNING("Passed photon selector but not passID.");
-	} else if (passid) {
-	  ATH_MSG_WARNING("Failed photon selector but passed passID.");
-	  ATH_MSG_WARNING("  selector isEM = " << std::hex << m_photonSelector->IsemValue() 
-			  << ", orig isEM = " << (*ph)->isem());
-	} else {
-	  ATH_MSG_DEBUG("Failed photon selector.");
-	}
+	// if (acc && passid) {
+	//   ATH_MSG_DEBUG("Passed photon selector and passID.");
+	// } else if (acc) {
+	//   ATH_MSG_WARNING("Passed photon selector but not passID.");
+	// } else if (passid) {
+	//   ATH_MSG_WARNING("Failed photon selector but passed passID.");
+	//   ATH_MSG_WARNING("  selector isEM = " << std::hex << m_photonSelector->IsemValue() 
+	// 		  << ", orig isEM = " << (*ph)->isem());
+	// } else {
+	//   ATH_MSG_DEBUG("Failed photon selector.");
+	// }
       }
 
       ATH_MSG_INFO("Photon with isem == " << std::hex << (*ph)->isem() 
