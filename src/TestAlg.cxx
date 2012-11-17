@@ -44,8 +44,8 @@
 #include "MCTruthClassifier/IMCTruthClassifier.h"
 #include "MCTruthClassifier/MCTruthClassifierDefs.h"
 
-// #include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
-// #include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
+#include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
+#include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
 // #include "ObjectSelectorCore/IAthSelectorTool.h"
 
 #include "simpleStudy/TestAlg.h"
