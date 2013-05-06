@@ -21,9 +21,9 @@ use  GeneratorObjects		GeneratorObjects-*		Generators
 
 use VxVertex			VxVertex-*			Tracking/TrkEvent
 
-#use ObjectSelectorCore          ObjectSelectorCore-*    PhysicsAnalysis/AnalysisCommon
 
 private
+use PATCore                     PATCore-*    PhysicsAnalysis/AnalysisCommon
 use AtlasROOT                  AtlasROOT-*                     External
 use TrkTrackLink		TrkTrackLink-*			Tracking/TrkEvent
 use TrkParticleBase		TrkParticleBase-*		Tracking/TrkEvent
