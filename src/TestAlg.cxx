@@ -60,6 +60,7 @@
 
 #include <gsl/gsl_math.h>
 
+using CLHEP::GeV;
 
 //================ Constructor =================================================
 
