@@ -31,6 +31,7 @@ use TrkNeutralParameters	TrkNeutralParameters-*		Tracking/TrkEvent
 use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
 use TrkTrack			TrkTrack-*			Tracking/TrkEvent
 use InDetSecVxFinderTool	InDetSecVxFinderTool-*		InnerDetector/InDetRecTools
+use  EventInfo                  EventInfo-*                     Event
 
 use FourMomUtils                FourMomUtils-*          Event
 

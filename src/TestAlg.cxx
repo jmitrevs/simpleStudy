@@ -5,6 +5,11 @@
 //#include <TDirectory.h>
 //#include <TFile.h>
 //#include <TROOT.h>
+
+#include "EventInfo/EventInfo.h"
+#include "EventInfo/EventID.h"
+#include "EventInfo/EventType.h"
+
 #include "TH1.h"
 #include "McParticleEvent/TruthParticle.h"
 #include "McParticleEvent/TruthParticleContainer.h"
@@ -110,6 +115,9 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("ConversionsName",                 
 		  m_ConversionsName="ConversionCandidate",
 		  "Name of the input conversion container");
+
+  declareProperty("runEvents", m_runEvents, "events to run over, though NULL is all");
+
   
 //   // Name of the EMTrackFit container
 //   declareProperty("EMTrackFitContainerName",
@@ -148,13 +156,9 @@ StatusCode TestAlg::initialize()
     ATH_MSG_ERROR("Unable to retrieve pointer to THistSvc");
     return sc;
   }
-	
-  /// get StoreGate service
-  sc = service("StoreGateSvc",m_storeGate);
-  if (sc.isFailure()) {
-    ATH_MSG_FATAL("StoreGate service not found !");
-    return StatusCode::FAILURE;
-  }
+
+  m_theEvents.insert(m_runEvents.begin(), m_runEvents.end());
+  m_runOnlySome = ! m_runEvents.empty();
 
   if (m_doTruth) {
     if(m_MCTruthClassifier.retrieve().isFailure()) {
@@ -432,8 +436,21 @@ StatusCode TestAlg::execute()
 
   // ATH_MSG_DEBUG("Electron container name: " << m_ElectronContainerName);
 
+  const EventInfo*  evtInfo = 0;
+  sc = evtStore()->retrieve(evtInfo);
+  if(sc.isFailure() || !evtInfo) {
+    ATH_MSG_ERROR("could not retrieve event info");
+    return StatusCode::RECOVERABLE;
+  }
+  
+  const unsigned int eventNumber = evtInfo->event_ID()->event_number();
+  if (m_runOnlySome && m_theEvents.find(eventNumber) == m_theEvents.end()) {
+    // skip the event
+    return StatusCode::SUCCESS;
+  }
+
   const ElectronContainer* electrons;
-  sc=m_storeGate->retrieve( electrons, m_ElectronContainerName);
+  sc=evtStore()->retrieve( electrons, m_ElectronContainerName);
   if( sc.isFailure()  ||  !electrons ) {
     ATH_MSG_ERROR("No continer "<< m_ElectronContainerName <<" container found in TDS");
     return StatusCode::FAILURE;
@@ -442,7 +459,7 @@ StatusCode TestAlg::execute()
   // ATH_MSG_DEBUG("Photon container name: " << m_PhotonContainerName);
 
   const PhotonContainer* photons;
-  sc=m_storeGate->retrieve( photons, m_PhotonContainerName);
+  sc=evtStore()->retrieve( photons, m_PhotonContainerName);
   if( sc.isFailure()  ||  !photons ) {
     ATH_MSG_ERROR("No continer "<< m_PhotonContainerName <<" container found in TDS");
     return StatusCode::FAILURE;
@@ -457,7 +474,7 @@ StatusCode TestAlg::execute()
   // }
 
   // const egammaContainer* egammas;
-  // sc=m_storeGate->retrieve( egammas, m_egammaContainerName);
+  // sc=evtStore()->retrieve( egammas, m_egammaContainerName);
   // if( sc.isFailure()  ||  !egammas ) {
   //   ATH_MSG_ERROR("No continer "<< m_egammaContainerName <<" container found in TDS");
   //   return StatusCode::FAILURE;
@@ -478,7 +495,7 @@ StatusCode TestAlg::execute()
 
   // /// Load Truth Container
   // const TruthParticleContainer*  mcpartTES;
-  // sc=m_storeGate->retrieve( mcpartTES, "SpclMC");
+  // sc=evtStore()->retrieve( mcpartTES, "SpclMC");
   // if( sc.isFailure()  ||  !mcpartTES ) {
   //   ATH_MSG_ERROR("No AOD MC truth particle container found in TDS");
   //   return StatusCode::FAILURE;
@@ -489,21 +506,21 @@ StatusCode TestAlg::execute()
 
   // // and the actual McEventCollection
   // const McEventCollection* mcEventCollection(0);
-  // sc = m_storeGate->retrieve(mcEventCollection,m_McEventCollectionContainerName);
+  // sc = evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName);
   // if( sc.isFailure()  ||  !mcEventCollection ) {
   //   ATH_MSG_ERROR("No AOD McEventCollection container found in TDS");
   //   return StatusCode::FAILURE;
   // }
 
   // const Rec::TrackParticleContainer* trackParts;
-  // sc=m_storeGate->retrieve(trackParts, m_TrackParticleContainerName);
+  // sc=evtStore()->retrieve(trackParts, m_TrackParticleContainerName);
   // if( sc.isFailure()  ||  !trackParts ) {
   //   ATH_MSG_ERROR("No AOD "<< m_TrackParticleContainerName <<" container found in TDS");
   //   return StatusCode::FAILURE;
   // }
 
   // const TrackParticleTruthCollection* trackPartsTruth;
-  // sc=m_storeGate->retrieve(trackPartsTruth, m_TrackParticleTruthCollectionName);
+  // sc=evtStore()->retrieve(trackPartsTruth, m_TrackParticleTruthCollectionName);
   // if( sc.isFailure()  ||  !trackParts ) {
   //   ATH_MSG_ERROR("No AOD "<< m_TrackParticleTruthCollectionName <<" container found in TDS");
   //   return StatusCode::FAILURE;

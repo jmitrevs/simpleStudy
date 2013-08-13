@@ -17,8 +17,6 @@
 #include "StoreGate/DataHandle.h"
 #include "GaudiKernel/ITHistSvc.h"
 
-//#include "TrkEventPrimitives/ParticleHypothesis.h"
-//#include "CLHEP/Matrix/SymMatrix.h"
 
 
 //class AtlasDetectorID;
@@ -33,21 +31,6 @@ class IMCTruthClassifier;
 //class IAthElectronIsEMSelector;
 //class IAthPhotonIsEMSelector;
 class IAthSelectorTool;
-
-namespace Analysis {
-  class Electron;
-}
-
-
-// namespace InDet 
-// {
-//   class InDetJetFitterUtils;
-// }
-
-// namespace Trk {
-//   class MeasuredNeutralPerigee;
-//   class VxCandidate;
-// }
 
 class TestAlg : public AthAlgorithm
 {
@@ -67,9 +50,6 @@ public:
   
 private:
 
-  /// a handle on Store Gate 
-  StoreGateSvc* m_storeGate;
-
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
   ToolHandle<IAthSelectorTool> m_electronSelector;
   //ToolHandle<IAthPhotonIsEMSelector> m_photonSelector;
@@ -84,6 +64,11 @@ private:
   std::string m_histFileName;
 
   std::map<std::string, TH1*> m_histograms;
+
+  std::vector<unsigned int> m_runEvents; // events to execute (if not null)
+  std::set<unsigned int> m_theEvents; // conversion of above
+
+  bool m_runOnlySome; // set to true if m_runEvents is not null
 
   bool m_doTruth;
 
