@@ -14,34 +14,12 @@
 #include "McParticleEvent/TruthParticle.h"
 #include "McParticleEvent/TruthParticleContainer.h"
 
-#include "egammaEvent/ElectronContainer.h"
-#include "egammaEvent/Electron.h"
-#include "egammaEvent/PhotonContainer.h"
-#include "egammaEvent/Photon.h"
+#include "xAODEgamma/Electron.h"
+#include "xAODEgamma/Photon.h"
 
-#include "egammaEvent/EMConvert.h"
-#include "egammaEvent/EMShower.h"
-#include "egammaEvent/EMTrackMatch.h"
-#include "egammaEvent/EMErrorDetail.h"
-#include "egammaEvent/egammaParamDefs.h"
-
-#include "egammaInterfaces/EMAmbiguityToolDefs.h"
-#include "egammaUtils/EMType.h"
-
-#include "MissingETEvent/MissingET.h"
-
-#include "Particle/TrackParticleContainer.h"
-#include "ParticleTruth/TrackParticleTruthCollection.h"
-#include "GeneratorObjects/McEventCollection.h"
-
-#include "TrkTrackLink/ITrackLink.h"
-#include "TrkParticleBase/LinkToTrackParticleBase.h"
-#include "TrkParticleBase/TrackParticleBaseCollection.h"
-
-#include "VxVertex/VxTrackAtVertex.h"
-#include "VxVertex/ExtendedVxCandidate.h"
-#include "InDetSecVxFinderTool/InDetJetFitterUtils.h"
-#include "TrkNeutralParameters/MeasuredNeutralPerigee.h"
+#include "xAODEgamma/ElectronContainer.h"
+#include "xAODEgamma/PhotonContainer.h"
+#include "xAODEgamma/EgammaxAODHelpers.h"
 
 #include "AnalysisUtils/AnalysisMisc.h"
 
@@ -51,15 +29,15 @@
 
 //#include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
 //#include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
-#include "PATCore/IAthSelectorTool.h"
+#include "PATCore/IAsgSelectionTool.h"
 
 #include "simpleStudy/TestAlg.h"
 
 // #include "egammaInterfaces/IEMBremsstrahlungBuilder.h"
 // #include "egammaInterfaces/IEMFourMomBuilder.h"
 
-#include "VxVertex/ExtendedVxCandidate.h"
-#include "FourMomUtils/P4Helpers.h"
+//#include "VxVertex/ExtendedVxCandidate.h"
+//#include "FourMomUtils/P4Helpers.h"
 
 //#include "PhotonAnalysisUtils/IPAUcaloIsolationTool.h"
 
@@ -85,7 +63,7 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("DoTruth", m_doTruth = false);
 
   /** Electron selection */
-  declareProperty("ElectronContainerName", m_ElectronContainerName = "ElectronAODCollection");
+  declareProperty("ElectronContainerName", m_ElectronContainerName = "ElectronCollection");
   declareProperty("ElectronPt",   m_electronPt=10*GeV);
   declareProperty("ElectronEta",  m_electronEta=3.2);
   declareProperty("ElectronIsEMFlag", m_electronIsEMFlag="Medium");
@@ -93,7 +71,7 @@ TestAlg::TestAlg(const std::string& name,
 
   declareProperty("TruthElectronPtMin", m_truthElectronPtMin = 5*GeV);
 
-  declareProperty("PhotonContainerName", m_PhotonContainerName = "PhotonAODCollection");
+  declareProperty("PhotonContainerName", m_PhotonContainerName = "PhotonCollection");
   declareProperty("PhotonPt",   m_photonPt=10*GeV);
   declareProperty("PhotonEta",  m_photonEta=3.2);
   declareProperty("PhotonIsEMFlag", m_photonIsEMFlag="Tight");
@@ -385,7 +363,6 @@ StatusCode TestAlg::initialize()
   // ATH_MSG_DEBUG("detlaPhi(3.1,-3.1) = " << P4Helpers::deltaPhi(3.1,-3.1));
   // ATH_MSG_DEBUG("detlaPhi(-3.1,3.1) = " << P4Helpers::deltaPhi(-3.1,3.1));
 
-  ATH_MSG_INFO("egammaPID::CONVMATCH_ELECTRON = " << egammaPID::CONVMATCH_ELECTRON);
   ATH_MSG_INFO("About to end initialize.");
 
   return StatusCode::SUCCESS;
@@ -449,7 +426,7 @@ StatusCode TestAlg::execute()
     return StatusCode::SUCCESS;
   }
 
-  const ElectronContainer* electrons;
+  const xAOD::ElectronContainer* electrons;
   sc=evtStore()->retrieve( electrons, m_ElectronContainerName);
   if( sc.isFailure()  ||  !electrons ) {
     ATH_MSG_ERROR("No continer "<< m_ElectronContainerName <<" container found in TDS");
@@ -458,7 +435,7 @@ StatusCode TestAlg::execute()
 
   // ATH_MSG_DEBUG("Photon container name: " << m_PhotonContainerName);
 
-  const PhotonContainer* photons;
+  const xAOD::PhotonContainer* photons;
   sc=evtStore()->retrieve( photons, m_PhotonContainerName);
   if( sc.isFailure()  ||  !photons ) {
     ATH_MSG_ERROR("No continer "<< m_PhotonContainerName <<" container found in TDS");
@@ -480,18 +457,18 @@ StatusCode TestAlg::execute()
   //   return StatusCode::FAILURE;
   // }
   
-  // retrieve Conversion Container
-  const VxContainer* convcoll;
-  if (evtStore()->contains<VxContainer>(m_ConversionsName)) {
-    StatusCode sc = evtStore()->retrieve(convcoll,m_ConversionsName);
-    if(sc.isFailure()) {
-      ATH_MSG_ERROR("Could not retrieve Conversion container."); 
-      return StatusCode::FAILURE;
-    }
-  } else {
-    ATH_MSG_DEBUG("Could not find Conversion container: name doesn't exist"); 
-    return StatusCode::FAILURE;
-  }
+  // // retrieve Conversion Container
+  // const VxContainer* convcoll;
+  // if (evtStore()->contains<VxContainer>(m_ConversionsName)) {
+  //   StatusCode sc = evtStore()->retrieve(convcoll,m_ConversionsName);
+  //   if(sc.isFailure()) {
+  //     ATH_MSG_ERROR("Could not retrieve Conversion container."); 
+  //     return StatusCode::FAILURE;
+  //   }
+  // } else {
+  //   ATH_MSG_DEBUG("Could not find Conversion container: name doesn't exist"); 
+  //   return StatusCode::FAILURE;
+  // }
 
   // /// Load Truth Container
   // const TruthParticleContainer*  mcpartTES;
@@ -537,220 +514,228 @@ StatusCode TestAlg::execute()
   double secondPt = 0;
 
   // loop over electrons
-  for (ElectronContainer::const_iterator el  = electrons->begin();
+  for (xAOD::ElectronContainer::const_iterator el  = electrons->begin();
        el != electrons->end();
        el++) {
     
     // try the selector
 
-    if (EMType::isElectronNotForward(*el)) {
+    if (xAOD::EgammaHelpers::isElectron(*el)) {
       const Root::TAccept& acc = m_electronSelector->accept(*el);
-      const bool passid = (*el)->passID(egammaPID::ElectronIDMediumPP);
       
-      if (acc && passid) {
-      	ATH_MSG_DEBUG("Passed electron selector and passID.");
-      } else if (acc) {
-      	ATH_MSG_WARNING("Passed electron selector but not passID.");
-      } else if (passid) {
-      	ATH_MSG_WARNING("Failed electron selector but passed passID.");
+      if (acc) {
+	numElPass++;
+	ATH_MSG_DEBUG("Passed electron selector.");
       } else {
-      	ATH_MSG_DEBUG("Failed electron selector.");
+	ATH_MSG_DEBUG("Failed electron selector.");
       }
     }
     bool passTruth = true;
-    if (m_doTruth) {
-      std::pair<MCTruthPartClassifier::ParticleType, MCTruthPartClassifier::ParticleOrigin> res =
-	m_MCTruthClassifier->particleTruthClassifier(*el);
-      passTruth = (res.first == MCTruthPartClassifier::IsoElectron);
-    }
+    // if (m_doTruth) {
+    //   std::pair<MCTruthPartClassifier::ParticleType, MCTruthPartClassifier::ParticleOrigin> res =
+    // 	m_MCTruthClassifier->particleTruthClassifier(*el);
+    //   passTruth = (res.first == MCTruthPartClassifier::IsoElectron);
+    // }
 
     if (passTruth) {
 
       numElectrons++;
-      if ((*el)->author(egammaParameters::AuthorElectron)) {
-	numEl++;
-	numElectronsAuthorElectron++;
-      }
-      if ((*el)->author(egammaParameters::AuthorSofte)) numElectronsAuthorSofte++;
-      if ((*el)->author(egammaParameters::AuthorFrwd)) numElectronsAuthorFrwd++;
+      // if ((*el)->author(egammaParameters::AuthorElectron)) {
+      // 	numEl++;
+      // 	numElectronsAuthorElectron++;
+      // }
+      // if ((*el)->author(egammaParameters::AuthorSofte)) numElectronsAuthorSofte++;
+      // if ((*el)->author(egammaParameters::AuthorFrwd)) numElectronsAuthorFrwd++;
 
-      ATH_MSG_INFO("Electron with author " << (*el)->author() << ", isem == " << std::hex << (*el)->isem() 
+      ATH_MSG_INFO("Electron with author " << (*el)->author() << ", pt == " << (*el)->pt() 
 		   << ", eta = " << (*el)->eta() << ", phi = " << (*el)->phi());
 
-      if ((*el)->passID(egammaPID::ElectronIDTight)) {
-	ATH_MSG_DEBUG("Electron passes tight.");
-	numTightElectrons++;
-	if ((*el)->author(egammaParameters::AuthorElectron)) {
-	  numTightElectronsAuthorElectron++;
-	  numElPass++;
-	}
+      ATH_MSG_INFO("Cluster eta = " << (*el)->caloCluster()->eta());
+
+      
+      //    if ((*el)->author(egammaParameters::AuthorElectron) && (*el)->isElectron(egammaPID::ElectronMedium_WithTrackMatch)) {
+      // const double elPt = (*el)->pt();
+      // if (elPt > leadPt) {
+      // 	second = leading;
+      // 	leading = *el;
+      // 	secondPt = leadPt;
+      // 	leadPt = elPt;
+      // } else if (elPt > secondPt) {
+      // 	second = *el;
+      // 	secondPt = elPt;
+      // }
+      
+
+      // const egamma::momentum_type& fourmom = (*el)->get4Mom(egamma::Uncombined);
+
+      // const double manualCalc = (*el)->cluster()->e()/cosh((*el)->trackParticle()->eta());
+      // const double autoCalc = fourmom.pt();
+
+      // ATH_MSG_INFO("Manualy calculated pt = " << manualCalc << ", uncombined = " << autoCalc);
+      
+      // ATH_MSG_INFO("author is = " << (*el)->author() << ", and num cells = " 
+      // 		   << (*el)->cluster()->getNumberOfCells());
+
+      //ATH_MSG_INFO("Electron OQ = " << std::hex << (*el)->isgoodoq());
+
+      m_histograms["ElEtaReco"]->Fill((*el)->eta());
+
+      //const EMShower* shower = (*el)->detail<EMShower>();
+      // std::cout << "About to print out electron shower" << std::endl;
+      //shower->print();
+
+      //   if (fabs((*el)->phi()) > M_PI) {
+      //     ATH_MSG_WARNING("Looking at electron (author = " << (*el)->author() 
+      // 		      << ") with phi = " << (*el)->phi() 
+      // 		      << ", eta = "<< (*el)->eta() 
+      // 		      << ", et = " << (*el)->et() 
+      // 		      << ", E = " << (*el)->e());
+      //     ATH_MSG_WARNING("   Cluster phi = " << (*el)->cluster()->phi() 
+      // 		      << ", eta = "<< (*el)->cluster()->eta() 
+      // 		      << ", et = " << (*el)->cluster()->et()
+      // 		      << ", E = " << (*el)->cluster()->e());
+
+      const xAOD::TrackParticle * trParticle = (*el)->trackParticle();
+      if (!trParticle) {
+	ATH_MSG_WARNING("Electron has no track-particle");
+	continue;
       }
-    
+
+      ATH_MSG_DEBUG("   Track phi = " << trParticle->phi() 
+		    << ", eta = "<< trParticle->eta() 
+		    << ", pt = " << trParticle->pt()
+		    << ", E = " << trParticle->e());
       
-      if (!((*el)->author(egammaParameters::AuthorFrwd))) {
-	//    if ((*el)->author(egammaParameters::AuthorElectron) && (*el)->isElectron(egammaPID::ElectronMedium_WithTrackMatch)) {
-	// const double elPt = (*el)->pt();
-	// if (elPt > leadPt) {
-	// 	second = leading;
-	// 	leading = *el;
-	// 	secondPt = leadPt;
-	// 	leadPt = elPt;
-	// } else if (elPt > secondPt) {
-	// 	second = *el;
-	// 	secondPt = elPt;
-	// }
-      
-
-	// const egamma::momentum_type& fourmom = (*el)->get4Mom(egamma::Uncombined);
-
-	// const double manualCalc = (*el)->cluster()->e()/cosh((*el)->trackParticle()->eta());
-	// const double autoCalc = fourmom.pt();
-
-	// ATH_MSG_INFO("Manualy calculated pt = " << manualCalc << ", uncombined = " << autoCalc);
-      
-	// ATH_MSG_INFO("author is = " << (*el)->author() << ", and num cells = " 
-	// 		   << (*el)->cluster()->getNumberOfCells());
-
-	ATH_MSG_INFO("Electron OQ = " << std::hex << (*el)->isgoodoq());
-
-	m_histograms["ElEtaReco"]->Fill((*el)->eta());
-
-	const EMShower* shower = (*el)->detail<EMShower>();
-	// std::cout << "About to print out electron shower" << std::endl;
-	shower->print();
-
-	//   if (fabs((*el)->phi()) > M_PI) {
-	//     ATH_MSG_WARNING("Looking at electron (author = " << (*el)->author() 
-	// 		      << ") with phi = " << (*el)->phi() 
-	// 		      << ", eta = "<< (*el)->eta() 
-	// 		      << ", et = " << (*el)->et() 
-	// 		      << ", E = " << (*el)->e());
-	//     ATH_MSG_WARNING("   Cluster phi = " << (*el)->cluster()->phi() 
-	// 		      << ", eta = "<< (*el)->cluster()->eta() 
-	// 		      << ", et = " << (*el)->cluster()->et()
-	// 		      << ", E = " << (*el)->cluster()->e());
-
-	const Rec::TrackParticle * trParticle = (*el)->trackParticle();
-	if (!trParticle) {
-	  ATH_MSG_WARNING("Electron has no track-particle");
-	  continue;
-	}
-
-	ATH_MSG_DEBUG("   Track phi = " << trParticle->phi() 
-		      << ", eta = "<< trParticle->eta() 
-		      << ", et = " << trParticle->et()
-		      << ", E = " << trParticle->e());
-      
-	// 	const Trk::TrackParticleBase* trkbase = dynamic_cast<const Trk::TrackParticleBase* >(trParticle);
-	// 	const Trk::MeasuredPerigee* perigee = dynamic_cast<const Trk::MeasuredPerigee*>( &(trkbase->definingParameters()) );
+      // 	const Trk::TrackParticleBase* trkbase = dynamic_cast<const Trk::TrackParticleBase* >(trParticle);
+      // 	const Trk::MeasuredPerigee* perigee = dynamic_cast<const Trk::MeasuredPerigee*>( &(trkbase->definingParameters()) );
 	
-	// 	double momentum = -999999.;
-	// 	double momentumError = -999999.;
+      // 	double momentum = -999999.;
+      // 	double momentumError = -999999.;
 	
-	// 	if (perigee->parameters()[Trk::qOverP] != 0 ) {
-	// 	  momentum = 1./fabs(perigee->parameters()[Trk::qOverP]);
-	// 	  momentumError =
-	// 	    momentum*momentum * sqrt(perigee->localErrorMatrix().covariance()[Trk::qOverP][Trk::qOverP]);
-	// 	}
+      // 	if (perigee->parameters()[Trk::qOverP] != 0 ) {
+      // 	  momentum = 1./fabs(perigee->parameters()[Trk::qOverP]);
+      // 	  momentumError =
+      // 	    momentum*momentum * sqrt(perigee->localErrorMatrix().covariance()[Trk::qOverP][Trk::qOverP]);
+      // 	}
 	
-	// 	const double energy =(*el)->detailValue(egammaParameters::EMPhoton_Eclus);
-	// 	const double energyError =sqrt( std::max(0.,(*el)->detailValue(egammaParameters::EMPhoton_CovEclusEclus)) );   
+      // 	const double energy =(*el)->detailValue(egammaParameters::EMPhoton_Eclus);
+      // 	const double energyError =sqrt( std::max(0.,(*el)->detailValue(egammaParameters::EMPhoton_CovEclusEclus)) );   
 	
-	// 	const double chi = sqrt(((energy - momentum)*(energy - momentum))
-	// 				/ ((energyError*energyError) + (momentumError*momentumError)));
+      // 	const double chi = sqrt(((energy - momentum)*(energy - momentum))
+      // 				/ ((energyError*energyError) + (momentumError*momentumError)));
 
-	// 	ATH_MSG_WARNING("Chi for combining values = " << chi);
+      // 	ATH_MSG_WARNING("Chi for combining values = " << chi);
 
-	//     }
+      //     }
 
 
-	//     const double theta = (*el)->detailValue(egammaParameters::EMTrack_theta);
-	//     const double eta = - log(tan(theta/2.0));
+      //     const double theta = (*el)->detailValue(egammaParameters::EMTrack_theta);
+      //     const double eta = - log(tan(theta/2.0));
 
-	//     ATH_MSG_WARNING("   Detail value EMTrack_phi0: " << (*el)->detailValue(egammaParameters::EMTrack_phi0) 
-	// 		      << ", hasSiliconHits = " << (*el)->detailValue(egammaParameters::hasSiliconHits) 
-	// 		      << ", EMTrackTheta = " << theta
-	// 		      << ", eta = " << eta);
+      //     ATH_MSG_WARNING("   Detail value EMTrack_phi0: " << (*el)->detailValue(egammaParameters::EMTrack_phi0) 
+      // 		      << ", hasSiliconHits = " << (*el)->detailValue(egammaParameters::hasSiliconHits) 
+      // 		      << ", EMTrackTheta = " << theta
+      // 		      << ", eta = " << eta);
 
       
 
-	const Trk::TrackSummary* sum = (*el)->trackParticle()->trackSummary();
-	if (!sum) {
-	  ATH_MSG_WARNING("trackParticle has no summary!");
-	  continue;
-	}
-	int nSiliconHits_trk = sum->get(Trk::numberOfSCTHits)+ sum->get(Trk::numberOfPixelHits);
+      uint8_t nBL = 0;
+      uint8_t nBLOutliers = 0;
+      // number of Pixel hits
+      uint8_t nPi = 0;
+      uint8_t nPiOutliers = 0;
+      // number of SCT hits
+      uint8_t nSCT = 0;
+      uint8_t nSCTOutliers = 0;
+      uint8_t nTRThigh          = 0;
+      uint8_t nTRThighOutliers  = 0;
+      uint8_t nTRT         = 0;
+      uint8_t nTRTOutliers = 0;
+      uint8_t nTRTXenonHits = 0;
+      uint8_t expectHitInBLayer = true;
       
-	const EMTrackMatch *trackmatch = (*el)->detail<EMTrackMatch>();
-	if (!trackmatch) {
-	  ATH_MSG_ERROR("No track match available");
-	  continue;
-	}
+      bool allFound = true;
+      
+      allFound &= trParticle->summaryValue(nBL, xAOD::numberOfBLayerHits);
+      allFound &= trParticle->summaryValue(nPi, xAOD::numberOfPixelHits);
+      allFound &= trParticle->summaryValue(nSCT, xAOD::numberOfSCTHits);
+      allFound &= trParticle->summaryValue(nBLOutliers, xAOD::numberOfBLayerOutliers);
+      allFound &= trParticle->summaryValue(nPiOutliers, xAOD::numberOfPixelOutliers);
+      allFound &= trParticle->summaryValue(nSCTOutliers, xAOD::numberOfSCTOutliers);
+      
+      allFound &= trParticle->summaryValue(nTRThigh, xAOD::numberOfTRTHighThresholdHits);
+      allFound &= trParticle->summaryValue(nTRThighOutliers, xAOD::numberOfTRTHighThresholdOutliers);
+      allFound &= trParticle->summaryValue(nTRT, xAOD::numberOfTRTHits);
+      allFound &= trParticle->summaryValue(nTRTOutliers, xAOD::numberOfTRTOutliers);
+      allFound &= trParticle->summaryValue(nTRTXenonHits, xAOD::numberOfTRTXenonHits);
+      
+      allFound &= trParticle->summaryValue(expectHitInBLayer, xAOD::expectBLayerHit);
 
-	ATH_MSG_DEBUG("   Number of silicon hits = " << nSiliconHits_trk << ", number of b-layer hits = " <<
-		      sum->get(Trk::numberOfBLayerHits));
-
-	ATH_MSG_DEBUG("   Electron tight blayer req = " << (*el)->isElectron(0x1 << egammaPID::TrackBlayer_Electron) 
-		      << "; expect hit in b-layer from detail = " << trackmatch->expectHitInBLayer() 
-		      << " and from track summary = " << sum->get(Trk::expectBLayerHit));
-
-
-	//   } // if (fabs((*el)->phi()) > M_PI)
-
-	//   if (!(*el)->isElectron(egammaPID::CONVMATCH_ELECTRON) && EMType::isElectronNotForward(*el)) {
-	//     const unsigned int isem = (*el)->isem();
-	//     ATH_MSG_DEBUG("Found a conv matched electron (author = " << (*el)->author() << ") based on PID == " << std::hex << isem);
-	//     const Analysis::Photon *matchedPhoton = NULL;
-	//     for (PhotonContainer::const_iterator ph  = photons->begin();
-	// 	   ph != photons->end();
-	// 	   ph++) {
-	// 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
-	// 	  matchedPhoton = *ph;
-	// 	  break;
-	// 	}
-	//     }
-	//     if (matchedPhoton) {
-	// 	const EMShower* shower = matchedPhoton->detail<EMShower>();
-	
-	// 	const CaloCluster* cluster = matchedPhoton->cluster();
-	
-	// 	double eta2   = fabs(cluster->etaBE(2)); 
-	// 	double et     = cluster->energy()/cosh(eta2);
-	// 	double ethad1 = shower->ethad1(); 
-	
-	// 	double hadleakage = et > 0. ? ethad1/et : 1.;
-	
-	// 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
-	// 	if (matchedPhoton->conversion()) {
-	// 	  ATH_MSG_INFO("Found a matched converted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
-	// 	} else {
-	// 	  ATH_MSG_INFO("Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
-	// 	}
-	//     } else {
-	//      	ATH_MSG_WARNING("NO MATCHING PHOTON FOUND");
-	//     }
-	//   } else {
-	//     const Analysis::Photon *matchedPhoton = NULL;
-	//     for (PhotonContainer::const_iterator ph  = photons->begin();
-	// 	   ph != photons->end();
-	// 	   ph++) {
-	// 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
-	// 	  matchedPhoton = *ph;
-	// 	  break;
-	// 	}
-	//     }
-	//     if (matchedPhoton) {
-	// 	ATH_MSG_ERROR("A MATCH WAS NOT EXPECTED!");
-	// 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
-	// 	const unsigned int isem = (*el)->isem();
-	// 	if (matchedPhoton->conversion()) {
-	// 	  ATH_MSG_WARNING("  Found a matched converted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
-	// 	} else {
-	// 	  ATH_MSG_WARNING("  Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
-	// 	}
-	//     }
-	//   }
+      if (!allFound) {
+	ATH_MSG_WARNING("Not all track values found");
       }
+
+      int nSiliconHits_trk = nPi + nSCT;
+
+      ATH_MSG_DEBUG("   Number of silicon hits = " << nSiliconHits_trk << ", number of b-layer hits = " << nBL 
+		    << ", expected hit in b-layer = " << expectHitInBLayer);
+
+
+      //   } // if (fabs((*el)->phi()) > M_PI)
+
+      //   if (!(*el)->isElectron(egammaPID::CONVMATCH_ELECTRON) && EMType::isElectronNotForward(*el)) {
+      //     const unsigned int isem = (*el)->isem();
+      //     ATH_MSG_DEBUG("Found a conv matched electron (author = " << (*el)->author() << ") based on PID == " << std::hex << isem);
+      //     const Analysis::Photon *matchedPhoton = NULL;
+      //     for (PhotonContainer::const_iterator ph  = photons->begin();
+      // 	   ph != photons->end();
+      // 	   ph++) {
+      // 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
+      // 	  matchedPhoton = *ph;
+      // 	  break;
+      // 	}
+      //     }
+      //     if (matchedPhoton) {
+      // 	const EMShower* shower = matchedPhoton->detail<EMShower>();
+	
+      // 	const CaloCluster* cluster = matchedPhoton->cluster();
+	
+      // 	double eta2   = fabs(cluster->etaBE(2)); 
+      // 	double et     = cluster->energy()/cosh(eta2);
+      // 	double ethad1 = shower->ethad1(); 
+	
+      // 	double hadleakage = et > 0. ? ethad1/et : 1.;
+	
+      // 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
+      // 	if (matchedPhoton->conversion()) {
+      // 	  ATH_MSG_INFO("Found a matched converted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
+      // 	} else {
+      // 	  ATH_MSG_INFO("Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
+      // 	}
+      //     } else {
+      //      	ATH_MSG_WARNING("NO MATCHING PHOTON FOUND");
+      //     }
+      //   } else {
+      //     const Analysis::Photon *matchedPhoton = NULL;
+      //     for (PhotonContainer::const_iterator ph  = photons->begin();
+      // 	   ph != photons->end();
+      // 	   ph++) {
+      // 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
+      // 	  matchedPhoton = *ph;
+      // 	  break;
+      // 	}
+      //     }
+      //     if (matchedPhoton) {
+      // 	ATH_MSG_ERROR("A MATCH WAS NOT EXPECTED!");
+      // 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
+      // 	const unsigned int isem = (*el)->isem();
+      // 	if (matchedPhoton->conversion()) {
+      // 	  ATH_MSG_WARNING("  Found a matched converted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
+      // 	} else {
+      // 	  ATH_MSG_WARNING("  Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
+      // 	}
+      //     }
+      //   }
     }
   } // loop over electrons
 
@@ -772,16 +757,9 @@ StatusCode TestAlg::execute()
 
   ATH_MSG_DEBUG("About to start photons");
 
-  PhotonContainer* sortedPhotons = const_cast<PhotonContainer*>(photons);
 
-  if (!sortedPhotons) {
-    ATH_MSG_WARNING("Can't const-cast photons");
-  }
-
-  AnalysisUtils::Sort::pT(sortedPhotons);
-
-  for (PhotonContainer::const_iterator ph  = sortedPhotons->begin();
-       ph != sortedPhotons->end();
+  for (auto ph  = photons->begin();
+       ph != photons->end();
        ph++) {
 
     // if ((*ph)->isPhoton(egammaPID::PhotonTight)) {
@@ -794,11 +772,6 @@ StatusCode TestAlg::execute()
       //     } else {
       //       ATH_MSG_DEBUG("Photon passes isolation with isem == " << std::hex << (*ph)->isem());
       //     }
-
-
-      const EMShower* shower = (*ph)->detail<EMShower>();
-      std::cout << "About to print out photon shower" << std::endl;
-      shower->print();
 
 
 
@@ -874,32 +847,18 @@ StatusCode TestAlg::execute()
 
       numPhotons++;
 
-      if ((*ph)->author(egammaParameters::AuthorPhoton | egammaParameters::AuthorRConv)) {
-	const Root::TAccept& acc = m_photonSelector->accept(*ph);
-	const bool passid = (*ph)->passID(egammaPID::PhotonIDTightAR);
+      const Root::TAccept& acc = m_photonSelector->accept(*ph);
+
       
-	if (acc && passid) {
-	  ATH_MSG_DEBUG("Passed photon selector and passID.");
-	} else if (acc) {
-	  ATH_MSG_WARNING("Passed photon selector but not passID.");
-	} else if (passid) {
-	  ATH_MSG_WARNING("Failed photon selector but passed passID.");
-	  // ATH_MSG_WARNING("  selector isEM = " << std::hex << m_photonSelector->IsemValue() 
-	  // 		  << ", orig isEM = " << (*ph)->isem());
-	} else {
-	  ATH_MSG_DEBUG("Failed photon selector.");
-	}
+      if (acc) {
+	ATH_MSG_DEBUG("Passed photon selector and passID.");
+      }  else {
+	ATH_MSG_DEBUG("Failed photon selector.");
       }
 
-      ATH_MSG_INFO("Photon with isem == " << std::hex << (*ph)->isem() 
-		   << ", cluster = " << (*ph)->cluster());
-      ATH_MSG_INFO("author is = " << (*ph)->author() << ", and num cells = " 
-		   << (*ph)->cluster()->getNumberOfCells());
-      ATH_MSG_INFO("Photon OQ = " << std::hex << (*ph)->isgoodoq());
+      ATH_MSG_INFO("author is = " << (*ph)->author());
+      //ATH_MSG_INFO("Photon OQ = " << std::hex << (*ph)->isgoodoq());
       //		 << ", cluster phi = " << (*ph)->cluster()->phi());
-
-      const double tppt = ((*ph)->trackParticle()) ? (*ph)->trackParticle()->pt() : -999; 
-      ATH_MSG_INFO("Photon trackParticle (not conversion) pt = " << tppt);
 
       //ATH_MSG_DEBUG("(*ph)->conversion() = " << (*ph)->conversion());
 
@@ -927,7 +886,7 @@ StatusCode TestAlg::execute()
       
       // 	// Then, to calculate the "corrected" isolation variables:
     
-      ATH_MSG_INFO("isos: " << shower->etcone20() << ", " << shower->etconoisedR03SigAbs3());
+      // ATH_MSG_INFO("isos: " << shower->etcone20() << ", " << shower->etconoisedR03SigAbs3());
 
     
       // 	m_histograms["etcone20"]->Fill(etcone20);
@@ -965,140 +924,156 @@ StatusCode TestAlg::execute()
       // 		     << ", full corrected = " << etcone40_corrected);
       // }
 
-      if ((*ph)->conversion()) {
+      if (xAOD::EgammaHelpers::isConvertedPhoton(*ph)) {
 	numConversions++;
-	if ((*ph)->author(egammaParameters::AuthorRConv)) numConversionsDup++;
+	ATH_MSG_INFO("Converted photon of type: " << xAOD::EgammaHelpers::conversionType(*ph));
 
-	if (!(*ph)->trackParticle()) numConversionsNotTP++;
+	//if ((*ph)->author(egammaParameters::AuthorRConv)) numConversionsDup++;
 
-	const Trk::VxCandidate*  convVtx = (*ph)->conversion();
-	const std::vector<Trk::VxTrackAtVertex*> *trkAtVxPtr = convVtx->vxTrackAtVertex();
-	if (trkAtVxPtr->size() == 1) {
-	  numConversionsSingleTrack++;
-	  int nSiliconHits_trk1=0;
-	  // first track
-	  Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
-	  const Trk::ITrackLink * trLink =tmpTrkAtVtx1->trackOrParticleLink();
-	  const Trk::TrackParticleBase* tempTrk1PB(0);
-	  if (0!= trLink) {
-	    const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink);  
-	    if (0!= linkToTrackPB) {
-	      if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
-	    } 
-	  }
-	  if ( tempTrk1PB!=NULL){  
-	    const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
-	    if (summary1 != NULL){
-	      nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
-	      const double pid1 = summary1->getPID(Trk::eProbabilityComb);
-	      m_histograms["TRTPID1Trk_fromPhotons"]->Fill(pid1);
-	      if (nSiliconHits_trk1 < 4) {
-		m_histograms["TRTPID1TrkTRT_fromPhotons"]->Fill(pid1);
-	      }
-	    }
-	  }
-	  const Trk::MeasuredPerigee* parAtVtx1 = 
-	    dynamic_cast<const  Trk::MeasuredPerigee*>(tmpTrkAtVtx1->perigeeAtVertex());
-	  if (nSiliconHits_trk1 < 4) {
-	    numConversionsSingleTrackTRT++;
-	    if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	    ATH_MSG_DEBUG("single-track trt photon with author = " << (*ph)->author() 
-			  << ", pt = " << (*ph)->pt() 
-			  << ", eta = " << (*ph)->eta() 
-			  << ", phi = " << (*ph)->phi()
-			  << ", conv vx tp pt = " << parAtVtx1->pT());
-	  } else {
-	    numConversionsSingleTrackSi++;
-	    ATH_MSG_DEBUG("single-track si photon with author = " << (*ph)->author() 
-			  << ", pt = " << (*ph)->pt() 
-			  << ", eta = " << (*ph)->eta() 
-			  << ", phi = " << (*ph)->phi()
-			  << ", conv vx tp pt = " << parAtVtx1->pT());
-	  }
+	// if (!(*ph)->trackParticle()) numConversionsNotTP++;
 
-	} else if (int(trkAtVxPtr->size())==2) {
-	  numConversionsDoubleTrack++;
+	// const Trk::VxCandidate*  convVtx = (*ph)->conversion();
+	// const std::vector<Trk::VxTrackAtVertex*> *trkAtVxPtr = convVtx->vxTrackAtVertex();
+	// if (trkAtVxPtr->size() == 1) {
+	//   numConversionsSingleTrack++;
+	//   int nSiliconHits_trk1=0;
+	//   // first track
+	//   Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
+	//   const Trk::ITrackLink * trLink =tmpTrkAtVtx1->trackOrParticleLink();
+	//   const Trk::TrackParticleBase* tempTrk1PB(0);
+	//   if (0!= trLink) {
+	//     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink);  
+	//     if (0!= linkToTrackPB) {
+	//       if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
+	//     } 
+	//   }
+	//   if ( tempTrk1PB!=NULL){  
+	//     const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
+	//     if (summary1 != NULL){
+	//       nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
+	//       const double pid1 = summary1->getPID(Trk::eProbabilityComb);
+	//       m_histograms["TRTPID1Trk_fromPhotons"]->Fill(pid1);
+	//       if (nSiliconHits_trk1 < 4) {
+	// 	m_histograms["TRTPID1TrkTRT_fromPhotons"]->Fill(pid1);
+	//       }
+	//     }
+	//   }
+	//   const Trk::MeasuredPerigee* parAtVtx1 = 
+	//     dynamic_cast<const  Trk::MeasuredPerigee*>(tmpTrkAtVtx1->perigeeAtVertex());
+	//   if (nSiliconHits_trk1 < 4) {
+	//     numConversionsSingleTrackTRT++;
+	//     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
+	//     ATH_MSG_DEBUG("single-track trt photon with author = " << (*ph)->author() 
+	// 		  << ", pt = " << (*ph)->pt() 
+	// 		  << ", eta = " << (*ph)->eta() 
+	// 		  << ", phi = " << (*ph)->phi()
+	// 		  << ", conv vx tp pt = " << parAtVtx1->pT());
+	//   } else {
+	//     numConversionsSingleTrackSi++;
+	//     ATH_MSG_DEBUG("single-track si photon with author = " << (*ph)->author() 
+	// 		  << ", pt = " << (*ph)->pt() 
+	// 		  << ", eta = " << (*ph)->eta() 
+	// 		  << ", phi = " << (*ph)->phi()
+	// 		  << ", conv vx tp pt = " << parAtVtx1->pT());
+	//   }
+
+	// } else if (int(trkAtVxPtr->size())==2) {
+	//   numConversionsDoubleTrack++;
 	    
-	  int nSiliconHits_trk1=0;
-	  int nSiliconHits_trk2=0;
-	  //	  const Trk::MeasuredPerigee* perigee = 0;
+	//   int nSiliconHits_trk1=0;
+	//   int nSiliconHits_trk2=0;
+	//   //	  const Trk::MeasuredPerigee* perigee = 0;
 
-	  // first track
-	  Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
-	  const Trk::ITrackLink * trLink1 =tmpTrkAtVtx1->trackOrParticleLink();
-	  const Trk::TrackParticleBase* tempTrk1PB(0);
-	  if (0!= trLink1) {
-	    const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink1);  
-	    if (0!= linkToTrackPB) {
-	      if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
-	    } 
-	  }
-	  if ( tempTrk1PB!=NULL){  
-	    const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
-	    if (summary1 != NULL){
-	      nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
-	    }
-	  }
-	  Trk::VxTrackAtVertex* tmpTrkAtVtx2 = trkAtVxPtr->at(1);
-	  const Trk::ITrackLink * trLink2 =tmpTrkAtVtx2->trackOrParticleLink();
-	  const Trk::TrackParticleBase* tempTrk2PB(0);
-	  if (0!= trLink2) {
-	    const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink2);  
-	    if (0!= linkToTrackPB) {
-	      if (linkToTrackPB->isValid()) tempTrk2PB = linkToTrackPB->cachedElement(); 
-	    } 
-	  }
-	  if ( tempTrk2PB!=NULL) {
-	    const Trk::TrackSummary* summary2 = tempTrk2PB->trackSummary();
-	    if (summary2 != NULL){
-	      nSiliconHits_trk2 = summary2->get(Trk::numberOfSCTHits)+ summary2->get(Trk::numberOfPixelHits);
-	    }
+	//   // first track
+	//   Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
+	//   const Trk::ITrackLink * trLink1 =tmpTrkAtVtx1->trackOrParticleLink();
+	//   const Trk::TrackParticleBase* tempTrk1PB(0);
+	//   if (0!= trLink1) {
+	//     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink1);  
+	//     if (0!= linkToTrackPB) {
+	//       if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
+	//     } 
+	//   }
+	//   if ( tempTrk1PB!=NULL){  
+	//     const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
+	//     if (summary1 != NULL){
+	//       nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
+	//     }
+	//   }
+	//   Trk::VxTrackAtVertex* tmpTrkAtVtx2 = trkAtVxPtr->at(1);
+	//   const Trk::ITrackLink * trLink2 =tmpTrkAtVtx2->trackOrParticleLink();
+	//   const Trk::TrackParticleBase* tempTrk2PB(0);
+	//   if (0!= trLink2) {
+	//     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink2);  
+	//     if (0!= linkToTrackPB) {
+	//       if (linkToTrackPB->isValid()) tempTrk2PB = linkToTrackPB->cachedElement(); 
+	//     } 
+	//   }
+	//   if ( tempTrk2PB!=NULL) {
+	//     const Trk::TrackSummary* summary2 = tempTrk2PB->trackSummary();
+	//     if (summary2 != NULL){
+	//       nSiliconHits_trk2 = summary2->get(Trk::numberOfSCTHits)+ summary2->get(Trk::numberOfPixelHits);
+	//     }
 	  
-	    //       ATH_MSG_ERROR("found a conversion without a trackParticle");
-	    //       return StatusCode::FAILURE;
-	  }
-	  if (nSiliconHits_trk1 < 4 &&  nSiliconHits_trk2 < 4) {
-	    numConversionsDoubleTrackTRT++;
-	    if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	    ATH_MSG_DEBUG("double-track trt photon with author = " << (*ph)->author() 
-			  << ", pt = " << (*ph)->pt() 
-			  << ", eta = " << (*ph)->eta() 
-			  << ", phi = " << (*ph)->phi());
-	  } else if (nSiliconHits_trk1 < 4 || nSiliconHits_trk2 < 4) {
-	    numConversionsDoubleTrackMix++;
-	    if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	    ATH_MSG_DEBUG("double-track mix photon with author = " << (*ph)->author() 
-			  << ", pt = " << (*ph)->pt()
-			  << ", eta = " << (*ph)->eta() 
-			  << ", phi = " << (*ph)->phi());
+	//     //       ATH_MSG_ERROR("found a conversion without a trackParticle");
+	//     //       return StatusCode::FAILURE;
+	//   }
+	//   if (nSiliconHits_trk1 < 4 &&  nSiliconHits_trk2 < 4) {
+	//     numConversionsDoubleTrackTRT++;
+	//     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
+	//     ATH_MSG_DEBUG("double-track trt photon with author = " << (*ph)->author() 
+	// 		  << ", pt = " << (*ph)->pt() 
+	// 		  << ", eta = " << (*ph)->eta() 
+	// 		  << ", phi = " << (*ph)->phi());
+	//   } else if (nSiliconHits_trk1 < 4 || nSiliconHits_trk2 < 4) {
+	//     numConversionsDoubleTrackMix++;
+	//     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
+	//     ATH_MSG_DEBUG("double-track mix photon with author = " << (*ph)->author() 
+	// 		  << ", pt = " << (*ph)->pt()
+	// 		  << ", eta = " << (*ph)->eta() 
+	// 		  << ", phi = " << (*ph)->phi());
 
-	  } else {
-	    numConversionsDoubleTrackSi++;
-	    ATH_MSG_DEBUG("double-track Si photon with author = " << (*ph)->author() 
-			  << ", pt = " << (*ph)->pt()
-			  << ", eta = " << (*ph)->eta() 
-			  << ", phi = " << (*ph)->phi());
-	  }
-	}
+	//   } else {
+	//     numConversionsDoubleTrackSi++;
+	//     ATH_MSG_DEBUG("double-track Si photon with author = " << (*ph)->author() 
+	// 		  << ", pt = " << (*ph)->pt()
+	// 		  << ", eta = " << (*ph)->eta() 
+	// 		  << ", phi = " << (*ph)->phi());
+	//   }
+	// }
       } else {
 	numUnconverted++;
-	ATH_MSG_DEBUG("Unconverted photon with author = " << (*ph)->author() 
-		      << ", pt = " << (*ph)->pt()
+	ATH_MSG_DEBUG("Unconverted photon with author = " << (*ph)->author());
+      }
+
+      ATH_MSG_INFO("Photon with pt = " << (*ph)->pt()
 		      << ", eta = " << (*ph)->eta() 
 		      << ", phi = " << (*ph)->phi());
-	if ((*ph)->author(egammaParameters::AuthorRConv)) numUnconvertedDup++;
-      }
 
-      const Rec::TrackParticle * trParticle = (*ph)->trackParticle();
-      if (trParticle) {
-	const Trk::TrackSummary* sum = trParticle->trackSummary();
-	int nSiliconHits_trk = -999;
-	if (sum != NULL)  nSiliconHits_trk = sum->get(Trk::numberOfSCTHits)+ sum->get(Trk::numberOfPixelHits);
+      ATH_MSG_INFO("Cluster eta = " << (*ph)->caloCluster()->eta());
+
+      bool allFound = true;
       
-	ATH_MSG_DEBUG("   Number of silicon hits of tp = " << nSiliconHits_trk << ", pt = " << trParticle->pt());
+      float etap = -999.0;
+
+      // E(3*7) in 2nd sampling
+      allFound &= (*ph)->showerShapeValue(etap, xAOD::EgammaParameters::etap);
+      if (!allFound) {
+	ATH_MSG_WARNING("Not all shower shape values found");
       }
 
-      ATH_MSG_DEBUG("   ambiguity result = " << (*ph)->detailValue(egammaParameters::ambiguityResult));
+      ATH_MSG_INFO("Pointing eta = " << etap);
+
+      // const Rec::TrackParticle * trParticle = (*ph)->trackParticle();
+      // if (trParticle) {
+      // 	const Trk::TrackSummary* sum = trParticle->trackSummary();
+      // 	int nSiliconHits_trk = -999;
+      // 	if (sum != NULL)  nSiliconHits_trk = sum->get(Trk::numberOfSCTHits)+ sum->get(Trk::numberOfPixelHits);
+      
+      // 	ATH_MSG_DEBUG("   Number of silicon hits of tp = " << nSiliconHits_trk << ", pt = " << trParticle->pt());
+      // }
+
+      // ATH_MSG_DEBUG("   ambiguity result = " << (*ph)->detailValue(egammaParameters::ambiguityResult));
   
       // const HepMC::GenParticle *truthPhoton = 
       //   m_TruthUtils->DoTruthMatch(*ph, ge, trackParts,

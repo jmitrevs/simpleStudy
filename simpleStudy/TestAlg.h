@@ -30,7 +30,7 @@ class StoreGateSvc;
 class IMCTruthClassifier;
 //class IAthElectronIsEMSelector;
 //class IAthPhotonIsEMSelector;
-class IAthSelectorTool;
+class IAsgSelectionTool;
 
 class TestAlg : public AthAlgorithm
 {
@@ -51,9 +51,9 @@ public:
 private:
 
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
-  ToolHandle<IAthSelectorTool> m_electronSelector;
+  ToolHandle<IAsgSelectionTool> m_electronSelector;
   //ToolHandle<IAthPhotonIsEMSelector> m_photonSelector;
-  ToolHandle<IAthSelectorTool> m_photonSelector;
+  ToolHandle<IAsgSelectionTool> m_photonSelector;
 
   //ToolHandle<TruthUtils> m_TruthUtils;
   ToolHandle<IMCTruthClassifier> m_MCTruthClassifier;

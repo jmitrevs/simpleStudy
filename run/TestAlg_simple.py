@@ -23,25 +23,22 @@ MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainer
 MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
 import PyCintex
-PyCintex.loadDictionary('egammaEnumsDict')
+PyCintex.loadDictionary('ElectronPhotonSelectorTools')
 from ROOT import egammaPID
 
-from ElectronPhotonSelectorTools.ConfiguredAthElectronIsEMSelectors import ConfiguredAthElectronIsEMSelector
-electronSelector = ConfiguredAthElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMediumPP,
+from ElectronPhotonSelectorTools.ConfiguredAsgElectronIsEMSelectors import ConfiguredAsgElectronIsEMSelector
+electronSelector = ConfiguredAsgElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMediumPP,
                                                      OutputLevel = DEBUG)
 ToolSvc += electronSelector
 
-from ElectronPhotonSelectorTools.ConfiguredAthPhotonIsEMSelectors import ConfiguredAthPhotonIsEMSelector
-photonSelector = ConfiguredAthPhotonIsEMSelector("myPhotonSelector", egammaPID.PhotonIDTightAR,
+from ElectronPhotonSelectorTools.ConfiguredAsgPhotonIsEMSelectors import ConfiguredAsgPhotonIsEMSelector
+photonSelector = ConfiguredAsgPhotonIsEMSelector("myPhotonSelector", egammaPID.PhotonIDTightAR,
                                                  OutputLevel = DEBUG)
 ToolSvc += photonSelector
 
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
-                  ElectronContainerName = "ElectronAODCollection",
-                  PhotonContainerName = "PhotonAODCollection",
-                  egammaContainerName = "HLT_egamma_Electrons",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,

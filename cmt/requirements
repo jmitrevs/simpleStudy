@@ -27,20 +27,16 @@ use PATCore                     PATCore-*    PhysicsAnalysis/AnalysisCommon
 use AtlasROOT                  AtlasROOT-*                     External
 use TrkTrackLink		TrkTrackLink-*			Tracking/TrkEvent
 use TrkParticleBase		TrkParticleBase-*		Tracking/TrkEvent
-use TrkNeutralParameters	TrkNeutralParameters-*		Tracking/TrkEvent
 use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
 use TrkTrack			TrkTrack-*			Tracking/TrkEvent
-use InDetSecVxFinderTool	InDetSecVxFinderTool-*		InnerDetector/InDetRecTools
 use  EventInfo                  EventInfo-*                     Event
+use  xAODEgamma                 xAODEgamma-*                    Event/xAOD
 
 use FourMomUtils                FourMomUtils-*          Event
 
 
 use AnalysisUtils AnalysisUtils-* PhysicsAnalysis/AnalysisCommon
 use  AtlasGSL                   AtlasGSL-*                      External
-use MissingETEvent              MissingETEvent-*        Reconstruction
-use  egammaInterfaces		egammaInterfaces-*		Reconstruction/egamma
-use  egammaUtils		egammaUtils-*			Reconstruction/egamma
 use ElectronPhotonSelectorTools ElectronPhotonSelectorTools-*   PhysicsAnalysis/ElectronPhotonID
 #use PhotonAnalysisUtils         PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
 
