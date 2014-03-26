@@ -8,8 +8,8 @@ from glob import glob
 #InputList = glob('/data3/jmitrevs/mc09_7TeV.114007.SPS8_110_jimmy_susy.merge.AOD.e530_s765_s767_r1302_r1306_tid140030_00/AOD*')
 #InputList = glob('../../q121/myAOD.pool.root')
 #InputList = glob('../../run/copy_AOD*.pool.root')
-#InputList = glob('../../run/AOD.pool.root')
-InputList = glob('../../run2/AOD.pool.root')
+InputList = glob('../../run/AOD.pool.root')
+#InputList = glob('../../run2/AOD.pool.root')
 #InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
 #InputList = ['root://eosatlas//eos/atlas/user/j/jcosta/PROC/myAOD_RECOFIX_Muons.pool.root']
 #InputList = glob('../../run_9/AOD.pool.root')
