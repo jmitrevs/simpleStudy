@@ -10,6 +10,8 @@
 #include "EventInfo/EventID.h"
 #include "EventInfo/EventType.h"
 
+#include "AthenaKernel/errorcheck.h"
+
 #include "TH1.h"
 #include "McParticleEvent/TruthParticle.h"
 #include "McParticleEvent/TruthParticleContainer.h"
@@ -503,31 +505,22 @@ StatusCode TestAlg::execute()
 
   // and the actual McEventCollection
   const McEventCollection* mcEventCollection(0);
-  sc = evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName);
-  if( sc.isFailure()  ||  !mcEventCollection ) {
-    ATH_MSG_WARNING("No McEventCollection container found in TDS");
-    mcEventCollection = 0;
+  if (evtStore()->contains<McEventCollection>(m_McEventCollectionContainerName)) {
+    CHECK(evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName));
+  }
+  const xAOD::TruthEventContainer *truthEvents(0);
+  if (evtStore()->contains<xAOD::TruthEventContainer>(m_xAODTruthEventContainerName)) {
+    CHECK(evtStore()->retrieve(truthEvents,m_xAODTruthEventContainerName));
   }
 
-  xAOD::TruthEventContainer *truthEvents(0);
-  sc = evtStore()->retrieve(truthEvents,m_xAODTruthEventContainerName);
-  if( sc.isFailure()  ||  !truthEvents ) {
-    ATH_MSG_WARNING("No xAODTruthEvent container found in TDS");
-    truthEvents = 0;
+  const xAOD::TruthParticleContainer *truthParticles(0);
+  if (evtStore()->contains<xAOD::TruthParticleContainer>(m_xAODTruthParticleContainerName)) {
+    CHECK(evtStore()->retrieve(truthParticles,m_xAODTruthParticleContainerName));
   }
 
-  xAOD::TruthParticleContainer *truthParticles(0);
-  sc = evtStore()->retrieve(truthParticles,m_xAODTruthParticleContainerName);
-  if( sc.isFailure()  ||  !truthParticles ) {
-    ATH_MSG_WARNING("No xAODTruthParticle container found in TDS");
-    truthParticles = 0;
-  }
-
-  xAOD::TruthVertexContainer *truthVertices(0);
-  sc = evtStore()->retrieve(truthVertices,m_xAODTruthVertexContainerName);
-  if( sc.isFailure()  ||  !truthVertices ) {
-    ATH_MSG_WARNING("No xAODTruthVertex container found in TDS");
-    truthVertices = 0;
+  const xAOD::TruthVertexContainer *truthVertices(0);
+  if (evtStore()->contains<xAOD::TruthVertexContainer>(m_xAODTruthVertexContainerName)) {
+    CHECK(evtStore()->retrieve(truthVertices,m_xAODTruthVertexContainerName));
   }
 
   // const Rec::TrackParticleContainer* trackParts;
@@ -1311,39 +1304,29 @@ StatusCode TestAlg::execute()
   //   }
   // } // end of loop over conversion vertices
 
-  // loop over xAODTruthParticles
-  if (truthParticles) {
-    for (auto tp : *truthParticles) {
-      if (tp->eta() == 0 && tp->phi() == 0) {
-	ATH_MSG_DEBUG("TruthPartcile with zero eta and phi; pt = " << tp->pt()
-		      << ", status = " << tp->status());
-      }
-    }
-  }
+  // // loop over xAODTruthParticles
+  // if (truthParticles) {
+  //   for (auto tp : *truthParticles) {
+  //     if (tp->eta() == 0 && tp->phi() == 0) {
+  // 	ATH_MSG_DEBUG("TruthPartcile with zero eta and phi; pt = " << tp->pt()
+  // 		      << ", status = " << tp->status());
+  //     }
+  //   }
+  // }
 
-  // loop over GenParticles
-  if (truthParticles) {
-    for (auto tp : *truthParticles) {
-      if (tp->phi() == 0 && tp->eta() == 0) {
-	ATH_MSG_DEBUG("TruthPartcile with zero eta and phi; pt = " << tp->pt()
-		      << ", status = " << tp->status());
-      }
-    }
-  }
-
-  if (mcEventCollection) {
-    ATH_MSG_INFO("Number of GenEvent = " << mcEventCollection->size());
-    for (auto ge : *mcEventCollection) {
-      // ATH_MSG_DEBUG("Looking at a new GenEvent");
-      for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
-	const auto& p = (*pcl)->momentum();
-	if (p.phi() == 0 && p.eta() == 0) {
-	  ATH_MSG_DEBUG("GenPartcile with zero eta and phi; pt = " << p.perp()
-			<< ", status = " << (*pcl)->status());
-	}
-      }
-    }
-  }
+  // if (mcEventCollection) {
+  //   ATH_MSG_INFO("Number of GenEvent = " << mcEventCollection->size());
+  //   for (auto ge : *mcEventCollection) {
+  //     // ATH_MSG_DEBUG("Looking at a new GenEvent");
+  //     for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
+  // 	const auto& p = (*pcl)->momentum();
+  // 	if (p.phi() == 0 && p.eta() == 0) {
+  // 	  ATH_MSG_DEBUG("GenPartcile with zero eta and phi; pt = " << p.perp()
+  // 			<< ", status = " << (*pcl)->status());
+  // 	}
+  //     }
+  //   }
+  // }
 
   return sc;
 

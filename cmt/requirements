@@ -32,6 +32,7 @@ use TrkTrack			TrkTrack-*			Tracking/TrkEvent
 use  EventInfo                  EventInfo-*                     Event
 use  xAODEgamma                 xAODEgamma-*                    Event/xAOD
 use  xAODTruth                  xAODTruth-*                    Event/xAOD
+use AthenaKernel                AthenaKernel-*                 Control
 
 use FourMomUtils                FourMomUtils-*          Event
 
