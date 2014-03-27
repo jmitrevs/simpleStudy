@@ -100,7 +100,11 @@ private:
   std::string m_ConversionsName;
 //   std::string m_EMTrackFitContainerName;
 //   std::string m_EMErrorDetailContainerName;
-//   std::string m_McEventCollectionContainerName;
+
+  std::string m_McEventCollectionContainerName;
+  std::string m_xAODTruthEventContainerName;
+  std::string m_xAODTruthParticleContainerName;
+  std::string m_xAODTruthVertexContainerName;
 
   int numPhotons;
   int numUnconverted;

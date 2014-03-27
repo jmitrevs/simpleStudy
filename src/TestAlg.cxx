@@ -21,6 +21,10 @@
 #include "xAODEgamma/PhotonContainer.h"
 #include "xAODEgamma/EgammaxAODHelpers.h"
 
+#include "xAODTruth/TruthEventContainer.h"
+#include "xAODTruth/TruthParticleContainer.h"
+#include "xAODTruth/TruthVertexContainer.h"
+
 #include "AnalysisUtils/AnalysisMisc.h"
 
 //#include "simpleStudy/TruthUtils.h"
@@ -40,6 +44,12 @@
 //#include "FourMomUtils/P4Helpers.h"
 
 //#include "PhotonAnalysisUtils/IPAUcaloIsolationTool.h"
+
+#include "GeneratorObjects/McEventCollection.h"
+ 
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+
 
 #include <gsl/gsl_math.h>
 
@@ -107,10 +117,20 @@ TestAlg::TestAlg(const std::string& name,
 //                   m_EMErrorDetailContainerName="egDetailAODAll",
 //                   "Name of the EMErrorDetail container");
 
-  // // Name of the McEventCollection Container
-  // declareProperty("McEventCollectionContainerName",
-  //                 m_McEventCollectionContainerName="GEN_AOD",
-  //                 "Name of the McEventCollection container");
+  // Name of the McEventCollection Container
+  declareProperty("McEventCollectionContainerName",
+		  m_McEventCollectionContainerName="TruthEvent",
+		  "Name of the McEventCollection container");
+
+  declareProperty("xAODTruthEventContainerName",
+		  m_xAODTruthEventContainerName="TruthEvent",
+		  "Name of the xAOD::TruthEvent container");
+  declareProperty("xAODTruthParticleContainerName",
+		  m_xAODTruthParticleContainerName="TruthParticle",
+		  "Name of the xAOD::TruthParticle container");
+  declareProperty("xAODTruthVertexContainerName",
+		  m_xAODTruthVertexContainerName="TruthVertex",
+		  "Name of the xAOD::TruthVertex container");
   
 }
 
@@ -481,13 +501,34 @@ StatusCode TestAlg::execute()
   // const HepMC::GenEvent *ge=mcpartTES->genEvent();
   // m_TruthUtils->FillTruthMap(ge, m_truthPhotonPtMin);
 
-  // // and the actual McEventCollection
-  // const McEventCollection* mcEventCollection(0);
-  // sc = evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName);
-  // if( sc.isFailure()  ||  !mcEventCollection ) {
-  //   ATH_MSG_ERROR("No AOD McEventCollection container found in TDS");
-  //   return StatusCode::FAILURE;
-  // }
+  // and the actual McEventCollection
+  const McEventCollection* mcEventCollection(0);
+  sc = evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName);
+  if( sc.isFailure()  ||  !mcEventCollection ) {
+    ATH_MSG_WARNING("No McEventCollection container found in TDS");
+    mcEventCollection = 0;
+  }
+
+  xAOD::TruthEventContainer *truthEvents(0);
+  sc = evtStore()->retrieve(truthEvents,m_xAODTruthEventContainerName);
+  if( sc.isFailure()  ||  !truthEvents ) {
+    ATH_MSG_WARNING("No xAODTruthEvent container found in TDS");
+    truthEvents = 0;
+  }
+
+  xAOD::TruthParticleContainer *truthParticles(0);
+  sc = evtStore()->retrieve(truthParticles,m_xAODTruthParticleContainerName);
+  if( sc.isFailure()  ||  !truthParticles ) {
+    ATH_MSG_WARNING("No xAODTruthParticle container found in TDS");
+    truthParticles = 0;
+  }
+
+  xAOD::TruthVertexContainer *truthVertices(0);
+  sc = evtStore()->retrieve(truthVertices,m_xAODTruthVertexContainerName);
+  if( sc.isFailure()  ||  !truthVertices ) {
+    ATH_MSG_WARNING("No xAODTruthVertex container found in TDS");
+    truthVertices = 0;
+  }
 
   // const Rec::TrackParticleContainer* trackParts;
   // sc=evtStore()->retrieve(trackParts, m_TrackParticleContainerName);
@@ -1269,6 +1310,40 @@ StatusCode TestAlg::execute()
 
   //   }
   // } // end of loop over conversion vertices
+
+  // loop over xAODTruthParticles
+  if (truthParticles) {
+    for (auto tp : *truthParticles) {
+      if (tp->eta() == 0 && tp->phi() == 0) {
+	ATH_MSG_DEBUG("TruthPartcile with zero eta and phi; pt = " << tp->pt()
+		      << ", status = " << tp->status());
+      }
+    }
+  }
+
+  // loop over GenParticles
+  if (truthParticles) {
+    for (auto tp : *truthParticles) {
+      if (tp->phi() == 0 && tp->eta() == 0) {
+	ATH_MSG_DEBUG("TruthPartcile with zero eta and phi; pt = " << tp->pt()
+		      << ", status = " << tp->status());
+      }
+    }
+  }
+
+  if (mcEventCollection) {
+    ATH_MSG_INFO("Number of GenEvent = " << mcEventCollection->size());
+    for (auto ge : *mcEventCollection) {
+      // ATH_MSG_DEBUG("Looking at a new GenEvent");
+      for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
+	const auto& p = (*pcl)->momentum();
+	if (p.phi() == 0 && p.eta() == 0) {
+	  ATH_MSG_DEBUG("GenPartcile with zero eta and phi; pt = " << p.perp()
+			<< ", status = " << (*pcl)->status());
+	}
+      }
+    }
+  }
 
   return sc;
 
