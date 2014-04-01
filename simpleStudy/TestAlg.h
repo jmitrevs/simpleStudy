@@ -71,6 +71,8 @@ private:
   bool m_runOnlySome; // set to true if m_runEvents is not null
 
   bool m_doTruth;
+  bool m_doElectrons;
+  bool m_doPhotons;
 
   /** Electron selection */
   std::string m_ElectronContainerName;

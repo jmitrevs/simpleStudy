@@ -1,6 +1,8 @@
+from glob import glob
 
 # Set up the reading of a file:
-FNAME = "../../run3/ESD.pool.root"
+FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
+#FNAME = "../../run3/ESD.pool.root"
 include( "AthenaPython/iread_file.py" )
 
 #--------------------------------------------------------------
