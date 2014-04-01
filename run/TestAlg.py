@@ -10,7 +10,7 @@ from glob import glob
 #InputList = glob('../../run/copy_AOD*.pool.root')
 #InputList = glob('../../run/AOD.pool.root')
 #InputList = glob('../../run2/AOD.pool.root')
-InputList = glob('../../run3/ESD.pool.root')
+InputList = glob('../../run8/ESD.pool.root')
 #InputList = ['root://eosatlas//eos/atlas/atlascerngroupdisk/proj-sit/rtt/prod/tct/rel_1/17.2.X/i686-slc5-gcc43-opt/offline/Tier0ChainTests/Run00183021_express0_Collisions/myAOD_express_0.AOD.pool.root']
 #InputList = ['root://eosatlas//eos/atlas/user/j/jcosta/PROC/myAOD_RECOFIX_Muons.pool.root']
 #InputList = glob('../../run_9/AOD.pool.root')

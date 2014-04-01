@@ -1,8 +1,8 @@
 from glob import glob
 
 # Set up the reading of a file:
-FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
-#FNAME = "../../run3/ESD.pool.root"
+#FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
+FNAME = "../../run8/ESD.pool.root"
 include( "AthenaPython/iread_file.py" )
 
 #--------------------------------------------------------------
@@ -29,7 +29,7 @@ MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainer
 MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
 import PyCintex
-PyCintex.loadDictionary('ElectronPhotonSelectorTools')
+PyCintex.loadDictionary('ElectronPhotonSelectorToolsDict')
 from ROOT import egammaPID
 
 from ElectronPhotonSelectorTools.ConfiguredAsgElectronIsEMSelectors import ConfiguredAsgElectronIsEMSelector
@@ -48,7 +48,9 @@ testAlg = TestAlg(name = "TestAlg",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
-                  DoTruth = False
+                  DoTruth = False,
+                  DoElectrons = True,
+                  DoPhotons = False
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG

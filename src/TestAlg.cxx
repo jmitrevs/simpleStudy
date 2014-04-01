@@ -714,8 +714,8 @@ StatusCode TestAlg::execute()
 
 	int nSiliconHits_trk = nPi + nSCT;
 
-	ATH_MSG_DEBUG("   Number of silicon hits = " << nSiliconHits_trk << ", number of b-layer hits = " << nBL 
-		      << ", expected hit in b-layer = " << expectHitInBLayer);
+	ATH_MSG_DEBUG("   Number of silicon hits = " << (int) nSiliconHits_trk << ", number of b-layer hits = " << (int) nBL 
+		      << ", expected hit in b-layer = " << (bool) expectHitInBLayer);
 
 
 	//   } // if (fabs((*el)->phi()) > M_PI)
@@ -1308,31 +1308,33 @@ StatusCode TestAlg::execute()
   //   }
   // } // end of loop over conversion vertices
 
-  // loop over xAODTruthParticles
-  if (truthParticles) {
-    for (auto tp : *truthParticles) {
-      if (tp->eta() == 0 && tp->phi() == 0) {
-  	ATH_MSG_WARNING("TruthPartcile with zero eta and phi; pt = " << tp->pt()
-			<< ", status = " << tp->status()
-			<< ", pdg_id = " << tp->pdgId());
+  if (m_doTruth) {
+    // loop over xAODTruthParticles
+    if (truthParticles) {
+      for (auto tp : *truthParticles) {
+	if (tp->eta() == 0 && tp->phi() == 0) {
+	  ATH_MSG_WARNING("TruthPartcile with zero eta and phi; pt = " << tp->pt()
+			  << ", status = " << tp->status()
+			  << ", pdg_id = " << tp->pdgId());
+	}
       }
     }
-  }
-
-  if (mcEventCollection) {
-    size_t size = mcEventCollection->size();
-    ATH_MSG_INFO("Number of GenEvent = " << size);
-    for (size_t i = 0; i < size; i++) {
-      auto ge = mcEventCollection->at(i);
-      
-      // ATH_MSG_DEBUG("Looking at a new GenEvent");
-      for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
-  	const auto& p = (*pcl)->momentum();
-  	if (p.phi() == 0 && p.eta() == 0) {
-  	  ATH_MSG_WARNING("GenPartcile in event " << i << " with zero eta and phi; pt = " << p.perp()
-			  << ", status = " << (*pcl)->status()
-			  << ", pdg_id = " << (*pcl)->pdg_id());
-  	}
+    
+    if (mcEventCollection) {
+      size_t size = mcEventCollection->size();
+      ATH_MSG_INFO("Number of GenEvent = " << size);
+      for (size_t i = 0; i < size; i++) {
+	auto ge = mcEventCollection->at(i);
+	
+	// ATH_MSG_DEBUG("Looking at a new GenEvent");
+	for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
+	  const auto& p = (*pcl)->momentum();
+	  if (p.phi() == 0 && p.eta() == 0) {
+	    ATH_MSG_WARNING("GenPartcile in event " << i << " with zero eta and phi; pt = " << p.perp()
+			    << ", status = " << (*pcl)->status()
+			    << ", pdg_id = " << (*pcl)->pdg_id());
+	  }
+	}
       }
     }
   }
