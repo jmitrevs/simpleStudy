@@ -2,7 +2,7 @@ from glob import glob
 
 # Set up the reading of a file:
 #FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
-FNAME = "../../run8/ESD.pool.root"
+FNAME = "../../run/myAOD.pool.root"
 include( "AthenaPython/iread_file.py" )
 
 #--------------------------------------------------------------
@@ -50,7 +50,7 @@ testAlg = TestAlg(name = "TestAlg",
                   MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
                   DoTruth = False,
                   DoElectrons = True,
-                  DoPhotons = False
+                  DoPhotons = True
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG
