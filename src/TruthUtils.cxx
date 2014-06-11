@@ -796,16 +796,16 @@ const std::vector<const HepMC::GenParticle*> TruthUtils::getTruthTracks(const Tr
   //get vector of linked GenParticles to them
   std::vector<const HepMC::GenParticle*> vecGenPart;
 
-  for( int counter =0; counter < int(trkAtVtx.size()); ++counter) {
-    const Rec::TrackParticle* trkP = trkAtVtx[counter];
-    const HepMC::GenParticle* genP = m_truthClassifier->getGenPart(trkP);
-    if(genP) {
-      const int pid = genP->pdg_id();
-      if (pid == 11 || pid == -11) {
-	vecGenPart.push_back(genP);
-      }
-    }
-  }
+  // for( int counter =0; counter < int(trkAtVtx.size()); ++counter) {
+  //   const Rec::TrackParticle* trkP = trkAtVtx[counter];
+  //   const HepMC::GenParticle* genP = m_truthClassifier->getGenPart(trkP);
+  //   if(genP) {
+  //     const int pid = genP->pdg_id();
+  //     if (pid == 11 || pid == -11) {
+  // 	vecGenPart.push_back(genP);
+  //     }
+  //   }
+  // }
   return vecGenPart;
 }
 
@@ -825,45 +825,46 @@ const HepMC::GenParticle* TruthUtils::FindConversionTruthMatch(const Trk::VxCand
   int motherBar=-1;
 
   // Here, we need to make a choice between using Olegs truthClassifier, or our older version
-  if(useTruthClassifier){
+//   if(useTruthClassifier){
 
-    std::vector<std::pair<int,int>* > vecElecPDGBar;
+//     std::vector<std::pair<int,int>* > vecElecPDGBar;
 
-    for( int counter =0; counter < int(trkAtVtx.size()); ++counter) {
-      const Rec::TrackParticle* trkP = trkAtVtx[counter];
-      //const HepMC::GenParticle* genP = m_truthTool->trkParticleToGenParticle(trkP, trkParticleTES, trkPartTruthTES);
-      const HepMC::GenParticle* genP = m_truthClassifier->getGenPart(trkP);
-      if(!genP) continue;
-      const int pid = genP->pdg_id();
-      if (pid != 11 && pid != -11) continue;
+//     for( int counter =0; counter < int(trkAtVtx.size()); ++counter) {
+//       const Rec::TrackParticle* trkP = trkAtVtx[counter];
+//       //const HepMC::GenParticle* genP = m_truthTool->trkParticleToGenParticle(trkP, trkParticleTES, trkPartTruthTES);
+//       const HepMC::GenParticle* genP = m_truthClassifier->getGenPart(trkP);
+//       if(!genP) continue;
+//       const int pid = genP->pdg_id();
+//       if (pid != 11 && pid != -11) continue;
       
-//       std::pair<egammaElecTruthClassifier::TrackPartType,
-// 	egammaElecTruthClassifier::ElectronOrigin>  elecres = m_truthClassifier->electronTrackClassifier(trkP);
-      std::pair<unsigned int, unsigned int> electres = m_truthClassifier->trackClassifier(trkP);
-      int elecPDG = m_truthClassifier->getMotherPDG();
-      int elecBar = m_truthClassifier->getMotherBarcode();
-      vecGenPart.push_back(genP);
-      vecElecPDGBar.push_back(new std::pair<int,int>(elecPDG,elecBar));
-    }
+// //       std::pair<egammaElecTruthClassifier::TrackPartType,
+// // 	egammaElecTruthClassifier::ElectronOrigin>  elecres = m_truthClassifier->electronTrackClassifier(trkP);
+//       std::pair<unsigned int, unsigned int> electres = m_truthClassifier->trackClassifier(trkP);
+//       int elecPDG = m_truthClassifier->getMotherPDG();
+//       int elecBar = m_truthClassifier->getMotherBarcode();
+//       vecGenPart.push_back(genP);
+//       vecElecPDGBar.push_back(new std::pair<int,int>(elecPDG,elecBar));
+//     }
 
-    // now, the vecElecPDGBar should consist of between 0 and 2 entries that are all the same.  Check to see if this is the case,
-    // and if so, no need to hold onto the vector...  just take the mother PDG.
-    for(std::vector<std::pair<int,int>* >::iterator elecPDG_iter=vecElecPDGBar.begin(); elecPDG_iter != vecElecPDGBar.end(); ++elecPDG_iter){
-      if(elecPDG_iter==vecElecPDGBar.begin()){
-	motherPDG = (*elecPDG_iter)->first;
-	motherBar = (*elecPDG_iter)->second;
-      }
-      else if(motherPDG != (*elecPDG_iter)->first){
-	msg(MSG::WARNING) << "The PDG ID's returned for the mother of this conversion do not match!"
-			  << "  first is " << motherPDG << " and this one is " << (*elecPDG_iter)->first << endreq;
-	return 0; // consider it to be a fake conversion
-      }
-    }
-    if(motherPDG==-1){
-      msg(MSG::WARNING) << "Got no PDG IDs back for the mother of this conversion.  Weird." << endreq;
-    }
-  }
-  else{
+//     // now, the vecElecPDGBar should consist of between 0 and 2 entries that are all the same.  Check to see if this is the case,
+//     // and if so, no need to hold onto the vector...  just take the mother PDG.
+//     for(std::vector<std::pair<int,int>* >::iterator elecPDG_iter=vecElecPDGBar.begin(); elecPDG_iter != vecElecPDGBar.end(); ++elecPDG_iter){
+//       if(elecPDG_iter==vecElecPDGBar.begin()){
+// 	motherPDG = (*elecPDG_iter)->first;
+// 	motherBar = (*elecPDG_iter)->second;
+//       }
+//       else if(motherPDG != (*elecPDG_iter)->first){
+// 	msg(MSG::WARNING) << "The PDG ID's returned for the mother of this conversion do not match!"
+// 			  << "  first is " << motherPDG << " and this one is " << (*elecPDG_iter)->first << endreq;
+// 	return 0; // consider it to be a fake conversion
+//       }
+//     }
+//     if(motherPDG==-1){
+//       msg(MSG::WARNING) << "Got no PDG IDs back for the mother of this conversion.  Weird." << endreq;
+//     }
+//   }
+//   else
+    {
 
     for( int counter =0; counter < int(trkAtVtx.size()); ++counter) {
       const Rec::TrackParticle* trkP = trkAtVtx[counter];

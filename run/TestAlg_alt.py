@@ -22,11 +22,11 @@ topSequence = AlgSequence()
 # mycaloisolationtool.DoAreaCorrections = True
 # ToolSvc += mycaloisolationtool
 
-import MCTruthClassifier.MCTruthClassifierBase
-print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
+# import MCTruthClassifier.MCTruthClassifierBase
+# print MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier
 
-MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
-MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
+# MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
+# MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
 import PyCintex
 PyCintex.loadDictionary('ElectronPhotonSelectorToolsDict')
@@ -47,7 +47,7 @@ from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
-                  MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
+                  # MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
                   DoTruth = False,
                   DoElectrons = True,
                   DoPhotons = True
