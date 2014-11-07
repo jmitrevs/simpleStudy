@@ -7,7 +7,7 @@ FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/data12_8TeV.00205113.physics_
 include( "AthenaPython/iread_file.py" )
 
 from RecExConfig.RecFlags import rec
-rec.doApplyAODFix.set_Value_and_Lock(True)
+#rec.doApplyAODFix.set_Value_and_Lock(True)
 
 #--------------------------------------------------------------
 # Define your Signal Selection Algorithm and Add Tools

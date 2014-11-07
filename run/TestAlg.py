@@ -40,7 +40,7 @@ athenaCommonFlags.EvtMax=200
 
 
 from RecExConfig.RecFlags import rec
-rec.doApplyAODFix.set_Value_and_Lock(True)
+#rec.doApplyAODFix.set_Value_and_Lock(True)
 
 
 #--------------------------------------------------------------
