@@ -543,11 +543,11 @@ StatusCode TestAlg::execute()
 
   int numEl = 0; // this is per event
   int numElPass = 0; // this is per event
-  Analysis::Electron *leading = 0;
-  Analysis::Electron *second = 0;
+  //Analysis::Electron *leading = 0;
+  //Analysis::Electron *second = 0;
 
-  double leadPt = 0;
-  double secondPt = 0;
+  //double leadPt = 0;
+  //double secondPt = 0;
 
   if (m_doElectrons) {
     // loop over electrons
