@@ -2,8 +2,12 @@ from glob import glob
 
 # Set up the reading of a file:
 #FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
-FNAME = "../../run/myAOD.pool.root"
+#FNAME = "../../run/myAOD.pool.root"
+FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/data12_8TeV.00205113.physics_JetTauEtmiss.merge.AOD.r5723_p1751_p1793*/*AOD*root*")
 include( "AthenaPython/iread_file.py" )
+
+from RecExConfig.RecFlags import rec
+rec.doApplyAODFix.set_Value_and_Lock(True)
 
 #--------------------------------------------------------------
 # Define your Signal Selection Algorithm and Add Tools
