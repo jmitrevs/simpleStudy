@@ -77,6 +77,8 @@ rec.doJiveXML.set_Value_and_Lock(False)
 
 rec.doPerfMon.set_Value_and_Lock(False)
 
+#rec.doContainerRemapping.set_Value_and_Lock(False)
+
 #### jOs from Thijs for spacepoints from ESDs:
 #from AthenaCommon.BeamFlags import jobproperties
 #from InDetRecExample.InDetJobProperties import InDetFlags

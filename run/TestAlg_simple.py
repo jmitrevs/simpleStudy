@@ -22,6 +22,12 @@ topSequence = AlgSequence()
 #MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
 #MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
+#include ("RecExCommon/ContainerRemapping.py")
+
+print "ServiceMgr after:"
+print ServiceMgr
+print "end ServiceMgr after"
+
 import PyCintex
 PyCintex.loadDictionary('ElectronPhotonSelectorTools')
 from ROOT import egammaPID
@@ -42,7 +48,9 @@ testAlg = TestAlg(name = "TestAlg",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
                   # MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
-                  DoTruth = False
+                  DoTruth = False,
+                  ElectronContainerName = "Electrons",
+                  PhotonContainerName = "Photons"
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG
