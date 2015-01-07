@@ -77,7 +77,7 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("DoPhotons", m_doPhotons = false);
 
   /** Electron selection */
-  declareProperty("ElectronContainerName", m_ElectronContainerName = "ElectronCollection");
+  declareProperty("ElectronContainerName", m_ElectronContainerName = "Electrons");
   declareProperty("ElectronPt",   m_electronPt=10*GeV);
   declareProperty("ElectronEta",  m_electronEta=3.2);
   declareProperty("ElectronIsEMFlag", m_electronIsEMFlag="Medium");
@@ -85,7 +85,7 @@ TestAlg::TestAlg(const std::string& name,
 
   declareProperty("TruthElectronPtMin", m_truthElectronPtMin = 5*GeV);
 
-  declareProperty("PhotonContainerName", m_PhotonContainerName = "PhotonCollection");
+  declareProperty("PhotonContainerName", m_PhotonContainerName = "Photons");
   declareProperty("PhotonPt",   m_photonPt=10*GeV);
   declareProperty("PhotonEta",  m_photonEta=3.2);
   declareProperty("PhotonIsEMFlag", m_photonIsEMFlag="Tight");
@@ -127,13 +127,13 @@ TestAlg::TestAlg(const std::string& name,
 		  "Name of the McEventCollection container");
 
   declareProperty("xAODTruthEventContainerName",
-		  m_xAODTruthEventContainerName="TruthEvent",
+		  m_xAODTruthEventContainerName="TruthEvents",
 		  "Name of the xAOD::TruthEvent container");
   declareProperty("xAODTruthParticleContainerName",
-		  m_xAODTruthParticleContainerName="TruthParticle",
+		  m_xAODTruthParticleContainerName="TruthParticles",
 		  "Name of the xAOD::TruthParticle container");
   declareProperty("xAODTruthVertexContainerName",
-		  m_xAODTruthVertexContainerName="TruthVertex",
+		  m_xAODTruthVertexContainerName="TruthVertices",
 		  "Name of the xAOD::TruthVertex container");
   
 }
@@ -450,22 +450,24 @@ StatusCode TestAlg::execute()
     return StatusCode::SUCCESS;
   }
 
-  const xAOD::ElectronContainer* electrons;
-  sc=evtStore()->retrieve( electrons, m_ElectronContainerName);
-  if( sc.isFailure()  ||  !electrons ) {
-    ATH_MSG_ERROR("No continer "<< m_ElectronContainerName <<" container found in TDS");
-    return StatusCode::FAILURE;
+  const xAOD::ElectronContainer* electrons(0);
+  if (m_doElectrons) {
+    sc=evtStore()->retrieve( electrons, m_ElectronContainerName);
+    if( sc.isFailure()  ||  !electrons ) {
+      ATH_MSG_ERROR("No continer "<< m_ElectronContainerName <<" container found in TDS");
+      return StatusCode::FAILURE;
+    }
   }
-
   // ATH_MSG_DEBUG("Photon container name: " << m_PhotonContainerName);
 
-  const xAOD::PhotonContainer* photons;
-  sc=evtStore()->retrieve( photons, m_PhotonContainerName);
-  if( sc.isFailure()  ||  !photons ) {
-    ATH_MSG_ERROR("No continer "<< m_PhotonContainerName <<" container found in TDS");
-    return StatusCode::FAILURE;
+  const xAOD::PhotonContainer* photons(0);
+  if (m_doPhotons) {
+    sc=evtStore()->retrieve( photons, m_PhotonContainerName);
+    if( sc.isFailure()  ||  !photons ) {
+      ATH_MSG_ERROR("No continer "<< m_PhotonContainerName <<" container found in TDS");
+      return StatusCode::FAILURE;
+    }
   }
-
   // // The missing ET object
   // const MissingET* met(0);
   // sc = evtStore()->retrieve( met, m_METContainerName );
@@ -506,25 +508,28 @@ StatusCode TestAlg::execute()
   // m_TruthUtils->FillTruthMap(ge, m_truthPhotonPtMin);
 
   // and the actual McEventCollection
+
   const McEventCollection* mcEventCollection(0);
-  if (evtStore()->contains<McEventCollection>(m_McEventCollectionContainerName)) {
-    CHECK(evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName));
-  }
   const xAOD::TruthEventContainer *truthEvents(0);
-  if (evtStore()->contains<xAOD::TruthEventContainer>(m_xAODTruthEventContainerName)) {
-    CHECK(evtStore()->retrieve(truthEvents,m_xAODTruthEventContainerName));
-  }
-
   const xAOD::TruthParticleContainer *truthParticles(0);
-  if (evtStore()->contains<xAOD::TruthParticleContainer>(m_xAODTruthParticleContainerName)) {
-    CHECK(evtStore()->retrieve(truthParticles,m_xAODTruthParticleContainerName));
-  }
-
   const xAOD::TruthVertexContainer *truthVertices(0);
-  if (evtStore()->contains<xAOD::TruthVertexContainer>(m_xAODTruthVertexContainerName)) {
-    CHECK(evtStore()->retrieve(truthVertices,m_xAODTruthVertexContainerName));
-  }
+  if (m_doTruth) {
+    if (evtStore()->contains<McEventCollection>(m_McEventCollectionContainerName)) {
+      CHECK(evtStore()->retrieve(mcEventCollection,m_McEventCollectionContainerName));
+    }
+  
+   if (evtStore()->contains<xAOD::TruthEventContainer>(m_xAODTruthEventContainerName)) {
+     CHECK(evtStore()->retrieve(truthEvents,m_xAODTruthEventContainerName));
+   }
 
+   if (evtStore()->contains<xAOD::TruthParticleContainer>(m_xAODTruthParticleContainerName)) {
+     CHECK(evtStore()->retrieve(truthParticles,m_xAODTruthParticleContainerName));
+   }
+
+   if (evtStore()->contains<xAOD::TruthVertexContainer>(m_xAODTruthVertexContainerName)) {
+     CHECK(evtStore()->retrieve(truthVertices,m_xAODTruthVertexContainerName));
+   }
+  }
   // const Rec::TrackParticleContainer* trackParts;
   // sc=evtStore()->retrieve(trackParts, m_TrackParticleContainerName);
   // if( sc.isFailure()  ||  !trackParts ) {
@@ -1326,14 +1331,14 @@ StatusCode TestAlg::execute()
       for (size_t i = 0; i < size; i++) {
 	auto ge = mcEventCollection->at(i);
 	
-	// ATH_MSG_DEBUG("Looking at a new GenEvent");
+	ATH_MSG_DEBUG("Looking at a new GenEvent");
 	for (auto pcl = ge->particles_begin(); pcl!= ge->particles_end(); ++pcl) {
 	  const auto& p = (*pcl)->momentum();
-	  if (p.phi() == 0 && p.eta() == 0) {
-	    ATH_MSG_WARNING("GenPartcile in event " << i << " with zero eta and phi; pt = " << p.perp()
-			    << ", status = " << (*pcl)->status()
-			    << ", pdg_id = " << (*pcl)->pdg_id());
-	  }
+	  ATH_MSG_INFO("GenPartcile in event " << i << "pt = " << p.perp()
+		       << ", eta = " << p.eta()
+		       << ", phi = " << p.phi()
+		       << ", status = " << (*pcl)->status()
+		       << ", pdg_id = " << (*pcl)->pdg_id());
 	}
       }
     }

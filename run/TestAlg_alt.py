@@ -3,7 +3,14 @@ from glob import glob
 # Set up the reading of a file:
 #FNAME = glob("/afs/cern.ch/work/k/krasznaa/public/xAOD/devval_rel_4/*ESD*")
 #FNAME = "../../run/myAOD.pool.root"
-FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/data12_8TeV.00205113.physics_JetTauEtmiss.merge.AOD.r5723_p1751_p1793*/*AOD*root*")
+#FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/data12_8TeV.00205113.physics_JetTauEtmiss.merge.AOD.r5723_p1751_p1793*/*AOD*root*")
+#FNAME = "../../Reconstruction/RecExample/RecExCommon/run/ESD.pool.root"
+#FNAME = "../../Reconstruction/RecExample/RecExCommon/run_old/ESD.pool.root"
+#FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/QTests-Run2/RDO-run2.Nov5.2014-500events.pool.root"
+#FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/QTests-Run2/RDO-run2.Nov27.2014-500events.pool.root"
+FNAME = "/afs/cern.ch/atlas/offline/ReleaseData/v18/testfile/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.digit.RDO.e1513_s1499_s1504_d700_10evt.pool.root"
+#FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.recon.ESD.*/*root*")
+#FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
 include( "AthenaPython/iread_file.py" )
 
 from RecExConfig.RecFlags import rec
@@ -52,9 +59,10 @@ testAlg = TestAlg(name = "TestAlg",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
                   # MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
-                  DoTruth = False,
-                  DoElectrons = True,
-                  DoPhotons = True
+                  DoTruth = True,
+                  DoElectrons = False,
+                  DoPhotons = False,
+#                  McEventCollectionContainerName = "GEN_AOD"
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
 testAlg.OutputLevel = DEBUG
