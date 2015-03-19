@@ -445,10 +445,13 @@ StatusCode TestAlg::execute()
   }
   
   const unsigned int eventNumber = evtInfo->event_ID()->event_number();
+  const unsigned int runNumber = evtInfo->event_ID()->run_number();
   if (m_runOnlySome && m_theEvents.find(eventNumber) == m_theEvents.end()) {
     // skip the event
     return StatusCode::SUCCESS;
   }
+
+  ATH_MSG_INFO("Run: " << runNumber << ", Event: " << eventNumber);
 
   const xAOD::ElectronContainer* electrons(0);
   if (m_doElectrons) {

@@ -8,9 +8,10 @@ from glob import glob
 #FNAME = "../../Reconstruction/RecExample/RecExCommon/run_old/ESD.pool.root"
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/QTests-Run2/RDO-run2.Nov5.2014-500events.pool.root"
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/QTests-Run2/RDO-run2.Nov27.2014-500events.pool.root"
-FNAME = "/afs/cern.ch/atlas/offline/ReleaseData/v18/testfile/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.digit.RDO.e1513_s1499_s1504_d700_10evt.pool.root"
+#FNAME = "/afs/cern.ch/atlas/offline/ReleaseData/v18/testfile/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.digit.RDO.e1513_s1499_s1504_d700_10evt.pool.root"
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.recon.ESD.*/*root*")
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
+FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
 include( "AthenaPython/iread_file.py" )
 
 from RecExConfig.RecFlags import rec
@@ -59,7 +60,7 @@ testAlg = TestAlg(name = "TestAlg",
                   ElectronSelector = electronSelector,
                   PhotonSelector = photonSelector,
                   # MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
-                  DoTruth = True,
+                  DoTruth = False,
                   DoElectrons = False,
                   DoPhotons = False,
 #                  McEventCollectionContainerName = "GEN_AOD"
@@ -93,3 +94,10 @@ from GaudiSvc.GaudiSvcConf import THistSvc
 ServiceMgr += THistSvc()
 ServiceMgr.THistSvc.Output = ["TestHistograms DATAFILE='TestHistograms.root' OPT='RECREATE'"]
 
+if not hasattr(ServiceMgr, theApp.EventLoop):
+   ServiceMgr += getattr(CfgMgr, theApp.EventLoop)() 
+evtloop = getattr(ServiceMgr, theApp.EventLoop)
+evtloop.EventPrintoutInterval = 1
+
+theApp.EvtMax=10
+ 
