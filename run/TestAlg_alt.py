@@ -10,8 +10,12 @@ from glob import glob
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/QTests-Run2/RDO-run2.Nov27.2014-500events.pool.root"
 #FNAME = "/afs/cern.ch/atlas/offline/ReleaseData/v18/testfile/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.digit.RDO.e1513_s1499_s1504_d700_10evt.pool.root"
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.recon.ESD.*/*root*")
-#FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
-FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
+#FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/input/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
+#FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
+#FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_TRUTH1.e3657_p2324_tid05304593_00/DAOD_TRUTH1.05304593._000060.pool.root.1"
+#FNAME = glob("/home/jmitrevs/workdir/testinput/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264*/*")
+FNAME = "../../run_merge2/myNewAOD.pool.root"
+
 include( "AthenaPython/iread_file.py" )
 
 from RecExConfig.RecFlags import rec
