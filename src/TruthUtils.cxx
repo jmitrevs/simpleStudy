@@ -47,7 +47,7 @@ StatusCode TruthUtils::initialize() {
   else {
     ATH_MSG_DEBUG("Retrieved MCTruthClassifier tool " << m_truthClassifier);
   }
-  m_truthClassifier->setdeltaRMatchCut(10000.);
+  //m_truthClassifier->setdeltaRMatchCut(10000.);
 
   msg(MSG::INFO) << "Initialization successful" << endreq;
 
