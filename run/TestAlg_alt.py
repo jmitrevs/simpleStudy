@@ -13,8 +13,9 @@ from glob import glob
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/input/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
 #FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_TRUTH1.e3657_p2324_tid05304593_00/DAOD_TRUTH1.05304593._000060.pool.root.1"
+FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
 #FNAME = glob("/home/jmitrevs/workdir/testinput/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264*/*")
-FNAME = "../../run_merge2/myNewAOD.pool.root"
+#FNAME = "../../run_merge2/myNewAOD.pool.root"
 
 include( "AthenaPython/iread_file.py" )
 
