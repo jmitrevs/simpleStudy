@@ -1100,15 +1100,15 @@ StatusCode TestAlg::execute()
 
 	bool allFound = true;
       
-	float etap = -999.0;
+	// float etap = -999.0;
 
-	// E(3*7) in 2nd sampling
-	allFound &= (*ph)->showerShapeValue(etap, xAOD::EgammaParameters::etap);
-	if (!allFound) {
-	  ATH_MSG_WARNING("Not all shower shape values found");
-	}
+	// // E(3*7) in 2nd sampling
+	// allFound &= (*ph)->showerShapeValue(etap, xAOD::EgammaParameters::etap);
+	// if (!allFound) {
+	//   ATH_MSG_WARNING("Not all shower shape values found");
+	// }
 
-	ATH_MSG_INFO("Pointing eta = " << etap);
+	// ATH_MSG_INFO("Pointing eta = " << etap);
 
 	// const Rec::TrackParticle * trParticle = (*ph)->trackParticle();
 	// if (trParticle) {
