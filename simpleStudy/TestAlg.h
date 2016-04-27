@@ -13,7 +13,7 @@
 #include "GaudiKernel/ToolHandle.h"
 #include "AthenaBaseComps/AthAlgorithm.h"
 /// Storegate
-#include "StoreGate/StoreGateSvc.h"
+//#include "StoreGate/StoreGateSvc.h"
 #include "StoreGate/DataHandle.h"
 #include "GaudiKernel/ITHistSvc.h"
 
@@ -22,12 +22,12 @@
 //class AtlasDetectorID;
 //class Identifier;
 //class TruthUtils;
-class StoreGateSvc;
+//class StoreGateSvc;
 //class IEMBremsstrahlungBuilder;
 //class IEMFourMomBuilder;
 //class EMErrorDetail;
 //class IPAUcaloIsolationTool;
-class IMCTruthClassifier;
+//class IMCTruthClassifier;
 //class IAthElectronIsEMSelector;
 //class IAthPhotonIsEMSelector;
 class IAsgSelectionTool;
@@ -56,7 +56,7 @@ private:
   ToolHandle<IAsgSelectionTool> m_photonSelector;
 
   //ToolHandle<TruthUtils> m_TruthUtils;
-  ToolHandle<IMCTruthClassifier> m_MCTruthClassifier;
+  //ToolHandle<IMCTruthClassifier> m_MCTruthClassifier;
   //ToolHandle<IPAUcaloIsolationTool> m_PAUcaloIsolationTool;
 
   /// a handle on the Hist/TTree registration service

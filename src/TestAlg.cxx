@@ -6,11 +6,13 @@
 //#include <TFile.h>
 //#include <TROOT.h>
 
-#include "EventInfo/EventInfo.h"
-#include "EventInfo/EventID.h"
-#include "EventInfo/EventType.h"
+// #include "EventInfo/EventInfo.h"
+// #include "EventInfo/EventID.h"
+// #include "EventInfo/EventType.h"
 
-#include "AthenaKernel/errorcheck.h"
+#include "xAODEventInfo/EventInfo.h"
+
+//#include "AthenaKernel/errorcheck.h"
 
 #include "TH1.h"
 #include "McParticleEvent/TruthParticle.h"
@@ -30,8 +32,6 @@
 #include "AnalysisUtils/AnalysisMisc.h"
 
 //#include "simpleStudy/TruthUtils.h"
-#include "MCTruthClassifier/IMCTruthClassifier.h"
-#include "MCTruthClassifier/MCTruthClassifierDefs.h"
 
 //#include "ElectronPhotonSelectorTools/IAthElectronIsEMSelector.h"
 //#include "ElectronPhotonSelectorTools/IAthPhotonIsEMSelector.h"
@@ -68,7 +68,6 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("HistFileName", m_histFileName = "TestHistograms");
   //  declareProperty("TruthUtils", m_TruthUtils);
   //  declareProperty("PAUcaloIsolationTool", m_PAUcaloIsolationTool);
-  declareProperty("MCTruthClassifier", m_MCTruthClassifier);
   declareProperty("ElectronSelector", m_electronSelector);
   declareProperty("PhotonSelector", m_photonSelector);
 
@@ -437,15 +436,16 @@ StatusCode TestAlg::execute()
 
   // ATH_MSG_DEBUG("Electron container name: " << m_ElectronContainerName);
 
-  const EventInfo*  evtInfo = 0;
+  const xAOD::EventInfo*  evtInfo = 0;
   sc = evtStore()->retrieve(evtInfo);
   if(sc.isFailure() || !evtInfo) {
     ATH_MSG_ERROR("could not retrieve event info");
     return StatusCode::RECOVERABLE;
   }
   
-  const unsigned int eventNumber = evtInfo->event_ID()->event_number();
-  const unsigned int runNumber = evtInfo->event_ID()->run_number();
+  const auto eventNumber = evtInfo->eventNumber();
+  const auto runNumber = evtInfo->runNumber();
+  const auto lumiBlock = evtInfo->lumiBlock();
   if (m_runOnlySome && m_theEvents.find(eventNumber) == m_theEvents.end()) {
     // skip the event
     return StatusCode::SUCCESS;

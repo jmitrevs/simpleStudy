@@ -23,6 +23,7 @@ atlas_depends_on_subdirs(
    Control/AthenaKernel
    Event/EventInfo
    Event/FourMomUtils
+   Event/xAOD/xAODEventInfo
    Event/xAOD/xAODEgamma
    Event/xAOD/xAODTruth
    PhysicsAnalysis/AnalysisCommon/AnalysisUtils
@@ -45,6 +46,6 @@ atlas_add_component( simpleStudy
    LINK_LIBRARIES ${ROOT_LIBRARIES} ${GSL_LIBRARIES} ${HEPMC_LIBRARIES}
    AthenaBaseComps StoreGateLib GaudiKernel GeneratorObjects MCTruthClassifier
    McParticleEvent McParticleUtils Particle ParticleTruth egammaEvent
-   VxVertex AthenaKernel EventInfo FourMomUtils xAODEgamma xAODTruth
+   VxVertex AthenaKernel EventInfo FourMomUtils xAODEventInfo xAODEgamma xAODTruth
    AnalysisUtils PATCoreLib ElectronPhotonSelectorToolsLib TrkParticleBase
    TrkTrack TrkTrackSummary )
