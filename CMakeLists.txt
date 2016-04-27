@@ -49,3 +49,4 @@ atlas_add_component( simpleStudy
    VxVertex AthenaKernel EventInfo FourMomUtils xAODEventInfo xAODEgamma xAODTruth
    AnalysisUtils PATCoreLib ElectronPhotonSelectorToolsLib TrkParticleBase
    TrkTrack TrkTrackSummary )
+atlas_install_joboptions( run/*.py )
