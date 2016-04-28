@@ -89,6 +89,7 @@ private:
   std::string m_photonIsEMFlag;
   int m_photonIsEM;
   double m_truthPhotonPtMin;
+  bool m_truthMatchPhotons;
 
   /** MET selecton */
   std::string m_METContainerName;

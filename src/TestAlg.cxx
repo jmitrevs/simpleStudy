@@ -15,8 +15,8 @@
 //#include "AthenaKernel/errorcheck.h"
 
 #include "TH1.h"
-#include "McParticleEvent/TruthParticle.h"
-#include "McParticleEvent/TruthParticleContainer.h"
+//#include "McParticleEvent/TruthParticle.h"
+//#include "McParticleEvent/TruthParticleContainer.h"
 
 #include "xAODEgamma/Electron.h"
 #include "xAODEgamma/Photon.h"
@@ -25,6 +25,8 @@
 #include "xAODEgamma/PhotonContainer.h"
 #include "xAODEgamma/EgammaxAODHelpers.h"
 
+#include "MCTruthClassifier/MCTruthClassifierDefs.h"
+#include "xAODTruth/xAODTruthHelpers.h"
 #include "xAODTruth/TruthEventContainer.h"
 #include "xAODTruth/TruthParticleContainer.h"
 #include "xAODTruth/TruthVertexContainer.h"
@@ -62,12 +64,10 @@ using CLHEP::GeV;
 TestAlg::TestAlg(const std::string& name, 
 		 ISvcLocator* pSvcLocator) : 
   AthAlgorithm(name,pSvcLocator)
-  // m_TruthUtils("TruthUtils/TruthUtils")
 {
 
   declareProperty("HistFileName", m_histFileName = "TestHistograms");
-  //  declareProperty("TruthUtils", m_TruthUtils);
-  //  declareProperty("PAUcaloIsolationTool", m_PAUcaloIsolationTool);
+
   declareProperty("ElectronSelector", m_electronSelector);
   declareProperty("PhotonSelector", m_photonSelector);
 
@@ -95,7 +95,7 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("egammaContainerName", m_egammaContainerName = "HLT_egamma");
 
   declareProperty("TruthPhotonPtMin", m_truthPhotonPtMin = 5*GeV);
-
+  declareProperty("TruthMatchPhotons", m_truthMatchPhotons = true, "Require photons to be truth-matched");
 
   declareProperty("TrackParticleContainerName", m_TrackParticleContainerName = 
 		  "TrackParticleCandidate");
@@ -171,20 +171,28 @@ StatusCode TestAlg::initialize()
   //   }
   // }
 
-  if(m_electronSelector.retrieve().isFailure()) {
-    ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
-    return StatusCode::FAILURE; // why success?
-  }
-  else {
-    ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
+  if (m_electronSelector.empty()) {
+    ATH_MSG_DEBUG("The electron selector is empty");
+  } else {
+    if(m_electronSelector.retrieve().isFailure()) {
+      ATH_MSG_ERROR("Failed to retrieve " << m_electronSelector);
+      return StatusCode::FAILURE; // why success?
+    }
+    else {
+      ATH_MSG_DEBUG("Retrieved ElectronSelector " << m_electronSelector);   
+    }
   }
 
-  if(m_photonSelector.retrieve().isFailure()) {
-    ATH_MSG_ERROR("Failed to retrieve " << m_photonSelector);
-    return StatusCode::FAILURE; // why success?
-  }
-  else {
-    ATH_MSG_DEBUG("Retrieved PhotonSelector " << m_photonSelector);   
+  if (m_photonSelector.empty()) {
+    ATH_MSG_DEBUG("The photon selector is empty");
+  } else {
+    if(m_photonSelector.retrieve().isFailure()) {
+      ATH_MSG_ERROR("Failed to retrieve " << m_photonSelector);
+      return StatusCode::FAILURE; // why success?
+    }
+    else {
+      ATH_MSG_DEBUG("Retrieved PhotonSelector " << m_photonSelector);   
+    }
   }
 
   // if(m_TruthUtils.retrieve().isFailure()) {
@@ -451,7 +459,9 @@ StatusCode TestAlg::execute()
     return StatusCode::SUCCESS;
   }
 
-  ATH_MSG_INFO("Run: " << runNumber << ", Event: " << eventNumber);
+  const bool isMC = evtInfo->eventType(xAOD::EventInfo::IS_SIMULATION);
+
+  ATH_MSG_INFO("Run: " << runNumber << ", lumi = " << lumiBlock << ", Event: " << eventNumber << ", isMC = " << isMC);
 
   const xAOD::ElectronContainer* electrons(0);
   if (m_doElectrons) {
@@ -804,313 +814,67 @@ StatusCode TestAlg::execute()
   ATH_MSG_DEBUG("About to start photons");
 
   if (m_doPhotons) {
-    for (auto ph  = photons->begin();
-	 ph != photons->end();
-	 ph++) {
+    for (auto ph : *photons) {
 
-      // if ((*ph)->isPhoton(egammaPID::PhotonTight)) {
-      {
+      const xAOD::TruthParticle *truthParticle{nullptr};
+      int truthType{0};
+      int truthOrigin{0};
 
-	//    if ((*ph)->detailValue(egammaParameters::ambiguityResult) <= EMAmbiguityType::LOOSE) continue;
-
-	//     if ((!(*ph)->isPhoton(0x80000000)) || (!(*ph)->isPhoton(0x40000000)) || (!(*ph)->isPhoton(0x20000000))) {
-	//       ATH_MSG_INFO("Photon fails isolation with isem == " << std::hex << (*ph)->isem());
-	//     } else {
-	//       ATH_MSG_DEBUG("Photon passes isolation with isem == " << std::hex << (*ph)->isem());
-	//     }
-
-
-
-	// ATH_MSG_DEBUG("Looking at photon (author = " << (*ph)->author() << ") with barcode = " << (*ph)->getAthenaBarCode());
-    
-	// const Trk::RecVertex* origin = (*ph)->origin();
-    
-	// if (origin) {
-	//   ATH_MSG_DEBUG("Origin of photon is = " << *origin);
-	// } else {
-	//   ATH_MSG_DEBUG("Origin pointer is 0");
-	// }
-	// const Analysis::Electron *matchedEl = NULL;
-	// for (ElectronContainer::const_iterator el  = electrons->begin();
-	// 	 el != electrons->end();
-	// 	 el++) {
-	//   if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
-	// 	matchedEl = *el;
-	// 	//break;
-	//   }
-
-	//   // const Trk::RecVertex* elorigin = (*el)->origin();
-
-	//   // if (elorigin) {
-	//   // 	ATH_MSG_DEBUG("Origin of electron (author = " << (*el)->author() << ") is = " << *elorigin);
-	//   // } else {
-	//   // 	ATH_MSG_DEBUG("Electron origin (author = " << (*el)->author() << ") pointer is 0");
-	//   // }
-	// }
-
-	// if (matchedEl) {
-	//   ATH_MSG_DEBUG("   Found an electron with same barcode");
-	// } else if ((*ph)->author() == 16) {
-	//   ATH_MSG_ERROR("   Did NOT find an electron with same barcode");
-	// }      
-
-	// if (phold != photons->end()) {
-	//   ATH_MSG_DEBUG("   does it match the previous one without version: " << 
-	// 		    (*ph)->hasSameAthenaBarCodeExceptVersion(**phold));
-	// }
-	// phold = ph;
-
-	// ATH_MSG_DEBUG("Photon with author " << (*ph)->author() << " has number of details: " << (*ph)->nDetails());
-	// for (int i = 0; i < (*ph)->nDetails(); i++) {
-	//   ATH_MSG_DEBUG("photon detail: " << (*ph)->detailName(i));
-	// }
-	// ATH_MSG_DEBUG("");
-
-
-	// let's mess around with uncombined 4-mom (makes no difference here
-	// since now it's not combined for photons)
-
-	// ATH_MSG_DEBUG("about to test uncombined");
-	// const egamma::momentum_type& fourmom = (*ph)->get4Mom(egamma::Uncombined);
-
-	// if (fourmom.pt() > 20*GeV) {
-	// 	ATH_MSG_DEBUG("uncombined pt > 20 GeV");
-	// }
-
-	// const EMErrorDetail *errorDetail = (*ph)->detail<EMErrorDetail>();
-
-	// ATH_MSG_DEBUG("author = " << std::hex << (*ph)->author());
-	// //    ATH_MSG_DEBUG("authordec = " << std::dec << (*ph)->author());
-	// ATH_MSG_DEBUG("errors = " << (*ph)->errors());
-	// //    if ((*ph)->author() == 4) { 
-	// ATH_MSG_DEBUG("eta error = " << (*ph)->errors()->etaError());
-	// if ((*ph)->author() == 16) {
-	//   ATH_MSG_DEBUG("eta error sq from detail = " << errorDetail->EMtrack_comb_Covetaeta());
-	//   ATH_MSG_DEBUG("eta error from detail = " << sqrt(errorDetail->EMtrack_comb_Covetaeta()));
-	//   ATH_MSG_DEBUG("eta error from cluster in detail = " << sqrt(errorDetail->EMphoton_Covetaeta()));
-	// }
-	// //}
+      if (isMC && m_truthMatchPhotons) {
+	truthParticle = xAOD::TruthHelpers::getTruthParticle(*ph);
+	truthType = xAOD::TruthHelpers::getParticleTruthType(*ph);
+	truthOrigin = xAOD::TruthHelpers::getParticleTruthOrigin(*ph);
+	ATH_MSG_DEBUG("Truth-match photon: type: " << truthType << ", origin: " 
+		      << truthOrigin << ", TruthParticle*: " << truthParticle);
+	
+      }
+      if (!m_truthMatchPhotons || truthType == MCTruthPartClassifier::IsoPhoton) {
 
 	numPhotons++;
 
-	const Root::TAccept& acc = m_photonSelector->accept(*ph);
+	// const Root::TAccept& acc = m_photonSelector->accept(ph);
 
       
-	if (acc) {
-	  ATH_MSG_DEBUG("Passed photon selector and passID.");
-	}  else {
-	  ATH_MSG_DEBUG("Failed photon selector.");
-	}
-
-	ATH_MSG_INFO("author is = " << (*ph)->author());
-	//ATH_MSG_INFO("Photon OQ = " << std::hex << (*ph)->isgoodoq());
-	//		 << ", cluster phi = " << (*ph)->cluster()->phi());
-
-	//ATH_MSG_DEBUG("(*ph)->conversion() = " << (*ph)->conversion());
-
-	//const EMShower* shower = (*ph)->detail<EMShower>();
-
-	// if ((*ph)->pt() > 20*GeV && (*ph)->isPhoton(egammaPID::PhotonTightAR)) { 
-	// 	// do isolation test
-	// 	const double pt_correction_20 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionPt(*ph, .20) ;
-	// 	const double pt_correction_30 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionPt(*ph, .30) ;
-	// 	const double pt_correction_40 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionPt(*ph, .40) ;
-    
-	// 	const int removeNHardestJets = 0;  // default value for now
-	// 	const double ED_correction_20 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionJetAreas(*ph, .20,
-	// 							   removeNHardestJets);
-	// 	const double ED_correction_30 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionJetAreas(*ph, .30,
-	// 							   removeNHardestJets);
-	// 	const double ED_correction_40 =
-	// 	  m_PAUcaloIsolationTool->EtConeCorrectionJetAreas(*ph, .40,
-	// 							   removeNHardestJets);
-      
-	// 	// Then, to calculate the "corrected" isolation variables:
-    
-	// ATH_MSG_INFO("isos: " << shower->etcone20() << ", " << shower->etconoisedR03SigAbs3());
-
-    
-	// 	m_histograms["etcone20"]->Fill(etcone20);
-	// 	m_histograms["etcone30"]->Fill(etcone30);
-	// 	m_histograms["etcone40"]->Fill(etcone40);
-
-	// 	const double etcone20_pt_corrected = etcone20 - pt_correction_20;
-	// 	const double etcone30_pt_corrected = etcone30 - pt_correction_30;
-	// 	const double etcone40_pt_corrected = etcone40 - pt_correction_40;
-    
-	// 	const double etcone20_ED_corrected = etcone20 - ED_correction_20;
-	// 	const double etcone30_ED_corrected = etcone30 - ED_correction_30;
-	// 	const double etcone40_ED_corrected = etcone40 - ED_correction_40;
-    
-	// 	const double etcone20_corrected = etcone20 - pt_correction_20 - ED_correction_20;
-	// 	const double etcone30_corrected = etcone30 - pt_correction_30 - ED_correction_30;
-	// 	const double etcone40_corrected = etcone40 - pt_correction_40 - ED_correction_40;
-
-	// 	m_histograms["etcone20_corrected"]->Fill(etcone20_corrected);
-	// 	m_histograms["etcone30_corrected"]->Fill(etcone30_corrected);
-	// 	m_histograms["etcone40_corrected"]->Fill(etcone40_corrected);
-
-    
-	// 	ATH_MSG_INFO("econe20 = " << etcone20 
-	// 		     << ", pt corrected = " << etcone20_pt_corrected
-	// 		     << ", ED corrected = " << etcone20_ED_corrected
-	// 		     << ", full corrected = " << etcone20_corrected);
-	// 	ATH_MSG_INFO("econe30 = " << etcone30 
-	// 		     << ", pt corrected = " << etcone30_pt_corrected
-	// 		     << ", ED corrected = " << etcone30_ED_corrected
-	// 		     << ", full corrected = " << etcone30_corrected);
-	// 	ATH_MSG_INFO("econe40 = " << etcone40 
-	// 		     << ", pt corrected = " << etcone40_pt_corrected
-	// 		     << ", ED corrected = " << etcone40_ED_corrected
-	// 		     << ", full corrected = " << etcone40_corrected);
+	// if (acc) {
+	//   ATH_MSG_DEBUG("Passed photon selector and passID.");
+	// }  else {
+	//   ATH_MSG_DEBUG("Failed photon selector.");
 	// }
 
-	if (xAOD::EgammaHelpers::isConvertedPhoton(*ph)) {
-	  numConversions++;
-	  ATH_MSG_INFO("Converted photon of type: " << xAOD::EgammaHelpers::conversionType(*ph));
+	ATH_MSG_INFO("author is = " << ph->author());
 
-	  //if ((*ph)->author(egammaParameters::AuthorRConv)) numConversionsDup++;
+	const auto photonType = xAOD::EgammaHelpers::conversionType(ph);
 
-	  // if (!(*ph)->trackParticle()) numConversionsNotTP++;
-
-	  // const Trk::VxCandidate*  convVtx = (*ph)->conversion();
-	  // const std::vector<Trk::VxTrackAtVertex*> *trkAtVxPtr = convVtx->vxTrackAtVertex();
-	  // if (trkAtVxPtr->size() == 1) {
-	  //   numConversionsSingleTrack++;
-	  //   int nSiliconHits_trk1=0;
-	  //   // first track
-	  //   Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
-	  //   const Trk::ITrackLink * trLink =tmpTrkAtVtx1->trackOrParticleLink();
-	  //   const Trk::TrackParticleBase* tempTrk1PB(0);
-	  //   if (0!= trLink) {
-	  //     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink);  
-	  //     if (0!= linkToTrackPB) {
-	  //       if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
-	  //     } 
-	  //   }
-	  //   if ( tempTrk1PB!=NULL){  
-	  //     const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
-	  //     if (summary1 != NULL){
-	  //       nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
-	  //       const double pid1 = summary1->getPID(Trk::eProbabilityComb);
-	  //       m_histograms["TRTPID1Trk_fromPhotons"]->Fill(pid1);
-	  //       if (nSiliconHits_trk1 < 4) {
-	  // 	m_histograms["TRTPID1TrkTRT_fromPhotons"]->Fill(pid1);
-	  //       }
-	  //     }
-	  //   }
-	  //   const Trk::MeasuredPerigee* parAtVtx1 = 
-	  //     dynamic_cast<const  Trk::MeasuredPerigee*>(tmpTrkAtVtx1->perigeeAtVertex());
-	  //   if (nSiliconHits_trk1 < 4) {
-	  //     numConversionsSingleTrackTRT++;
-	  //     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	  //     ATH_MSG_DEBUG("single-track trt photon with author = " << (*ph)->author() 
-	  // 		  << ", pt = " << (*ph)->pt() 
-	  // 		  << ", eta = " << (*ph)->eta() 
-	  // 		  << ", phi = " << (*ph)->phi()
-	  // 		  << ", conv vx tp pt = " << parAtVtx1->pT());
-	  //   } else {
-	  //     numConversionsSingleTrackSi++;
-	  //     ATH_MSG_DEBUG("single-track si photon with author = " << (*ph)->author() 
-	  // 		  << ", pt = " << (*ph)->pt() 
-	  // 		  << ", eta = " << (*ph)->eta() 
-	  // 		  << ", phi = " << (*ph)->phi()
-	  // 		  << ", conv vx tp pt = " << parAtVtx1->pT());
-	  //   }
-
-	  // } else if (int(trkAtVxPtr->size())==2) {
-	  //   numConversionsDoubleTrack++;
-	    
-	  //   int nSiliconHits_trk1=0;
-	  //   int nSiliconHits_trk2=0;
-	  //   //	  const Trk::MeasuredPerigee* perigee = 0;
-
-	  //   // first track
-	  //   Trk::VxTrackAtVertex* tmpTrkAtVtx1 = trkAtVxPtr->at(0);
-	  //   const Trk::ITrackLink * trLink1 =tmpTrkAtVtx1->trackOrParticleLink();
-	  //   const Trk::TrackParticleBase* tempTrk1PB(0);
-	  //   if (0!= trLink1) {
-	  //     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink1);  
-	  //     if (0!= linkToTrackPB) {
-	  //       if(linkToTrackPB->isValid()) tempTrk1PB = linkToTrackPB->cachedElement(); 
-	  //     } 
-	  //   }
-	  //   if ( tempTrk1PB!=NULL){  
-	  //     const Trk::TrackSummary* summary1 = tempTrk1PB->trackSummary();
-	  //     if (summary1 != NULL){
-	  //       nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits)+ summary1->get(Trk::numberOfPixelHits);
-	  //     }
-	  //   }
-	  //   Trk::VxTrackAtVertex* tmpTrkAtVtx2 = trkAtVxPtr->at(1);
-	  //   const Trk::ITrackLink * trLink2 =tmpTrkAtVtx2->trackOrParticleLink();
-	  //   const Trk::TrackParticleBase* tempTrk2PB(0);
-	  //   if (0!= trLink2) {
-	  //     const Trk::LinkToTrackParticleBase * linkToTrackPB =  dynamic_cast<const Trk::LinkToTrackParticleBase *>(trLink2);  
-	  //     if (0!= linkToTrackPB) {
-	  //       if (linkToTrackPB->isValid()) tempTrk2PB = linkToTrackPB->cachedElement(); 
-	  //     } 
-	  //   }
-	  //   if ( tempTrk2PB!=NULL) {
-	  //     const Trk::TrackSummary* summary2 = tempTrk2PB->trackSummary();
-	  //     if (summary2 != NULL){
-	  //       nSiliconHits_trk2 = summary2->get(Trk::numberOfSCTHits)+ summary2->get(Trk::numberOfPixelHits);
-	  //     }
-	  
-	  //     //       ATH_MSG_ERROR("found a conversion without a trackParticle");
-	  //     //       return StatusCode::FAILURE;
-	  //   }
-	  //   if (nSiliconHits_trk1 < 4 &&  nSiliconHits_trk2 < 4) {
-	  //     numConversionsDoubleTrackTRT++;
-	  //     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	  //     ATH_MSG_DEBUG("double-track trt photon with author = " << (*ph)->author() 
-	  // 		  << ", pt = " << (*ph)->pt() 
-	  // 		  << ", eta = " << (*ph)->eta() 
-	  // 		  << ", phi = " << (*ph)->phi());
-	  //   } else if (nSiliconHits_trk1 < 4 || nSiliconHits_trk2 < 4) {
-	  //     numConversionsDoubleTrackMix++;
-	  //     if (!(*ph)->trackParticle()) numConversionsNotTPTRTOnly++;
-	  //     ATH_MSG_DEBUG("double-track mix photon with author = " << (*ph)->author() 
-	  // 		  << ", pt = " << (*ph)->pt()
-	  // 		  << ", eta = " << (*ph)->eta() 
-	  // 		  << ", phi = " << (*ph)->phi());
-
-	  //   } else {
-	  //     numConversionsDoubleTrackSi++;
-	  //     ATH_MSG_DEBUG("double-track Si photon with author = " << (*ph)->author() 
-	  // 		  << ", pt = " << (*ph)->pt()
-	  // 		  << ", eta = " << (*ph)->eta() 
-	  // 		  << ", phi = " << (*ph)->phi());
-	  //   }
-	  // }
-	} else {
+	switch(photonType) {
+	case xAOD::EgammaParameters::unconverted:
 	  numUnconverted++;
-	  ATH_MSG_DEBUG("Unconverted photon with author = " << (*ph)->author());
+	  ATH_MSG_DEBUG("Unconverted photon with author = " << ph->author());
+	  break;
+	default:
+	  numConversions++;
+	  ATH_MSG_INFO("Converted photon of type: " << xAOD::EgammaHelpers::conversionType(ph));
+	  break;
 	}
 
-	ATH_MSG_INFO("Photon with pt = " << (*ph)->pt()
-		     << ", eta = " << (*ph)->eta() 
-		     << ", phi = " << (*ph)->phi());
+	ATH_MSG_INFO("Photon with pt = " << ph->pt()
+		     << ", eta = " << ph->eta() 
+		     << ", phi = " << ph->phi());
 
-	ATH_MSG_INFO("Cluster eta = " << (*ph)->caloCluster()->eta());
+	ATH_MSG_INFO("Cluster eta = " << ph->caloCluster()->eta());
 
 	bool allFound = true;
       
 	// float etap = -999.0;
 
 	// // E(3*7) in 2nd sampling
-	// allFound &= (*ph)->showerShapeValue(etap, xAOD::EgammaParameters::etap);
+	// allFound &= ph->showerShapeValue(etap, xAOD::EgammaParameters::etap);
 	// if (!allFound) {
 	//   ATH_MSG_WARNING("Not all shower shape values found");
 	// }
 
 	// ATH_MSG_INFO("Pointing eta = " << etap);
 
-	// const Rec::TrackParticle * trParticle = (*ph)->trackParticle();
+	// const Rec::TrackParticle * trParticle = ph->trackParticle();
 	// if (trParticle) {
 	// 	const Trk::TrackSummary* sum = trParticle->trackSummary();
 	// 	int nSiliconHits_trk = -999;
@@ -1119,7 +883,7 @@ StatusCode TestAlg::execute()
 	// 	ATH_MSG_DEBUG("   Number of silicon hits of tp = " << nSiliconHits_trk << ", pt = " << trParticle->pt());
 	// }
 
-	// ATH_MSG_DEBUG("   ambiguity result = " << (*ph)->detailValue(egammaParameters::ambiguityResult));
+	// ATH_MSG_DEBUG("   ambiguity result = " << ph->detailValue(egammaParameters::ambiguityResult));
   
 	// const HepMC::GenParticle *truthPhoton = 
 	//   m_TruthUtils->DoTruthMatch(*ph, ge, trackParts,
@@ -1127,7 +891,7 @@ StatusCode TestAlg::execute()
 
 	// // for debug
 	// {
-	//   const Trk::VxCandidate*  convVtx = (*ph)->conversion();
+	//   const Trk::VxCandidate*  convVtx = ph->conversion();
 	//   if (convVtx) {
 	// 	const std::vector<Trk::VxTrackAtVertex*> *trkAtVxPtr = convVtx->vxTrackAtVertex();
 	// 	ATH_MSG_DEBUG("trkAtVxPtr->size() = " << trkAtVxPtr->size());
@@ -1140,7 +904,7 @@ StatusCode TestAlg::execute()
 	//   ATH_MSG_INFO("Photon 4-mom is = " << fourmom.hlv() << ", pt = " << fourmom.pt());
 	//   const float recoeta = fourmom.eta(); 
 	//   const float trutheta = (truthPhoton) ? (truthPhoton->momentum()).eta() : -999;
-	m_histograms["EtaReco"]->Fill((*ph)->eta());
+	m_histograms["EtaReco"]->Fill(ph->eta());
 	//   m_histograms["EtaTruth"]->Fill(trutheta);
 	//   m_histograms["Resolution"]->Fill(recoeta - trutheta);
 
@@ -1150,11 +914,11 @@ StatusCode TestAlg::execute()
 	//   m_histograms["PhiTruth"]->Fill(truthphi);
 	//   m_histograms["PhiResolution"]->Fill(recophi - truthphi);
 
-	//   // if ((*ph)->author(egammaParameters::AuthorRConv)) {
-	//   // 	ATH_MSG_INFO("Recovered photon has isEM == " << std::hex << (*ph)->isem());
+	//   // if (ph->author(egammaParameters::AuthorRConv)) {
+	//   // 	ATH_MSG_INFO("Recovered photon has isEM == " << std::hex << ph->isem());
 	//   // }
 
-	//   const Trk::VxCandidate*  convVtx = (*ph)->conversion();
+	//   const Trk::VxCandidate*  convVtx = ph->conversion();
 	//   if (convVtx) {
 	// 	const std::vector<Trk::VxTrackAtVertex*> *trkAtVxPtr = convVtx->vxTrackAtVertex();
 	// 	if (int(trkAtVxPtr->size())==1) {
