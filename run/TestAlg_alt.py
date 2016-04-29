@@ -13,9 +13,9 @@ from glob import glob
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/input/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
 #FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_TRUTH1.e3657_p2324_tid05304593_00/DAOD_TRUTH1.05304593._000060.pool.root.1"
-FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
+#FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
 #FNAME = glob("/home/jmitrevs/workdir/testinput/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264*/*")
-#FNAME = "../../run_merge2/myNewAOD.pool.root"
+FNAME = "../run/AOD.pool.root"
 
 include( "AthenaPython/iread_file.py" )
 
@@ -45,29 +45,29 @@ topSequence = AlgSequence()
 # MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleContainerName  = "GSFTrackParticleCandidate"
 # MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier.TrackParticleTruthCollection  = "GSFTrackParticleTruthCollection"
 
-import PyCintex
-PyCintex.loadDictionary('ElectronPhotonSelectorToolsDict')
-from ROOT import egammaPID
+# import PyCintex
+# PyCintex.loadDictionary('ElectronPhotonSelectorToolsDict')
+# from ROOT import egammaPID
 
-from ElectronPhotonSelectorTools.ConfiguredAsgElectronIsEMSelectors import ConfiguredAsgElectronIsEMSelector
-electronSelector = ConfiguredAsgElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMediumPP,
-                                                     OutputLevel = DEBUG)
-ToolSvc += electronSelector
+# from ElectronPhotonSelectorTools.ConfiguredAsgElectronIsEMSelectors import ConfiguredAsgElectronIsEMSelector
+# electronSelector = ConfiguredAsgElectronIsEMSelector("myIsEmSelector", egammaPID.ElectronIDMediumPP,
+#                                                      OutputLevel = DEBUG)
+# ToolSvc += electronSelector
 
-from ElectronPhotonSelectorTools.ConfiguredAsgPhotonIsEMSelectors import ConfiguredAsgPhotonIsEMSelector
-photonSelector = ConfiguredAsgPhotonIsEMSelector("myPhotonSelector", egammaPID.PhotonIDTightAR,
-                                                 OutputLevel = DEBUG)
-ToolSvc += photonSelector
+# from ElectronPhotonSelectorTools.ConfiguredAsgPhotonIsEMSelectors import ConfiguredAsgPhotonIsEMSelector
+# photonSelector = ConfiguredAsgPhotonIsEMSelector("myPhotonSelector", egammaPID.PhotonIDTight,
+#                                                  OutputLevel = DEBUG)
+# ToolSvc += photonSelector
 
 # Add top algorithms to be run
 from simpleStudy.simpleStudyConf import TestAlg
 testAlg = TestAlg(name = "TestAlg",
-                  ElectronSelector = electronSelector,
-                  PhotonSelector = photonSelector,
+                  ElectronSelector = None,
+                  PhotonSelector = None,
                   # MCTruthClassifier = MCTruthClassifier.MCTruthClassifierBase.MCTruthClassifier,
                   DoTruth = False,
                   DoElectrons = False,
-                  DoPhotons = False,
+                  DoPhotons = True,
 #                  McEventCollectionContainerName = "GEN_AOD"
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
