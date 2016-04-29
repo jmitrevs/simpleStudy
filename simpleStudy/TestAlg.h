@@ -17,7 +17,7 @@
 #include "StoreGate/DataHandle.h"
 #include "GaudiKernel/ITHistSvc.h"
 
-
+#include <string>
 
 //class AtlasDetectorID;
 //class Identifier;
@@ -49,6 +49,8 @@ public:
   StatusCode          finalize();
   
 private:
+
+  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float Eres);
 
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
   ToolHandle<IAsgSelectionTool> m_electronSelector;
@@ -109,31 +111,22 @@ private:
   std::string m_xAODTruthParticleContainerName;
   std::string m_xAODTruthVertexContainerName;
 
-  int numPhotons;
-  int numUnconverted;
-  int numUnconvertedDup;
+  int m_numPhotons;
+  int m_numUnconverted;
 
-  int numConversions;
-  int numConversionsDup;
+  int m_numConversionsSingleTrackSi;
+  int m_numConversionsDoubleTrackSi;
+  int m_numConversionsSingleTrackTRT;
+  int m_numConversionsDoubleTrackTRT;
+  int m_numConversionsDoubleTrackMix;
 
-  int numConversionsSingleTrack;
-  int numConversionsDoubleTrack;
-  int numConversionsSingleTrackSi;
-  int numConversionsDoubleTrackSi;
-  int numConversionsSingleTrackTRT;
-  int numConversionsDoubleTrackTRT;
-  int numConversionsDoubleTrackMix;
-
-  int numConversionsNotTP;
-  int numConversionsNotTPTRTOnly;
-
-  int numElectrons;
-  int numTightElectrons;
-  int numElectronsAuthorElectron;
-  int numTightElectronsAuthorElectron;
-  int numElectronsAuthorSofte;
-  int numElectronsAuthorFrwd;
-  int numElConversions;
+  int m_numElectrons;
+  int m_numTightElectrons;
+  int m_numElectronsAuthorElectron;
+  int m_numTightElectronsAuthorElectron;
+  int m_numElectronsAuthorSofte;
+  int m_numElectronsAuthorFrwd;
+  int m_numElConversions;
 
 };
 
