@@ -551,7 +551,7 @@ StatusCode TestAlg::execute()
 
 	//ATH_MSG_INFO("Electron OQ = " << std::hex << (*el)->isgoodoq());
 
-	m_histograms["ElEtaReco"]->Fill((*el)->eta());
+	//m_histograms["ElEtaReco"]->Fill((*el)->eta());
 
 	//const EMShower* shower = (*el)->detail<EMShower>();
 	// std::cout << "About to print out electron shower" << std::endl;
@@ -715,7 +715,7 @@ StatusCode TestAlg::execute()
 
   ATH_MSG_DEBUG("The event had " << numEl << " electrons out of which " << numElPass << " passed tight.");
 
-  m_histograms["numEl"]->Fill(numElPass);
+  //m_histograms["numEl"]->Fill(numElPass);
 
 
   // if (numElPass > 1) {
