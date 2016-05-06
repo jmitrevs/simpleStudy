@@ -31,6 +31,7 @@ use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
 use TrkTrack			TrkTrack-*			Tracking/TrkEvent
 use  EventInfo                  EventInfo-*                     Event
 use  xAODEgamma                 xAODEgamma-*                    Event/xAOD
+use  xAODEventInfo              xAODEventInfo-*                 Event/xAOD
 use  xAODTruth                  xAODTruth-*                    Event/xAOD
 use AthenaKernel                AthenaKernel-*                 Control
 
