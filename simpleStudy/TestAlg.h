@@ -18,6 +18,7 @@
 #include "GaudiKernel/ITHistSvc.h"
 
 #include <string>
+#include <cstdint>
 
 //class AtlasDetectorID;
 //class Identifier;
@@ -92,6 +93,7 @@ private:
   int m_photonIsEM;
   double m_truthPhotonPtMin;
   bool m_truthMatchPhotons;
+  uint16_t m_photonAuthor;
 
   /** MET selecton */
   std::string m_METContainerName;

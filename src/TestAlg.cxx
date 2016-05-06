@@ -24,6 +24,7 @@
 #include "xAODEgamma/ElectronContainer.h"
 #include "xAODEgamma/PhotonContainer.h"
 #include "xAODEgamma/EgammaxAODHelpers.h"
+#include "xAODEgamma/EgammaDefs.h"
 
 #include "MCTruthClassifier/MCTruthClassifierDefs.h"
 #include "xAODTruth/xAODTruthHelpers.h"
@@ -45,7 +46,7 @@
 // #include "egammaInterfaces/IEMFourMomBuilder.h"
 
 //#include "VxVertex/ExtendedVxCandidate.h"
-//#include "FourMomUtils/P4Helpers.h"
+#include "FourMomUtils/xAODP4Helpers.h"
 
 //#include "PhotonAnalysisUtils/IPAUcaloIsolationTool.h"
 
@@ -56,6 +57,7 @@
 
 
 #include <gsl/gsl_math.h>
+#include <set>
 
 using CLHEP::GeV;
 
@@ -89,6 +91,7 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("PhotonEta",  m_photonEta=3.2);
   declareProperty("PhotonIsEMFlag", m_photonIsEMFlag="Tight");
   declareProperty("PhotonIsEM", m_photonIsEM=0);
+  declareProperty("PhotonAuthor", m_photonAuthor = xAOD::EgammaParameters::AuthorALL);
 
   declareProperty("METContainerName", m_METContainerName = "MET_LocHadTopo");
 
@@ -211,9 +214,9 @@ StatusCode TestAlg::initialize()
   //   ATH_MSG_DEBUG("Retrieved PAUcaloIsolationTool " << m_PAUcaloIsolationTool);   
   // }
 
-  const Int_t numEResBins = 200;
-  const Double_t EResLow = -2.0;
-  const Double_t EResHigh = 2.0;
+  const Int_t numEResBins = 220;
+  const Double_t EResLow = -1.1;
+  const Double_t EResHigh = 1.1;
 
   /// Defining Histogramsquer
   m_histograms["EResolution"] = new TH1F("EResolution","Raw Energy Resolution;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -360,6 +363,8 @@ StatusCode TestAlg::execute()
 
   StatusCode sc = StatusCode::SUCCESS;
 
+  static int count = 0;
+  //ATH_MSG_WARNING("Skip event: " << count++); 
   // ATH_MSG_DEBUG("Electron container name: " << m_ElectronContainerName);
 
   const xAOD::EventInfo*  evtInfo = 0;
@@ -732,21 +737,35 @@ StatusCode TestAlg::execute()
   ATH_MSG_DEBUG("About to start photons");
 
   if (m_doPhotons) {
+    std::set<const xAOD::TruthParticle *> seenTruths;
     for (auto ph : *photons) {
 
       const xAOD::TruthParticle *truthParticle{nullptr};
       int truthType{0};
       int truthOrigin{0};
 
+      bool alreadySeen = false;
+
       if (isMC) {
 	truthParticle = xAOD::TruthHelpers::getTruthParticle(*ph);
 	truthType = xAOD::TruthHelpers::getParticleTruthType(*ph);
 	truthOrigin = xAOD::TruthHelpers::getParticleTruthOrigin(*ph);
+
 	ATH_MSG_DEBUG("Truth-match photon: type: " << truthType << ", origin: " 
 		      << truthOrigin << ", TruthParticle*: " << truthParticle);
-	
+
+	if (seenTruths.count(truthParticle)) {
+	  // have already seen the particle
+	  alreadySeen = true;
+	  ATH_MSG_DEBUG("Have already seen a partcle matched to same truth");
+	} else {
+	  seenTruths.insert(truthParticle);
+	}
       }
-      if (!m_truthMatchPhotons || truthType == MCTruthPartClassifier::IsoPhoton) {
+
+
+      if (ph->author(m_photonAuthor) && 
+	  (!m_truthMatchPhotons || (truthType == MCTruthPartClassifier::IsoPhoton && !alreadySeen))) {
 
 	m_numPhotons++;
 
@@ -758,6 +777,7 @@ StatusCode TestAlg::execute()
 	const auto Eres = (Ereco - Etruth)/Etruth;
 	const auto eta = ph->eta();
 	const auto eta2 = ph->caloCluster()->etaBE(2);
+	const auto etaTruth = (truthParticle) ? truthParticle->eta() : -999.0;
 	const bool isC = std::abs(eta2) <= 1.37;
 	const bool isEC = std::abs(eta2) >= 1.52;
 
@@ -774,6 +794,43 @@ StatusCode TestAlg::execute()
 	case xAOD::EgammaParameters::unconverted:
 	  m_numUnconverted++;
 	  fillPhotonHists("0T", isC, isEC, eta, Eres);
+	  if (Eres < -0.95 && isEC) {
+	    ATH_MSG_WARNING("Event " << runNumber << ", " << lumiBlock << ", " << eventNumber 
+			    << ", Eres = " << Eres
+			    << ", pt = " << ph->pt()
+			    // << ", eta = " << eta 
+			    << ", eta2 = " << eta2
+			    << ", etaTruth = " << etaTruth
+			    // << ", phi = " << ph->phi()
+			    << ", Ereco = " << Ereco
+			    << ", Etruth = " << Etruth
+			    << ", author = " << ph->author()
+			    );
+
+	    // let's find if there are better-matched nearby cells
+	    
+	    for (auto ph2 : *photons) {
+	      if (ph != ph2 && xAOD::P4Helpers::isInDeltaR(*(ph->caloCluster()), *(ph2->caloCluster()), 0.4, false)) {
+		const xAOD::TruthParticle *truthParticle2{nullptr};
+		int truthType2{0};
+
+		if (isMC) {
+		  truthParticle2 = xAOD::TruthHelpers::getTruthParticle(*ph2);
+		  truthType2 = xAOD::TruthHelpers::getParticleTruthType(*ph2);
+		}
+
+		const std::string match = 
+		  (truthParticle == truthParticle2) ? 
+		  "match same truthParticle" : "do not match same truthParticle";
+
+		ATH_MSG_WARNING("Found cluster with energy: " << ph2->caloCluster()->rawE() 
+				<< ", deltaR = " << xAOD::P4Helpers::deltaR(ph->caloCluster(), ph2->caloCluster(), false)
+				<< ", truthType = " << truthType2
+				<< ", " << match
+				);
+	      }
+	    }
+	  }
 	  break;
 	case xAOD::EgammaParameters::singleSi:
 	  m_numConversionsSingleTrackSi++;

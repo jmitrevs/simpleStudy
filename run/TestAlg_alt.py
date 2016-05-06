@@ -15,7 +15,39 @@ from glob import glob
 #FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_TRUTH1.e3657_p2324_tid05304593_00/DAOD_TRUTH1.05304593._000060.pool.root.1"
 #FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
 #FNAME = glob("/home/jmitrevs/workdir/testinput/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264*/*")
-FNAME = "../run/AOD.pool.root"
+FNAME = ["../run/AOD.pool.root", 
+         "../run2/AOD.pool.root",
+         "../run3/AOD.pool.root",
+         "../run4/AOD.pool.root",
+         "../run5/AOD.pool.root",
+         "../run6/AOD.pool.root",
+#          "../run7/AOD.pool.root",
+#          "../run8/AOD.pool.root",
+#          "../run9/AOD.pool.root",
+#          "../run10/AOD.pool.root",
+       ]
+
+#FNAME = ["../run_orig/AOD.pool.root", 
+#          "../run2_orig/AOD.pool.root",
+#          "../run3_orig/AOD.pool.root",
+#          "../run4_orig/AOD.pool.root",
+#          "../run5_orig/AOD.pool.root",
+#       ]
+
+# FNAME = ["../run_5x5/AOD.pool.root", 
+#          "../run2_5x5/AOD.pool.root",
+#          "../run3_5x5/AOD.pool.root",
+#          "../run4_5x5/AOD.pool.root",
+#          "../run5_5x5/AOD.pool.root",
+#      ]
+
+# FNAME = ["../run_noemf2/AOD.pool.root", 
+#          "../run2_noemf2/AOD.pool.root",
+#          "../run3_noemf2/AOD.pool.root",
+#          "../run4_noemf2/AOD.pool.root",
+#          "../run5_noemf2/AOD.pool.root",
+#          #"../run6_noemf/AOD.pool.root",
+#      ]
 
 include( "AthenaPython/iread_file.py" )
 
@@ -69,9 +101,10 @@ testAlg = TestAlg(name = "TestAlg",
                   DoElectrons = False,
                   DoPhotons = True,
 #                  McEventCollectionContainerName = "GEN_AOD"
+#                  PhotonAuthor = 20,
                   )   # 1 alg, named "HelloWorld"
 from AthenaCommon.AppMgr import ToolSvc
-testAlg.OutputLevel = DEBUG
+#testAlg.OutputLevel = DEBUG
 
 # Add example to Reader
 topSequence += testAlg
@@ -80,7 +113,7 @@ topSequence += testAlg
 # Event related parameters
 #--------------------------------------------------------------
 
-ServiceMgr.MessageSvc.OutputLevel = WARNING
+ServiceMgr.MessageSvc.OutputLevel = INFO
 
 
 # from simpleStudy.simpleStudyConf import TruthUtils
@@ -104,5 +137,5 @@ if not hasattr(ServiceMgr, theApp.EventLoop):
 evtloop = getattr(ServiceMgr, theApp.EventLoop)
 evtloop.EventPrintoutInterval = 1
 
-theApp.EvtMax=10
+theApp.EvtMax=-1
  
