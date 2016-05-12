@@ -51,7 +51,7 @@ public:
   
 private:
 
-  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float Eres);
+  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float pt, float Eres);
 
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
   ToolHandle<IAsgSelectionTool> m_electronSelector;
@@ -94,6 +94,8 @@ private:
   double m_truthPhotonPtMin;
   bool m_truthMatchPhotons;
   uint16_t m_photonAuthor;
+
+  std::string m_egammaTruthParticleContainerName;
 
   /** MET selecton */
   std::string m_METContainerName;
