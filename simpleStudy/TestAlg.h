@@ -52,6 +52,21 @@ public:
 private:
 
   void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float pt, float Eres);
+  void fillElectronHists(bool isC, bool isEC, 
+			 float eta, float pt, float Eovp,
+			 uint8_t nBL,
+			 uint8_t nBLOutliers,
+			 uint8_t nPi,
+			 uint8_t nPiOutliers,
+			 uint8_t nSCT,
+			 uint8_t nSCTOutliers,
+			 uint8_t expectBLayerHit,
+			 float delPhi1,
+			 float delPhiRescaled1,
+			 float delPhi2,
+			 float delPhiRescaled2,
+			 float delEta2
+			 );
 
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
   ToolHandle<IAsgSelectionTool> m_electronSelector;
@@ -83,7 +98,10 @@ private:
   double m_electronEta;
   std::string m_electronIsEMFlag;
   int m_electronIsEM;
-  double m_truthElectronPtMin;
+  //double m_truthElectronPtMin;
+  bool m_truthMatchElectrons;
+  bool m_truthMatchElectronAsPhotons;
+  uint16_t m_electronAuthor;
 
   /** Photon selection */
   std::string m_PhotonContainerName;
@@ -91,14 +109,14 @@ private:
   double m_photonEta;
   std::string m_photonIsEMFlag;
   int m_photonIsEM;
-  double m_truthPhotonPtMin;
+  //double m_truthPhotonPtMin;
   bool m_truthMatchPhotons;
   uint16_t m_photonAuthor;
 
   std::string m_egammaTruthParticleContainerName;
 
   /** MET selecton */
-  std::string m_METContainerName;
+  //std::string m_METContainerName;
 
   /** egamma selecton (for HLT) */
   std::string m_egammaContainerName;

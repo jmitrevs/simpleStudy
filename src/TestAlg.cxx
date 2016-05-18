@@ -90,8 +90,11 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("ElectronEta",  m_electronEta=3.2);
   declareProperty("ElectronIsEMFlag", m_electronIsEMFlag="Medium");
   declareProperty("ElectronIsEM", m_electronIsEM=0);
+  declareProperty("ElectronAuthor", m_electronAuthor = xAOD::EgammaParameters::AuthorALL);
 
-  declareProperty("TruthElectronPtMin", m_truthElectronPtMin = 5*GeV);
+  //declareProperty("TruthElectronPtMin", m_truthElectronPtMin = 5*GeV);
+  declareProperty("TruthMatchElectrons", m_truthMatchElectrons = false, "Require electrons to be truth-matched");
+  declareProperty("TruthMatchElectronAsPhotons", m_truthMatchElectronAsPhotons = true, "Require electrons to be truth-matched to photons");
 
   declareProperty("PhotonContainerName", m_PhotonContainerName = "Photons");
   declareProperty("PhotonPt",   m_photonPt=10*GeV);
@@ -100,16 +103,16 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("PhotonIsEM", m_photonIsEM=0);
   declareProperty("PhotonAuthor", m_photonAuthor = xAOD::EgammaParameters::AuthorALL);
 
+ //declareProperty("TruthPhotonPtMin", m_truthPhotonPtMin = 5*GeV);
+  declareProperty("TruthMatchPhotons", m_truthMatchPhotons = true, "Require photons to be truth-matched");
+
   declareProperty("EgammaTruthContainerName", m_egammaTruthParticleContainerName = "egammaTruthParticles",
     "Name of the output egamma truth particle container");
 
 
-  declareProperty("METContainerName", m_METContainerName = "MET_LocHadTopo");
+  //declareProperty("METContainerName", m_METContainerName = "MET_LocHadTopo");
 
   declareProperty("egammaContainerName", m_egammaContainerName = "HLT_egamma");
-
-  declareProperty("TruthPhotonPtMin", m_truthPhotonPtMin = 5*GeV);
-  declareProperty("TruthMatchPhotons", m_truthMatchPhotons = true, "Require photons to be truth-matched");
 
   declareProperty("TrackParticleContainerName", m_TrackParticleContainerName = 
 		  "TrackParticleCandidate");
@@ -294,6 +297,72 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TMixEC"] = new TH1F("PtReco2TMixEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
 
+  // Now for electron histograms 
+  m_histograms["ElEtaReco"] = new TH1F("ElEtaReco","Electron reco Psuedorapidity;#eta_{reco}", 100, -3,3);
+  m_histograms["ElPtReco"] = new TH1F("ElPtReco","Electron reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+  m_histograms["ElPtRecoC"] = new TH1F("ElPtRecoC","Electron reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+  m_histograms["ElPtRecoEC"] = new TH1F("ElPtRecoEC","Electron reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+
+  m_histograms["ElNumBLHits"] = new TH1F("ElNumBLHits","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsC"] = new TH1F("ElNumBLHitsC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsEC"] = new TH1F("ElNumBLHitsEC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+
+  m_histograms["ElNumBLHitsExp"] = new TH1F("ElNumBLHits","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsExpC"] = new TH1F("ElNumBLHitsC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsExpEC"] = new TH1F("ElNumBLHitsEC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+
+  m_histograms["ElNumBLHitsOutls"] = new TH1F("ElNumBLHitsOutls","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsOutlsC"] = new TH1F("ElNumBLHitsOutlsC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+  m_histograms["ElNumBLHitsOutlsEC"] = new TH1F("ElNumBLHitsOutlsEC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+
+  m_histograms["ElNumPixHits"] = new TH1F("ElNumPixHits","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+  m_histograms["ElNumPixHitsC"] = new TH1F("ElNumPixHitsC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+  m_histograms["ElNumPixHitsEC"] = new TH1F("ElNumPixHitsEC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+
+  m_histograms["ElNumPixHitsOutls"] = new TH1F("ElNumPixHitsOutls","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+  m_histograms["ElNumPixHitsOutlsC"] = new TH1F("ElNumPixHitsOutlsC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+  m_histograms["ElNumPixHitsOutlsEC"] = new TH1F("ElNumPixHitsOutlsEC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+
+  m_histograms["ElNumSiHits"] = new TH1F("ElNumSiHits","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+  m_histograms["ElNumSiHitsC"] = new TH1F("ElNumSiHitsC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+  m_histograms["ElNumSiHitsEC"] = new TH1F("ElNumSiHitsEC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+
+  m_histograms["ElNumSiHitsOutls"] = new TH1F("ElNumSiHitsOutls","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  m_histograms["ElNumSiHitsOutlsC"] = new TH1F("ElNumSiHitsOutlsC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  m_histograms["ElNumSiHitsOutlsEC"] = new TH1F("ElNumSiHitsOutlsEC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  
+
+  const Int_t numEovpBins = 100;
+  const Double_t EovpLow = 0;
+  const Double_t EovpHigh = 30;
+  m_histograms["Eovp"] = new TH1F("Eovp","E over p;E/p", numEovpBins, EovpLow, EovpHigh);
+  m_histograms["EovpC"] = new TH1F("EovpC","E over p, Central;E/p", numEovpBins, EovpLow, EovpHigh);
+  m_histograms["EovpEC"] = new TH1F("EovpEC","E over p, End-cap;E/p", numEovpBins, EovpLow, EovpHigh);
+
+  const Int_t numDelPhiBins = 100;
+  const Int_t numDelEtaBins = 100;
+  const Double_t DelPhiLow = -0.3;
+  const Double_t DelPhiHigh = 0.3;
+  const Double_t DelEtaLow = -0.3;
+  const Double_t DelEtaHigh = 0.3;
+  m_histograms["DelPhi1"] = new TH1F("DelPhi1","Track match #Delta#phi (layer 1);#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhi1C"] = new TH1F("DelPhi1C","Track match #Delta#phi (layer 1) , Central;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhi1EC"] = new TH1F("DelPhi1EC","Track match #Delta#phi (layer 1), End-cap;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhi2"] = new TH1F("DelPhi2","Track match #Delta#phi (layer 2);#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhi2C"] = new TH1F("DelPhi2C","Track match #Delta#phi (layer 2) , Central;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhi2EC"] = new TH1F("DelPhi2EC","Track match #Delta#phi (layer 2), End-cap;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+
+  m_histograms["DelPhiRescaled1"] = new TH1F("DelPhiRescaled1","Track match #Delta#phi (layer 1, rescaled);#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhiRescaled1C"] = new TH1F("DelPhiRescaled1C","Track match #Delta#phi (layer 1, rescaled) , Central;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhiRescaled1EC"] = new TH1F("DelPhiRescaled1EC","Track match #Delta#phi (layer 1, rescaled), End-cap;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhiRescaled2"] = new TH1F("DelPhiRescaled2","Track match #Delta#phi (layer 2, rescaled);#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhiRescaled2C"] = new TH1F("DelPhiRescaled2C","Track match #Delta#phi (layer 2, rescaled) , Central;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+  m_histograms["DelPhiRescaled2EC"] = new TH1F("DelPhiRescaled2EC","Track match #Delta#phi (layer 2, rescaled), End-cap;#Delta#phi", numDelPhiBins, DelPhiLow, DelPhiHigh);
+
+  m_histograms["DelEta2"] = new TH1F("DelEta2","Track match #Delta#eta (layer 2);#Delta#eta", numDelEtaBins, DelEtaLow, DelEtaHigh);
+  m_histograms["DelEta2C"] = new TH1F("DelEta2C","Track match #Delta#eta (layer 2) , Central;#Delta#eta", numDelEtaBins, DelEtaLow, DelEtaHigh);
+  m_histograms["DelEta2EC"] = new TH1F("DelEta2EC","Track match #Delta#eta (layer 2), End-cap;#Delta#eta", numDelEtaBins, DelEtaLow, DelEtaHigh);
+
 
   /// Registering Histograms
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution" , m_histograms["EResolution"]).ignore();
@@ -352,7 +421,62 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMixC" , m_histograms["PtReco2TMixC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMixEC" , m_histograms["PtReco2TMixEC"]).ignore();
 
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EtaReco" , m_histograms["ElEtaReco"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtReco" , m_histograms["ElPtReco"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtRecoC" , m_histograms["ElPtRecoC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtRecoEC" , m_histograms["ElPtRecoEC"]).ignore();
   
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHits", m_histograms["ElNumBLHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsC", m_histograms["ElNumBLHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsEC", m_histograms["ElNumBLHitsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExp", m_histograms["ElNumBLHitsExp"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpC", m_histograms["ElNumBLHitsExpC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpEC", m_histograms["ElNumBLHitsExpEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutls", m_histograms["ElNumBLHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsC", m_histograms["ElNumBLHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsEC", m_histograms["ElNumBLHitsOutlsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHits", m_histograms["ElNumPixHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsC", m_histograms["ElNumPixHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsEC", m_histograms["ElNumPixHitsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutls", m_histograms["ElNumPixHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsC", m_histograms["ElNumPixHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsEC", m_histograms["ElNumPixHitsOutlsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHits", m_histograms["ElNumSiHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsC", m_histograms["ElNumSiHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsEC", m_histograms["ElNumSiHitsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutls", m_histograms["ElNumSiHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsC", m_histograms["ElNumSiHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsEC", m_histograms["ElNumSiHitsOutlsEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/Eovp" , m_histograms["ElEovp"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpC" , m_histograms["ElEovpC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpEC" , m_histograms["ElEovpEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1" , m_histograms["ElDelPhi1"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1C" , m_histograms["ElDelPhi1C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1EC" , m_histograms["ElDelPhi1EC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1" , m_histograms["ElDelPhiRescaled1"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1C" , m_histograms["ElDelPhiRescaled1C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1EC" , m_histograms["ElDelPhiRescaled1EC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2" , m_histograms["ElDelPhi2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2C" , m_histograms["ElDelPhi2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2EC" , m_histograms["ElDelPhi2EC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2" , m_histograms["ElDelPhiRescaled2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2C" , m_histograms["ElDelPhiRescaled2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2EC" , m_histograms["ElDelPhiRescaled2EC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2" , m_histograms["ElDelEta2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2C" , m_histograms["ElDelEta2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2EC" , m_histograms["ElDelEta2EC"]).ignore();
 
   // initialize some constants
   m_numPhotons = 0;
@@ -549,129 +673,59 @@ StatusCode TestAlg::execute()
 
   if (m_doElectrons) {
     // loop over electrons
-    for (xAOD::ElectronContainer::const_iterator el  = electrons->begin();
-	 el != electrons->end();
-	 el++) {
+    for (auto el : *electrons) {
     
-      // try the selector
+      const xAOD::TruthParticle *truthParticle{nullptr};
+      int truthType{0};
+      int truthOrigin{0};
 
-      if (xAOD::EgammaHelpers::isElectron(*el)) {
-	const Root::TAccept& acc = m_electronSelector->accept(*el);
-      
-	if (acc) {
-	  numElPass++;
-	  ATH_MSG_DEBUG("Passed electron selector.");
-	} else {
-	  ATH_MSG_DEBUG("Failed electron selector.");
-	}
+      //bool alreadySeen = false;
+
+      if (isMC) {
+	truthParticle = xAOD::TruthHelpers::getTruthParticle(*el);
+	truthType = xAOD::TruthHelpers::getParticleTruthType(*el);
+	truthOrigin = xAOD::TruthHelpers::getParticleTruthOrigin(*el);
+
+	ATH_MSG_DEBUG("Truth-match electron: type: " << truthType << ", origin: " 
+		      << truthOrigin << ", TruthParticle*: " << truthParticle);
       }
-      bool passTruth = true;
-      // if (m_doTruth) {
-      //   std::pair<MCTruthPartClassifier::ParticleType, MCTruthPartClassifier::ParticleOrigin> res =
-      // 	m_MCTruthClassifier->particleTruthClassifier(*el);
-      //   passTruth = (res.first == MCTruthPartClassifier::IsoElectron);
-      // }
-
-      if (passTruth) {
-
+      
+      if (el->author(m_electronAuthor) && 
+	  (!(m_truthMatchElectrons || m_truthMatchElectronAsPhotons) ||
+	   (m_truthMatchElectrons && truthType == MCTruthPartClassifier::IsoElectron) ||
+	   (m_truthMatchElectronAsPhotons && truthType == MCTruthPartClassifier::IsoPhoton))) {
+	
 	m_numElectrons++;
-	// if ((*el)->author(egammaParameters::AuthorElectron)) {
-	// 	numEl++;
-	// 	numElectronsAuthorElectron++;
-	// }
-	// if ((*el)->author(egammaParameters::AuthorSofte)) numElectronsAuthorSofte++;
-	// if ((*el)->author(egammaParameters::AuthorFrwd)) numElectronsAuthorFrwd++;
-
-	ATH_MSG_INFO("Electron with author " << (*el)->author() << ", pt == " << (*el)->pt() 
-		     << ", eta = " << (*el)->eta() << ", phi = " << (*el)->phi());
-
-	ATH_MSG_INFO("Cluster eta = " << (*el)->caloCluster()->eta());
-
-      
-	//    if ((*el)->author(egammaParameters::AuthorElectron) && (*el)->isElectron(egammaPID::ElectronMedium_WithTrackMatch)) {
-	// const double elPt = (*el)->pt();
-	// if (elPt > leadPt) {
-	// 	second = leading;
-	// 	leading = *el;
-	// 	secondPt = leadPt;
-	// 	leadPt = elPt;
-	// } else if (elPt > secondPt) {
-	// 	second = *el;
-	// 	secondPt = elPt;
-	// }
-      
-
-	// const egamma::momentum_type& fourmom = (*el)->get4Mom(egamma::Uncombined);
-
-	// const double manualCalc = (*el)->cluster()->e()/cosh((*el)->trackParticle()->eta());
-	// const double autoCalc = fourmom.pt();
-
-	// ATH_MSG_INFO("Manualy calculated pt = " << manualCalc << ", uncombined = " << autoCalc);
-      
-	// ATH_MSG_INFO("author is = " << (*el)->author() << ", and num cells = " 
-	// 		   << (*el)->cluster()->getNumberOfCells());
-
-	//ATH_MSG_INFO("Electron OQ = " << std::hex << (*el)->isgoodoq());
-
-	//m_histograms["ElEtaReco"]->Fill((*el)->eta());
-
-	//const EMShower* shower = (*el)->detail<EMShower>();
-	// std::cout << "About to print out electron shower" << std::endl;
-	//shower->print();
-
-	//   if (fabs((*el)->phi()) > M_PI) {
-	//     ATH_MSG_WARNING("Looking at electron (author = " << (*el)->author() 
-	// 		      << ") with phi = " << (*el)->phi() 
-	// 		      << ", eta = "<< (*el)->eta() 
-	// 		      << ", et = " << (*el)->et() 
-	// 		      << ", E = " << (*el)->e());
-	//     ATH_MSG_WARNING("   Cluster phi = " << (*el)->cluster()->phi() 
-	// 		      << ", eta = "<< (*el)->cluster()->eta() 
-	// 		      << ", et = " << (*el)->cluster()->et()
-	// 		      << ", E = " << (*el)->cluster()->e());
-
-	const xAOD::TrackParticle * trParticle = (*el)->trackParticle();
+	
+	const auto Ereco = el->caloCluster()->rawE();
+	const auto Etruth = (truthParticle) ? truthParticle->e() : 0.0;
+	//const auto Eres = (Ereco - Etruth)/Etruth;
+	const auto eta = el->eta();
+	const auto eta2 = el->caloCluster()->etaBE(2);
+	//const auto etaTruth = (truthParticle) ? truthParticle->eta() : -999.0;
+	const auto Et = Ereco/cosh(eta);
+	const auto EtTruth = (truthParticle) ? truthParticle->pt() : 0.0;
+	const bool isC = std::abs(eta2) <= 1.37;
+	const bool isEC = std::abs(eta2) >= 1.52;
+	
+	ATH_MSG_INFO("Electron with author " << el->author() << ", Et == " << Et 
+		     << ", eta = " << eta);
+	
+	
+	const xAOD::TrackParticle * trParticle = el->trackParticle();
 	if (!trParticle) {
-	  ATH_MSG_WARNING("Electron has no track-particle");
-	  continue;
+	  ATH_MSG_ERROR("Electron has no track-particle");
+	  return StatusCode::FAILURE;
 	}
+
+	const auto invP = std::abs(trParticle->qOverP());
+	const auto Eovp = Ereco * invP;
 
 	ATH_MSG_DEBUG("   Track phi = " << trParticle->phi() 
 		      << ", eta = "<< trParticle->eta() 
 		      << ", pt = " << trParticle->pt()
 		      << ", E = " << trParticle->e());
       
-	// 	const Trk::TrackParticleBase* trkbase = dynamic_cast<const Trk::TrackParticleBase* >(trParticle);
-	// 	const Trk::MeasuredPerigee* perigee = dynamic_cast<const Trk::MeasuredPerigee*>( &(trkbase->definingParameters()) );
-	
-	// 	double momentum = -999999.;
-	// 	double momentumError = -999999.;
-	
-	// 	if (perigee->parameters()[Trk::qOverP] != 0 ) {
-	// 	  momentum = 1./fabs(perigee->parameters()[Trk::qOverP]);
-	// 	  momentumError =
-	// 	    momentum*momentum * sqrt(perigee->localErrorMatrix().covariance()[Trk::qOverP][Trk::qOverP]);
-	// 	}
-	
-	// 	const double energy =(*el)->detailValue(egammaParameters::EMPhoton_Eclus);
-	// 	const double energyError =sqrt( std::max(0.,(*el)->detailValue(egammaParameters::EMPhoton_CovEclusEclus)) );   
-	
-	// 	const double chi = sqrt(((energy - momentum)*(energy - momentum))
-	// 				/ ((energyError*energyError) + (momentumError*momentumError)));
-
-	// 	ATH_MSG_WARNING("Chi for combining values = " << chi);
-
-	//     }
-
-
-	//     const double theta = (*el)->detailValue(egammaParameters::EMTrack_theta);
-	//     const double eta = - log(tan(theta/2.0));
-
-	//     ATH_MSG_WARNING("   Detail value EMTrack_phi0: " << (*el)->detailValue(egammaParameters::EMTrack_phi0) 
-	// 		      << ", hasSiliconHits = " << (*el)->detailValue(egammaParameters::hasSiliconHits) 
-	// 		      << ", EMTrackTheta = " << theta
-	// 		      << ", eta = " << eta);
-
       
 
 	uint8_t nBL = 0;
@@ -687,24 +741,24 @@ StatusCode TestAlg::execute()
 	uint8_t nTRT         = 0;
 	uint8_t nTRTOutliers = 0;
 	uint8_t nTRTXenonHits = 0;
-	uint8_t expectHitInBLayer = true;
+	uint8_t  expectBLayerHit = true;
       
 	bool allFound = true;
       
-	allFound &= trParticle->summaryValue(nBL, xAOD::numberOfBLayerHits);
-	allFound &= trParticle->summaryValue(nPi, xAOD::numberOfPixelHits);
-	allFound &= trParticle->summaryValue(nSCT, xAOD::numberOfSCTHits);
-	allFound &= trParticle->summaryValue(nBLOutliers, xAOD::numberOfBLayerOutliers);
-	allFound &= trParticle->summaryValue(nPiOutliers, xAOD::numberOfPixelOutliers);
-	allFound &= trParticle->summaryValue(nSCTOutliers, xAOD::numberOfSCTOutliers);
+	allFound = allFound && trParticle->summaryValue(nBL, xAOD::numberOfBLayerHits);
+	allFound = allFound && trParticle->summaryValue(nPi, xAOD::numberOfPixelHits);
+	allFound = allFound && trParticle->summaryValue(nSCT, xAOD::numberOfSCTHits);
+	allFound = allFound && trParticle->summaryValue(nBLOutliers, xAOD::numberOfBLayerOutliers);
+	allFound = allFound && trParticle->summaryValue(nPiOutliers, xAOD::numberOfPixelOutliers);
+	allFound = allFound && trParticle->summaryValue(nSCTOutliers, xAOD::numberOfSCTOutliers);
       
-	allFound &= trParticle->summaryValue(nTRThigh, xAOD::numberOfTRTHighThresholdHits);
-	allFound &= trParticle->summaryValue(nTRThighOutliers, xAOD::numberOfTRTHighThresholdOutliers);
-	allFound &= trParticle->summaryValue(nTRT, xAOD::numberOfTRTHits);
-	allFound &= trParticle->summaryValue(nTRTOutliers, xAOD::numberOfTRTOutliers);
-	allFound &= trParticle->summaryValue(nTRTXenonHits, xAOD::numberOfTRTXenonHits);
+	allFound = allFound && trParticle->summaryValue(nTRThigh, xAOD::numberOfTRTHighThresholdHits);
+	allFound = allFound && trParticle->summaryValue(nTRThighOutliers, xAOD::numberOfTRTHighThresholdOutliers);
+	allFound = allFound && trParticle->summaryValue(nTRT, xAOD::numberOfTRTHits);
+	allFound = allFound && trParticle->summaryValue(nTRTOutliers, xAOD::numberOfTRTOutliers);
+	allFound = allFound && trParticle->summaryValue(nTRTXenonHits, xAOD::numberOfTRTXenonHits);
       
-	allFound &= trParticle->summaryValue(expectHitInBLayer, xAOD::expectBLayerHit);
+	allFound = allFound && trParticle->summaryValue(expectBLayerHit, xAOD::expectBLayerHit);
 
 	if (!allFound) {
 	  ATH_MSG_WARNING("Not all track values found");
@@ -713,65 +767,31 @@ StatusCode TestAlg::execute()
 	int nSiliconHits_trk = nPi + nSCT;
 
 	ATH_MSG_DEBUG("   Number of silicon hits = " << (int) nSiliconHits_trk << ", number of b-layer hits = " << (int) nBL 
-		      << ", expected hit in b-layer = " << (bool) expectHitInBLayer);
+		      << ", expected hit in b-layer = " << (bool) expectBLayerHit);
 
+	const auto delPhi1 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhi1);
+	const auto delPhiRescaled1 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhiRescaled1);
+	const auto delPhi2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhi2);
+	const auto delPhiRescaled2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhiRescaled2);
+	const auto delEta2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaEta2);
 
-	//   } // if (fabs((*el)->phi()) > M_PI)
+	fillElectronHists(isC, isEC, 
+			  eta, Et, Eovp,
+			  nBL,
+			  nBLOutliers,
+			  nPi,
+			  nPiOutliers,
+			  nSCT,
+			  nSCTOutliers,
+			  expectBLayerHit,
+			  delPhi1,
+			  delPhiRescaled1,
+			  delPhi2,
+			  delPhiRescaled2,
+			  delEta2
+			  );
 
-	//   if (!(*el)->isElectron(egammaPID::CONVMATCH_ELECTRON) && EMType::isElectronNotForward(*el)) {
-	//     const unsigned int isem = (*el)->isem();
-	//     ATH_MSG_DEBUG("Found a conv matched electron (author = " << (*el)->author() << ") based on PID == " << std::hex << isem);
-	//     const Analysis::Photon *matchedPhoton = NULL;
-	//     for (PhotonContainer::const_iterator ph  = photons->begin();
-	// 	   ph != photons->end();
-	// 	   ph++) {
-	// 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
-	// 	  matchedPhoton = *ph;
-	// 	  break;
-	// 	}
-	//     }
-	//     if (matchedPhoton) {
-	// 	const EMShower* shower = matchedPhoton->detail<EMShower>();
-	
-	// 	const CaloCluster* cluster = matchedPhoton->cluster();
-	
-	// 	double eta2   = fabs(cluster->etaBE(2)); 
-	// 	double et     = cluster->energy()/cosh(eta2);
-	// 	double ethad1 = shower->ethad1(); 
-	
-	// 	double hadleakage = et > 0. ? ethad1/et : 1.;
-	
-	// 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
-	// 	if (matchedPhoton->conversion()) {
-	// 	  ATH_MSG_INFO("Found a matched converted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
-	// 	} else {
-	// 	  ATH_MSG_INFO("Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << ", had leakage == " << hadleakage << ", and deltaR == " << deltaR);
-	// 	}
-	//     } else {
-	//      	ATH_MSG_WARNING("NO MATCHING PHOTON FOUND");
-	//     }
-	//   } else {
-	//     const Analysis::Photon *matchedPhoton = NULL;
-	//     for (PhotonContainer::const_iterator ph  = photons->begin();
-	// 	   ph != photons->end();
-	// 	   ph++) {
-	// 	if ((*el)->hasSameAthenaBarCodeExceptVersion(**ph)) {
-	// 	  matchedPhoton = *ph;
-	// 	  break;
-	// 	}
-	//     }
-	//     if (matchedPhoton) {
-	// 	ATH_MSG_ERROR("A MATCH WAS NOT EXPECTED!");
-	// 	const double deltaR = P4Helpers::deltaR(*el, matchedPhoton);
-	// 	const unsigned int isem = (*el)->isem();
-	// 	if (matchedPhoton->conversion()) {
-	// 	  ATH_MSG_WARNING("  Found a matched converted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
-	// 	} else {
-	// 	  ATH_MSG_WARNING("  Found a matched unconverted photon with PID == " << std::hex << isem << std::dec << " and deltaR == " << deltaR);
-	// 	}
-	//     }
-	//   }
-      }
+      } // truth-match 
     } // loop over electrons
   }
 
@@ -1054,6 +1074,77 @@ void TestAlg::fillPhotonHists(std::string suffix,
   }
 }
  
+void TestAlg::fillElectronHists(bool isC, bool isEC, 
+				float eta, float pt, float Eovp,
+				uint8_t nBL,
+				uint8_t nBLOutliers,
+				uint8_t nPix,
+				uint8_t nPixOutliers,
+				uint8_t nSCT,
+				uint8_t nSCTOutliers,
+				uint8_t expectBLayerHit,
+				float delPhi1,
+				float delPhiRescaled1,
+				float delPhi2,
+				float delPhiRescaled2,
+				float delEta2
+				)
+{
+  auto nBLHitsOutls = nBL + nBLOutliers;
+  auto nPixHitsOutls = nPix + nPixOutliers;
+  auto nSCTHitsOutls = nSCT + nSCTOutliers;
+  auto nSi = nPix + nSCT;
+  auto nSiHitsOutls = nPixHitsOutls + nSCTHitsOutls;
+  auto nBLHitsExp = (expectBLayerHit) ? nBL : 1;
+
+  m_histograms.at("ElEtaReco")->Fill(eta);
+  m_histograms.at("ElPtReco")->Fill(pt/GeV);
+  m_histograms.at("Eovp")->Fill(Eovp);
+  m_histograms.at("ElNumBLHits")->Fill(nBL);
+  m_histograms.at("ElNumBLHitsOutls")->Fill(nBLHitsOutls);
+  m_histograms.at("ElNumBLHitsExp")->Fill(nBLHitsExp);
+  m_histograms.at("ElNumPixHits")->Fill(nPix);
+  m_histograms.at("ElNumPixHitsOutls")->Fill(nPixHitsOutls);
+  m_histograms.at("ElNumSiHits")->Fill(nSi);
+  m_histograms.at("ElNumSiHitsOutls")->Fill(nSiHitsOutls);
+  m_histograms.at("ElDelPhi1")->Fill(delPhi1);
+  m_histograms.at("ElDelPhiRescaled1")->Fill(delPhiRescaled1);
+  m_histograms.at("ElDelPhi2")->Fill(delPhi2);
+  m_histograms.at("ElDelPhiRescaled2")->Fill(delPhiRescaled2);
+  m_histograms.at("ElDelEta2")->Fill(delEta2);
+
+  if (isC) {
+    m_histograms.at("ElPtRecoC")->Fill(pt/GeV);
+    m_histograms.at("EovpC")->Fill(Eovp);
+    m_histograms.at("ElNumBLHitsC")->Fill(nBL);
+    m_histograms.at("ElNumBLHitsOutlsC")->Fill(nBLHitsOutls);
+    m_histograms.at("ElNumBLHitsExpC")->Fill(nBLHitsExp);
+    m_histograms.at("ElNumPixHitsC")->Fill(nPix);
+    m_histograms.at("ElNumPixHitsOutlsC")->Fill(nPixHitsOutls);
+    m_histograms.at("ElNumSiHitsC")->Fill(nSi);
+    m_histograms.at("ElNumSiHitsOutlsC")->Fill(nSiHitsOutls);
+    m_histograms.at("ElDelPhi1C")->Fill(delPhi1);
+    m_histograms.at("ElDelPhiRescaled1C")->Fill(delPhiRescaled1);
+    m_histograms.at("ElDelPhi2C")->Fill(delPhi2);
+    m_histograms.at("ElDelPhiRescaled2C")->Fill(delPhiRescaled2);
+    m_histograms.at("ElDelEta2C")->Fill(delEta2);
+  } else if (isEC) {
+    m_histograms.at("ElPtRecoEC")->Fill(pt/GeV);
+    m_histograms.at("EovpEC")->Fill(Eovp);
+    m_histograms.at("ElNumBLHitsEC")->Fill(nBL);
+    m_histograms.at("ElNumBLHitsOutlsEC")->Fill(nBLHitsOutls);
+    m_histograms.at("ElNumBLHitsExpEC")->Fill(nBLHitsExp);
+    m_histograms.at("ElNumPixHitsEC")->Fill(nPix);
+    m_histograms.at("ElNumPixHitsOutlsEC")->Fill(nPixHitsOutls);
+    m_histograms.at("ElNumSiHitsEC")->Fill(nSi);
+    m_histograms.at("ElNumSiHitsOutlsEC")->Fill(nSiHitsOutls);
+    m_histograms.at("ElDelPhi1EC")->Fill(delPhi1);
+    m_histograms.at("ElDelPhiRescaled1EC")->Fill(delPhiRescaled1);
+    m_histograms.at("ElDelPhi2EC")->Fill(delPhi2);
+    m_histograms.at("ElDelPhiRescaled2EC")->Fill(delPhiRescaled2);
+    m_histograms.at("ElDelEta2EC")->Fill(delEta2);
+  }
+}
 
 namespace {
   bool isBestMatch(const xAOD::TruthParticle *truthParticle, 
