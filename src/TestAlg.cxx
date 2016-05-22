@@ -303,33 +303,33 @@ StatusCode TestAlg::initialize()
   m_histograms["ElPtRecoC"] = new TH1F("ElPtRecoC","Electron reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["ElPtRecoEC"] = new TH1F("ElPtRecoEC","Electron reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["ElNumBLHits"] = new TH1F("ElNumBLHits","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsC"] = new TH1F("ElNumBLHitsC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsEC"] = new TH1F("ElNumBLHitsEC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHits"] = new TH1F("NumBLHits","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsC"] = new TH1F("NumBLHitsC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsEC"] = new TH1F("NumBLHitsEC","Electron Number BLayer Hits;N_{hits}", 3, -0.5, 2.5);
 
-  m_histograms["ElNumBLHitsExp"] = new TH1F("ElNumBLHits","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsExpC"] = new TH1F("ElNumBLHitsC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsExpEC"] = new TH1F("ElNumBLHitsEC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsExp"] = new TH1F("NumBLHitsExp","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsExpC"] = new TH1F("NumBLHitsExpC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsExpEC"] = new TH1F("NumBLHitsExpEC","Electron Number BLayer Hits (assume hit if not expected);N_{hits}", 3, -0.5, 2.5);
 
-  m_histograms["ElNumBLHitsOutls"] = new TH1F("ElNumBLHitsOutls","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsOutlsC"] = new TH1F("ElNumBLHitsOutlsC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
-  m_histograms["ElNumBLHitsOutlsEC"] = new TH1F("ElNumBLHitsOutlsEC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsOutls"] = new TH1F("NumBLHitsOutls","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsOutlsC"] = new TH1F("NumBLHitsOutlsC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
+  m_histograms["NumBLHitsOutlsEC"] = new TH1F("NumBLHitsOutlsEC","Electron Number BLayer Hits + Outliers;N_{hits+outls}", 3, -0.5, 2.5);
 
-  m_histograms["ElNumPixHits"] = new TH1F("ElNumPixHits","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
-  m_histograms["ElNumPixHitsC"] = new TH1F("ElNumPixHitsC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
-  m_histograms["ElNumPixHitsEC"] = new TH1F("ElNumPixHitsEC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+  m_histograms["NumPixHits"] = new TH1F("NumPixHits","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+  m_histograms["NumPixHitsC"] = new TH1F("NumPixHitsC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
+  m_histograms["NumPixHitsEC"] = new TH1F("NumPixHitsEC","Electron Number Pixel Hits;N_{hits}", 6, -0.5, 5.5);
 
-  m_histograms["ElNumPixHitsOutls"] = new TH1F("ElNumPixHitsOutls","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
-  m_histograms["ElNumPixHitsOutlsC"] = new TH1F("ElNumPixHitsOutlsC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
-  m_histograms["ElNumPixHitsOutlsEC"] = new TH1F("ElNumPixHitsOutlsEC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+  m_histograms["NumPixHitsOutls"] = new TH1F("NumPixHitsOutls","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+  m_histograms["NumPixHitsOutlsC"] = new TH1F("NumPixHitsOutlsC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
+  m_histograms["NumPixHitsOutlsEC"] = new TH1F("NumPixHitsOutlsEC","Electron Number Pixel Hits + Outliers;N_{hits+outls}", 6, -0.5, 5.5);
 
-  m_histograms["ElNumSiHits"] = new TH1F("ElNumSiHits","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
-  m_histograms["ElNumSiHitsC"] = new TH1F("ElNumSiHitsC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
-  m_histograms["ElNumSiHitsEC"] = new TH1F("ElNumSiHitsEC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+  m_histograms["NumSiHits"] = new TH1F("NumSiHits","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+  m_histograms["NumSiHitsC"] = new TH1F("NumSiHitsC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
+  m_histograms["NumSiHitsEC"] = new TH1F("NumSiHitsEC","Electron Number Si Hits;N_{hits}", 15, -0.5, 14.5);
 
-  m_histograms["ElNumSiHitsOutls"] = new TH1F("ElNumSiHitsOutls","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
-  m_histograms["ElNumSiHitsOutlsC"] = new TH1F("ElNumSiHitsOutlsC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
-  m_histograms["ElNumSiHitsOutlsEC"] = new TH1F("ElNumSiHitsOutlsEC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  m_histograms["NumSiHitsOutls"] = new TH1F("NumSiHitsOutls","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  m_histograms["NumSiHitsOutlsC"] = new TH1F("NumSiHitsOutlsC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
+  m_histograms["NumSiHitsOutlsEC"] = new TH1F("NumSiHitsOutlsEC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
   
 
   const Int_t numEovpBins = 100;
@@ -426,57 +426,57 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtRecoC" , m_histograms["ElPtRecoC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtRecoEC" , m_histograms["ElPtRecoEC"]).ignore();
   
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHits", m_histograms["ElNumBLHits"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsC", m_histograms["ElNumBLHitsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsEC", m_histograms["ElNumBLHitsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHits", m_histograms["NumBLHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsC", m_histograms["NumBLHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsEC", m_histograms["NumBLHitsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExp", m_histograms["ElNumBLHitsExp"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpC", m_histograms["ElNumBLHitsExpC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpEC", m_histograms["ElNumBLHitsExpEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExp", m_histograms["NumBLHitsExp"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpC", m_histograms["NumBLHitsExpC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsExpEC", m_histograms["NumBLHitsExpEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutls", m_histograms["ElNumBLHitsOutls"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsC", m_histograms["ElNumBLHitsOutlsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsEC", m_histograms["ElNumBLHitsOutlsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutls", m_histograms["NumBLHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsC", m_histograms["NumBLHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumBLHitsOutlsEC", m_histograms["NumBLHitsOutlsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHits", m_histograms["ElNumPixHits"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsC", m_histograms["ElNumPixHitsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsEC", m_histograms["ElNumPixHitsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHits", m_histograms["NumPixHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsC", m_histograms["NumPixHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsEC", m_histograms["NumPixHitsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutls", m_histograms["ElNumPixHitsOutls"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsC", m_histograms["ElNumPixHitsOutlsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsEC", m_histograms["ElNumPixHitsOutlsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutls", m_histograms["NumPixHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsC", m_histograms["NumPixHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumPixHitsOutlsEC", m_histograms["NumPixHitsOutlsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHits", m_histograms["ElNumSiHits"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsC", m_histograms["ElNumSiHitsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsEC", m_histograms["ElNumSiHitsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHits", m_histograms["NumSiHits"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsC", m_histograms["NumSiHitsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsEC", m_histograms["NumSiHitsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutls", m_histograms["ElNumSiHitsOutls"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsC", m_histograms["ElNumSiHitsOutlsC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsEC", m_histograms["ElNumSiHitsOutlsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutls", m_histograms["NumSiHitsOutls"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsC", m_histograms["NumSiHitsOutlsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumSiHitsOutlsEC", m_histograms["NumSiHitsOutlsEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/Eovp" , m_histograms["ElEovp"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpC" , m_histograms["ElEovpC"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpEC" , m_histograms["ElEovpEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/Eovp" , m_histograms["Eovp"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpC" , m_histograms["EovpC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EovpEC" , m_histograms["EovpEC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1" , m_histograms["ElDelPhi1"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1C" , m_histograms["ElDelPhi1C"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1EC" , m_histograms["ElDelPhi1EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1" , m_histograms["DelPhi1"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1C" , m_histograms["DelPhi1C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi1EC" , m_histograms["DelPhi1EC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1" , m_histograms["ElDelPhiRescaled1"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1C" , m_histograms["ElDelPhiRescaled1C"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1EC" , m_histograms["ElDelPhiRescaled1EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1" , m_histograms["DelPhiRescaled1"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1C" , m_histograms["DelPhiRescaled1C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled1EC" , m_histograms["DelPhiRescaled1EC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2" , m_histograms["ElDelPhi2"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2C" , m_histograms["ElDelPhi2C"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2EC" , m_histograms["ElDelPhi2EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2" , m_histograms["DelPhi2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2C" , m_histograms["DelPhi2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhi2EC" , m_histograms["DelPhi2EC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2" , m_histograms["ElDelPhiRescaled2"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2C" , m_histograms["ElDelPhiRescaled2C"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2EC" , m_histograms["ElDelPhiRescaled2EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2" , m_histograms["DelPhiRescaled2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2C" , m_histograms["DelPhiRescaled2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelPhiRescaled2EC" , m_histograms["DelPhiRescaled2EC"]).ignore();
 
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2" , m_histograms["ElDelEta2"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2C" , m_histograms["ElDelEta2C"]).ignore();
-  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2EC" , m_histograms["ElDelEta2EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2" , m_histograms["DelEta2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2C" , m_histograms["DelEta2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2EC" , m_histograms["DelEta2EC"]).ignore();
 
   // initialize some constants
   m_numPhotons = 0;
@@ -774,6 +774,21 @@ StatusCode TestAlg::execute()
 	const auto delPhi2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhi2);
 	const auto delPhiRescaled2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaPhiRescaled2);
 	const auto delEta2 = el->trackCaloMatchValue(xAOD::EgammaParameters::deltaEta2);
+
+	ATH_MSG_WARNING("Event " << runNumber << ", " << lumiBlock << ", " << eventNumber 
+			<< ", Eovp = " << Eovp
+			<< ", Ereco = " << Ereco
+			<< ", Et = " << Et
+			<< ", eta2 = " << eta2
+			<< ", clphi = " << el->caloCluster()->phi()
+			<< ", nBL+outl = " << nBL + nBLOutliers
+			<< ", expectBLayerHit = " << expectBLayerHit
+			<< ", nSi+outl = " << nPi + nPiOutliers + nSCT + nSCTOutliers
+			<< ", DelEta2 = " << delEta2
+			<< ", DelPhi1 = " << delPhi1
+			<< ", DelPhiRescaled1 = " << delPhiRescaled1
+			);
+	
 
 	fillElectronHists(isC, isEC, 
 			  eta, Et, Eovp,
@@ -1095,54 +1110,54 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
   auto nSCTHitsOutls = nSCT + nSCTOutliers;
   auto nSi = nPix + nSCT;
   auto nSiHitsOutls = nPixHitsOutls + nSCTHitsOutls;
-  auto nBLHitsExp = (expectBLayerHit) ? nBL : 1;
+  auto nBLHitsExp = (expectBLayerHit) ? nBLHitsOutls : 1;
 
   m_histograms.at("ElEtaReco")->Fill(eta);
   m_histograms.at("ElPtReco")->Fill(pt/GeV);
   m_histograms.at("Eovp")->Fill(Eovp);
-  m_histograms.at("ElNumBLHits")->Fill(nBL);
-  m_histograms.at("ElNumBLHitsOutls")->Fill(nBLHitsOutls);
-  m_histograms.at("ElNumBLHitsExp")->Fill(nBLHitsExp);
-  m_histograms.at("ElNumPixHits")->Fill(nPix);
-  m_histograms.at("ElNumPixHitsOutls")->Fill(nPixHitsOutls);
-  m_histograms.at("ElNumSiHits")->Fill(nSi);
-  m_histograms.at("ElNumSiHitsOutls")->Fill(nSiHitsOutls);
-  m_histograms.at("ElDelPhi1")->Fill(delPhi1);
-  m_histograms.at("ElDelPhiRescaled1")->Fill(delPhiRescaled1);
-  m_histograms.at("ElDelPhi2")->Fill(delPhi2);
-  m_histograms.at("ElDelPhiRescaled2")->Fill(delPhiRescaled2);
-  m_histograms.at("ElDelEta2")->Fill(delEta2);
+  m_histograms.at("NumBLHits")->Fill(nBL);
+  m_histograms.at("NumBLHitsOutls")->Fill(nBLHitsOutls);
+  m_histograms.at("NumBLHitsExp")->Fill(nBLHitsExp);
+  m_histograms.at("NumPixHits")->Fill(nPix);
+  m_histograms.at("NumPixHitsOutls")->Fill(nPixHitsOutls);
+  m_histograms.at("NumSiHits")->Fill(nSi);
+  m_histograms.at("NumSiHitsOutls")->Fill(nSiHitsOutls);
+  m_histograms.at("DelPhi1")->Fill(delPhi1);
+  m_histograms.at("DelPhiRescaled1")->Fill(delPhiRescaled1);
+  m_histograms.at("DelPhi2")->Fill(delPhi2);
+  m_histograms.at("DelPhiRescaled2")->Fill(delPhiRescaled2);
+  m_histograms.at("DelEta2")->Fill(delEta2);
 
   if (isC) {
     m_histograms.at("ElPtRecoC")->Fill(pt/GeV);
     m_histograms.at("EovpC")->Fill(Eovp);
-    m_histograms.at("ElNumBLHitsC")->Fill(nBL);
-    m_histograms.at("ElNumBLHitsOutlsC")->Fill(nBLHitsOutls);
-    m_histograms.at("ElNumBLHitsExpC")->Fill(nBLHitsExp);
-    m_histograms.at("ElNumPixHitsC")->Fill(nPix);
-    m_histograms.at("ElNumPixHitsOutlsC")->Fill(nPixHitsOutls);
-    m_histograms.at("ElNumSiHitsC")->Fill(nSi);
-    m_histograms.at("ElNumSiHitsOutlsC")->Fill(nSiHitsOutls);
-    m_histograms.at("ElDelPhi1C")->Fill(delPhi1);
-    m_histograms.at("ElDelPhiRescaled1C")->Fill(delPhiRescaled1);
-    m_histograms.at("ElDelPhi2C")->Fill(delPhi2);
-    m_histograms.at("ElDelPhiRescaled2C")->Fill(delPhiRescaled2);
-    m_histograms.at("ElDelEta2C")->Fill(delEta2);
+    m_histograms.at("NumBLHitsC")->Fill(nBL);
+    m_histograms.at("NumBLHitsOutlsC")->Fill(nBLHitsOutls);
+    m_histograms.at("NumBLHitsExpC")->Fill(nBLHitsExp);
+    m_histograms.at("NumPixHitsC")->Fill(nPix);
+    m_histograms.at("NumPixHitsOutlsC")->Fill(nPixHitsOutls);
+    m_histograms.at("NumSiHitsC")->Fill(nSi);
+    m_histograms.at("NumSiHitsOutlsC")->Fill(nSiHitsOutls);
+    m_histograms.at("DelPhi1C")->Fill(delPhi1);
+    m_histograms.at("DelPhiRescaled1C")->Fill(delPhiRescaled1);
+    m_histograms.at("DelPhi2C")->Fill(delPhi2);
+    m_histograms.at("DelPhiRescaled2C")->Fill(delPhiRescaled2);
+    m_histograms.at("DelEta2C")->Fill(delEta2);
   } else if (isEC) {
     m_histograms.at("ElPtRecoEC")->Fill(pt/GeV);
     m_histograms.at("EovpEC")->Fill(Eovp);
-    m_histograms.at("ElNumBLHitsEC")->Fill(nBL);
-    m_histograms.at("ElNumBLHitsOutlsEC")->Fill(nBLHitsOutls);
-    m_histograms.at("ElNumBLHitsExpEC")->Fill(nBLHitsExp);
-    m_histograms.at("ElNumPixHitsEC")->Fill(nPix);
-    m_histograms.at("ElNumPixHitsOutlsEC")->Fill(nPixHitsOutls);
-    m_histograms.at("ElNumSiHitsEC")->Fill(nSi);
-    m_histograms.at("ElNumSiHitsOutlsEC")->Fill(nSiHitsOutls);
-    m_histograms.at("ElDelPhi1EC")->Fill(delPhi1);
-    m_histograms.at("ElDelPhiRescaled1EC")->Fill(delPhiRescaled1);
-    m_histograms.at("ElDelPhi2EC")->Fill(delPhi2);
-    m_histograms.at("ElDelPhiRescaled2EC")->Fill(delPhiRescaled2);
-    m_histograms.at("ElDelEta2EC")->Fill(delEta2);
+    m_histograms.at("NumBLHitsEC")->Fill(nBL);
+    m_histograms.at("NumBLHitsOutlsEC")->Fill(nBLHitsOutls);
+    m_histograms.at("NumBLHitsExpEC")->Fill(nBLHitsExp);
+    m_histograms.at("NumPixHitsEC")->Fill(nPix);
+    m_histograms.at("NumPixHitsOutlsEC")->Fill(nPixHitsOutls);
+    m_histograms.at("NumSiHitsEC")->Fill(nSi);
+    m_histograms.at("NumSiHitsOutlsEC")->Fill(nSiHitsOutls);
+    m_histograms.at("DelPhi1EC")->Fill(delPhi1);
+    m_histograms.at("DelPhiRescaled1EC")->Fill(delPhiRescaled1);
+    m_histograms.at("DelPhi2EC")->Fill(delPhi2);
+    m_histograms.at("DelPhiRescaled2EC")->Fill(delPhiRescaled2);
+    m_histograms.at("DelEta2EC")->Fill(delEta2);
   }
 }
 
