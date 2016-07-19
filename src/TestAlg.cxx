@@ -15,6 +15,7 @@
 //#include "AthenaKernel/errorcheck.h"
 
 #include "TH1.h"
+#include "TProfile.h"
 //#include "McParticleEvent/TruthParticle.h"
 //#include "McParticleEvent/TruthParticleContainer.h"
 
@@ -236,6 +237,13 @@ StatusCode TestAlg::initialize()
   const Double_t PtLow = 0; // in GeV, not MeV
   const Double_t PtHigh = 4000; // in GeV, not MeV
 
+  const Int_t numMuBins = 30;
+  const Double_t muLow = 0;
+  const Double_t muHigh = 60;
+
+
+  m_histograms["AverageInteractionsPerCrossing"] = new TH1F("AverageInteractionsPerCrossing", "AverageInteractionsPerCrossing;<#mu>", numMuBins, muLow, muHigh);
+
   /// Defining Histogramsquer
   m_histograms["EResolution"] = new TH1F("EResolution","Raw Energy Resolution;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolutionC"] = new TH1F("EResolutionC","Raw Energy Resolution, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -244,6 +252,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco"] = new TH1F("PtReco","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtRecoC"] = new TH1F("PtRecoC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtRecoEC"] = new TH1F("PtRecoEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+
+  m_histograms["EResolution_mu"] = new TProfile("EResolution_mu","Raw Energy Resolution;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolutionC_mu"] = new TProfile("EResolutionC_mu","Raw Energy Resolution, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolutionEC_mu"] = new TProfile("EResolutionEC_mu","Raw Energy Resolution, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
   // only for unconverted
   m_histograms["EResolution0T"] = new TH1F("EResolution0T","Raw Energy Resolution, unconverted;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -254,6 +266,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco0TC"] = new TH1F("PtReco0TC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco0TEC"] = new TH1F("PtReco0TEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
+  m_histograms["EResolution0T_mu"] = new TProfile("EResolution0T_mu","Raw Energy Resolution, unconverted;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution0TC_mu"] = new TProfile("EResolution0TC_mu","Raw Energy Resolution, unconverted, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution0TEC_mu"] = new TProfile("EResolution0TEC_mu","Raw Energy Resolution, unconverted, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+
   // only for Si
   m_histograms["EResolution1TSi"] = new TH1F("EResolution1TSi","Raw Energy Resolution, 1-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution1TSiC"] = new TH1F("EResolution1TSiC","Raw Energy Resolution, 1-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -263,6 +279,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco1TSiC"] = new TH1F("PtReco1TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TSiEC"] = new TH1F("PtReco1TSiEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
+  m_histograms["EResolution1TSi_mu"] = new TProfile("EResolution1TSi_mu","Raw Energy Resolution, 1-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TSiC_mu"] = new TProfile("EResolution1TSiC_mu","Raw Energy Resolution, 1-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TSiEC_mu"] = new TProfile("EResolution1TSiEC_mu","Raw Energy Resolution, 1-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+
   m_histograms["EResolution2TSi"] = new TH1F("EResolution2TSi","Raw Energy Resolution, 2-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TSiC"] = new TH1F("EResolution2TSiC","Raw Energy Resolution, 2-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TSiEC"] = new TH1F("EResolution2TSiEC","Raw Energy Resolution, 2-track Si conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -270,6 +290,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TSi"] = new TH1F("PtReco2TSi","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TSiC"] = new TH1F("PtReco2TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TSiEC"] = new TH1F("PtReco2TSiEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+
+  m_histograms["EResolution2TSi_mu"] = new TProfile("EResolution2TSi_mu","Raw Energy Resolution, 2-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TSiC_mu"] = new TProfile("EResolution2TSiC_mu","Raw Energy Resolution, 2-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TSiEC_mu"] = new TProfile("EResolution2TSiEC_mu","Raw Energy Resolution, 2-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
   // TRT
   m_histograms["EResolution1TTRT"] = new TH1F("EResolution1TTRT","Raw Energy Resolution, 1-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -280,6 +304,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco1TTRTC"] = new TH1F("PtReco1TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TTRTEC"] = new TH1F("PtReco1TTRTEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
+  m_histograms["EResolution1TTRT_mu"] = new TProfile("EResolution1TTRT_mu","Raw Energy Resolution, 1-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TTRTC_mu"] = new TProfile("EResolution1TTRTC_mu","Raw Energy Resolution, 1-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TTRTEC_mu"] = new TProfile("EResolution1TTRTEC_mu","Raw Energy Resolution, 1-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+
   m_histograms["EResolution2TTRT"] = new TH1F("EResolution2TTRT","Raw Energy Resolution, 2-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TTRTC"] = new TH1F("EResolution2TTRTC","Raw Energy Resolution, 2-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TTRTEC"] = new TH1F("EResolution2TTRTEC","Raw Energy Resolution, 2-track TRT conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -288,6 +316,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TTRTC"] = new TH1F("PtReco2TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TTRTEC"] = new TH1F("PtReco2TTRTEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
+  m_histograms["EResolution2TTRT_mu"] = new TProfile("EResolution2TTRT_mu","Raw Energy Resolution, 2-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TTRTC_mu"] = new TProfile("EResolution2TTRTC_mu","Raw Energy Resolution, 2-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TTRTEC_mu"] = new TProfile("EResolution2TTRTEC_mu","Raw Energy Resolution, 2-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+
   m_histograms["EResolution2TMix"] = new TH1F("EResolution2TMix","Raw Energy Resolution, 2-track Mix conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TMixC"] = new TH1F("EResolution2TMixC","Raw Energy Resolution, 2-track Mix conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TMixEC"] = new TH1F("EResolution2TMixEC","Raw Energy Resolution, 2-track Mix conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -295,6 +327,10 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TMix"] = new TH1F("PtReco2TMix","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TMixC"] = new TH1F("PtReco2TMixC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TMixEC"] = new TH1F("PtReco2TMixEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
+
+  m_histograms["EResolution2TMix_mu"] = new TProfile("EResolution2TMix_mu","Raw Energy Resolution, 2-track Mix conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TMixC_mu"] = new TProfile("EResolution2TMixC_mu","Raw Energy Resolution, 2-track Mix conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TMixEC_mu"] = new TProfile("EResolution2TMixEC_mu","Raw Energy Resolution, 2-track Mix conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
 
   // Now for electron histograms 
@@ -365,6 +401,8 @@ StatusCode TestAlg::initialize()
 
 
   /// Registering Histograms
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/AverageInteractionsPerCrossing" , m_histograms["AverageInteractionsPerCrossing"]).ignore();
+
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution" , m_histograms["EResolution"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionC" , m_histograms["EResolutionC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionEC" , m_histograms["EResolutionEC"]).ignore();
@@ -372,6 +410,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco" , m_histograms["PtReco"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtRecoC" , m_histograms["PtRecoC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtRecoEC" , m_histograms["PtRecoEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution_mu" , m_histograms["EResolution_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionC_mu" , m_histograms["EResolutionC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionEC_mu" , m_histograms["EResolutionEC_mu"]).ignore();
 
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0T" , m_histograms["EResolution0T"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TC" , m_histograms["EResolution0TC"]).ignore();
@@ -381,6 +423,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco0TC" , m_histograms["PtReco0TC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco0TEC" , m_histograms["PtReco0TEC"]).ignore();
 
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0T_mu" , m_histograms["EResolution0T_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TC_mu" , m_histograms["EResolution0TC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TEC_mu" , m_histograms["EResolution0TEC_mu"]).ignore();
+
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSi" , m_histograms["EResolution1TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiC" , m_histograms["EResolution1TSiC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiEC" , m_histograms["EResolution1TSiEC"]).ignore();
@@ -388,6 +434,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TSi" , m_histograms["PtReco1TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TSiC" , m_histograms["PtReco1TSiC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TSiEC" , m_histograms["PtReco1TSiEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSi_mu" , m_histograms["EResolution1TSi_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiC_mu" , m_histograms["EResolution1TSiC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiEC_mu" , m_histograms["EResolution1TSiEC_mu"]).ignore();
 
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSi" , m_histograms["EResolution2TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiC" , m_histograms["EResolution2TSiC"]).ignore();
@@ -397,6 +447,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TSiC" , m_histograms["PtReco2TSiC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TSiEC" , m_histograms["PtReco2TSiEC"]).ignore();
 
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSi_mu" , m_histograms["EResolution2TSi_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiC_mu" , m_histograms["EResolution2TSiC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiEC_mu" , m_histograms["EResolution2TSiEC_mu"]).ignore();
+
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRT" , m_histograms["EResolution1TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTC" , m_histograms["EResolution1TTRTC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTEC" , m_histograms["EResolution1TTRTEC"]).ignore();
@@ -404,6 +458,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TTRT" , m_histograms["PtReco1TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TTRTC" , m_histograms["PtReco1TTRTC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TTRTEC" , m_histograms["PtReco1TTRTEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRT_mu" , m_histograms["EResolution1TTRT_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTC_mu" , m_histograms["EResolution1TTRTC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTEC_mu" , m_histograms["EResolution1TTRTEC_mu"]).ignore();
 
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRT" , m_histograms["EResolution2TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTC" , m_histograms["EResolution2TTRTC"]).ignore();
@@ -413,6 +471,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TTRTC" , m_histograms["PtReco2TTRTC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TTRTEC" , m_histograms["PtReco2TTRTEC"]).ignore();
 
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRT_mu" , m_histograms["EResolution2TTRT_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTC_mu" , m_histograms["EResolution2TTRTC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTEC_mu" , m_histograms["EResolution2TTRTEC_mu"]).ignore();
+
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMix" , m_histograms["EResolution2TMix"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixC" , m_histograms["EResolution2TMixC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixEC" , m_histograms["EResolution2TMixEC"]).ignore();
@@ -420,6 +482,10 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMix" , m_histograms["PtReco2TMix"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMixC" , m_histograms["PtReco2TMixC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMixEC" , m_histograms["PtReco2TMixEC"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMix_mu" , m_histograms["EResolution2TMix_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixC_mu" , m_histograms["EResolution2TMixC_mu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixEC_mu" , m_histograms["EResolution2TMixEC_mu"]).ignore();
 
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/EtaReco" , m_histograms["ElEtaReco"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/PtReco" , m_histograms["ElPtReco"]).ignore();
@@ -544,6 +610,8 @@ StatusCode TestAlg::execute()
 
   StatusCode sc = StatusCode::SUCCESS;
 
+  float weight = 1.0;
+
   // static int count = 0;
   // ATH_MSG_WARNING("Skip event: " << count++); 
   // ATH_MSG_DEBUG("Electron container name: " << m_ElectronContainerName);
@@ -566,6 +634,14 @@ StatusCode TestAlg::execute()
   const bool isMC = evtInfo->eventType(xAOD::EventInfo::IS_SIMULATION);
 
   ATH_MSG_INFO("Run: " << runNumber << ", lumi = " << lumiBlock << ", Event: " << eventNumber << ", isMC = " << isMC);
+
+  if (isMC) {
+    weight = evtInfo->mcEventWeight();
+  }
+
+  const auto mu = evtInfo->averageInteractionsPerCrossing();
+
+  m_histograms["AverageInteractionsPerCrossing"]->Fill(mu, weight);
 
   const xAOD::ElectronContainer* electrons(0);
   if (m_doElectrons) {
@@ -803,7 +879,8 @@ StatusCode TestAlg::execute()
 			  delPhiRescaled1,
 			  delPhi2,
 			  delPhiRescaled2,
-			  delEta2
+			  delEta2,
+			  weight
 			  );
 
       } // truth-match 
@@ -812,15 +889,15 @@ StatusCode TestAlg::execute()
 
   ATH_MSG_DEBUG("The event had " << numEl << " electrons out of which " << numElPass << " passed tight.");
 
-  //m_histograms["numEl"]->Fill(numElPass);
+  //m_histograms["numEl"]->Fill(numElPass, weight);
 
 
   // if (numElPass > 1) {
   //   const double minv = P4Helpers::invMass(leading, second);
-  //   m_histograms["minv"]->Fill(minv);
+  //   m_histograms["minv"]->Fill(minv, weight);
 
   //   // if (minv > 71*GeV && minv < 111*GeV) {
-  //   //   m_histograms["met"]->Fill(met->et());
+  //   //   m_histograms["met"]->Fill(met->et(), weight);
   //   // }
   // }
 
@@ -900,12 +977,12 @@ StatusCode TestAlg::execute()
 	
 
 	// first do general all-photons
-	fillPhotonHists("", isC, isEC, eta, pt, Eres);
+	fillPhotonHists("", isC, isEC, eta, pt, Eres, mu, weight);
 
 	switch(photonType) {
 	case xAOD::EgammaParameters::unconverted:
 	  m_numUnconverted++;
-	  fillPhotonHists("0T", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("0T", isC, isEC, eta, pt, Eres, mu, weight);
 	  if (Eres < -0.95 && isEC) {
 	    ATH_MSG_WARNING("Event " << runNumber << ", " << lumiBlock << ", " << eventNumber 
 			    << ", Eres = " << Eres
@@ -946,23 +1023,23 @@ StatusCode TestAlg::execute()
 	  break;
 	case xAOD::EgammaParameters::singleSi:
 	  m_numConversionsSingleTrackSi++;
-	  fillPhotonHists("1TSi", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("1TSi", isC, isEC, eta, pt, Eres, mu, weight);
 	  break;
 	case xAOD::EgammaParameters::singleTRT:
 	  m_numConversionsSingleTrackTRT++;
-	  fillPhotonHists("1TTRT", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("1TTRT", isC, isEC, eta, pt, Eres, mu, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleSi:
 	  m_numConversionsDoubleTrackSi++;
-	  fillPhotonHists("2TSi", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("2TSi", isC, isEC, eta, pt, Eres, mu, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleTRT:
 	  m_numConversionsDoubleTrackTRT++;
-	  fillPhotonHists("2TTRT", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("2TTRT", isC, isEC, eta, pt, Eres, mu, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleSiTRT:
 	  m_numConversionsDoubleTrackMix++;
-	  fillPhotonHists("2TMix", isC, isEC, eta, pt, Eres);
+	  fillPhotonHists("2TMix", isC, isEC, eta, pt, Eres, mu, weight);
 	  break;
 	default:
 	  ATH_MSG_ERROR("Uknown photon type: " << photonType);
@@ -1016,9 +1093,9 @@ StatusCode TestAlg::execute()
   // 	  const int nSiliconHits_trk1 = summary1->get(Trk::numberOfSCTHits) + 
   // 	    summary1->get(Trk::numberOfPixelHits);
   // 	  const double pid1 = summary1->getPID(Trk::eProbabilityComb);
-  // 	  m_histograms["TRTPID1Trk"]->Fill(pid1);
+  // 	  m_histograms["TRTPID1Trk"]->Fill(pid1, weight);
   // 	  if (nSiliconHits_trk1 < 4) {
-  // 	    m_histograms["TRTPID1TrkTRT"]->Fill(pid1);
+  // 	    m_histograms["TRTPID1TrkTRT"]->Fill(pid1, weight);
   // 	  }
   // 	}
   //     }
@@ -1064,7 +1141,9 @@ StatusCode TestAlg::execute()
 
 void TestAlg::fillPhotonHists(std::string suffix, 
 			      bool isC, bool isEC, 
-			      float eta, float pt, float Eres)
+			      float eta, float pt, float Eres, 
+			      float mu, 
+			      float weight)
 {
  
   const std::string ptstr = "PtReco" + suffix;
@@ -1073,19 +1152,22 @@ void TestAlg::fillPhotonHists(std::string suffix,
 
   ATH_MSG_INFO("ptstr = " << ptstr << ", pt/GeV = " << pt/GeV);
 
-  m_histograms.at(ptstr)->Fill(pt/GeV);
-  m_histograms.at(etastr)->Fill(eta);
-  m_histograms.at(Eresstr)->Fill(Eres);
+  m_histograms.at(ptstr)->Fill(pt/GeV, weight);
+  m_histograms.at(etastr)->Fill(eta, weight);
+  m_histograms.at(Eresstr)->Fill(Eres, weight);
+  static_cast<TProfile*>(m_histograms.at(Eresstr+"_mu"))->Fill(mu, Eres, weight);
   if (isC) {
     const std::string EresstrC = Eresstr + "C";
     const std::string ptstrC = ptstr + "C";
-    m_histograms.at(EresstrC)->Fill(Eres);
-    m_histograms.at(ptstrC)->Fill(pt/GeV);
+    m_histograms.at(EresstrC)->Fill(Eres, weight);
+    m_histograms.at(ptstrC)->Fill(pt/GeV, weight);
+    static_cast<TProfile*>(m_histograms.at(EresstrC+"_mu"))->Fill(mu, Eres, weight);
   } else if (isEC) {
     const std::string EresstrEC = Eresstr + "EC";
     const std::string ptstrEC = ptstr + "EC";
-    m_histograms.at(EresstrEC)->Fill(Eres);
-    m_histograms.at(ptstrEC)->Fill(pt/GeV);
+    m_histograms.at(EresstrEC)->Fill(Eres, weight);
+    m_histograms.at(ptstrEC)->Fill(pt/GeV, weight);
+    static_cast<TProfile*>(m_histograms.at(EresstrEC+"_mu"))->Fill(mu, Eres, weight);
   }
 }
  
@@ -1102,7 +1184,8 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
 				float delPhiRescaled1,
 				float delPhi2,
 				float delPhiRescaled2,
-				float delEta2
+				float delEta2,
+				float weight
 				)
 {
   auto nBLHitsOutls = nBL + nBLOutliers;
@@ -1112,52 +1195,52 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
   auto nSiHitsOutls = nPixHitsOutls + nSCTHitsOutls;
   auto nBLHitsExp = (expectBLayerHit) ? nBLHitsOutls : 1;
 
-  m_histograms.at("ElEtaReco")->Fill(eta);
-  m_histograms.at("ElPtReco")->Fill(pt/GeV);
-  m_histograms.at("Eovp")->Fill(Eovp);
-  m_histograms.at("NumBLHits")->Fill(nBL);
-  m_histograms.at("NumBLHitsOutls")->Fill(nBLHitsOutls);
-  m_histograms.at("NumBLHitsExp")->Fill(nBLHitsExp);
-  m_histograms.at("NumPixHits")->Fill(nPix);
-  m_histograms.at("NumPixHitsOutls")->Fill(nPixHitsOutls);
-  m_histograms.at("NumSiHits")->Fill(nSi);
-  m_histograms.at("NumSiHitsOutls")->Fill(nSiHitsOutls);
-  m_histograms.at("DelPhi1")->Fill(delPhi1);
-  m_histograms.at("DelPhiRescaled1")->Fill(delPhiRescaled1);
-  m_histograms.at("DelPhi2")->Fill(delPhi2);
-  m_histograms.at("DelPhiRescaled2")->Fill(delPhiRescaled2);
-  m_histograms.at("DelEta2")->Fill(delEta2);
+  m_histograms.at("ElEtaReco")->Fill(eta, weight);
+  m_histograms.at("ElPtReco")->Fill(pt/GeV, weight);
+  m_histograms.at("Eovp")->Fill(Eovp, weight);
+  m_histograms.at("NumBLHits")->Fill(nBL, weight);
+  m_histograms.at("NumBLHitsOutls")->Fill(nBLHitsOutls, weight);
+  m_histograms.at("NumBLHitsExp")->Fill(nBLHitsExp, weight);
+  m_histograms.at("NumPixHits")->Fill(nPix, weight);
+  m_histograms.at("NumPixHitsOutls")->Fill(nPixHitsOutls, weight);
+  m_histograms.at("NumSiHits")->Fill(nSi, weight);
+  m_histograms.at("NumSiHitsOutls")->Fill(nSiHitsOutls, weight);
+  m_histograms.at("DelPhi1")->Fill(delPhi1, weight);
+  m_histograms.at("DelPhiRescaled1")->Fill(delPhiRescaled1, weight);
+  m_histograms.at("DelPhi2")->Fill(delPhi2, weight);
+  m_histograms.at("DelPhiRescaled2")->Fill(delPhiRescaled2, weight);
+  m_histograms.at("DelEta2")->Fill(delEta2, weight);
 
   if (isC) {
-    m_histograms.at("ElPtRecoC")->Fill(pt/GeV);
-    m_histograms.at("EovpC")->Fill(Eovp);
-    m_histograms.at("NumBLHitsC")->Fill(nBL);
-    m_histograms.at("NumBLHitsOutlsC")->Fill(nBLHitsOutls);
-    m_histograms.at("NumBLHitsExpC")->Fill(nBLHitsExp);
-    m_histograms.at("NumPixHitsC")->Fill(nPix);
-    m_histograms.at("NumPixHitsOutlsC")->Fill(nPixHitsOutls);
-    m_histograms.at("NumSiHitsC")->Fill(nSi);
-    m_histograms.at("NumSiHitsOutlsC")->Fill(nSiHitsOutls);
-    m_histograms.at("DelPhi1C")->Fill(delPhi1);
-    m_histograms.at("DelPhiRescaled1C")->Fill(delPhiRescaled1);
-    m_histograms.at("DelPhi2C")->Fill(delPhi2);
-    m_histograms.at("DelPhiRescaled2C")->Fill(delPhiRescaled2);
-    m_histograms.at("DelEta2C")->Fill(delEta2);
+    m_histograms.at("ElPtRecoC")->Fill(pt/GeV, weight);
+    m_histograms.at("EovpC")->Fill(Eovp, weight);
+    m_histograms.at("NumBLHitsC")->Fill(nBL, weight);
+    m_histograms.at("NumBLHitsOutlsC")->Fill(nBLHitsOutls, weight);
+    m_histograms.at("NumBLHitsExpC")->Fill(nBLHitsExp, weight);
+    m_histograms.at("NumPixHitsC")->Fill(nPix, weight);
+    m_histograms.at("NumPixHitsOutlsC")->Fill(nPixHitsOutls, weight);
+    m_histograms.at("NumSiHitsC")->Fill(nSi, weight);
+    m_histograms.at("NumSiHitsOutlsC")->Fill(nSiHitsOutls, weight);
+    m_histograms.at("DelPhi1C")->Fill(delPhi1, weight);
+    m_histograms.at("DelPhiRescaled1C")->Fill(delPhiRescaled1, weight);
+    m_histograms.at("DelPhi2C")->Fill(delPhi2, weight);
+    m_histograms.at("DelPhiRescaled2C")->Fill(delPhiRescaled2, weight);
+    m_histograms.at("DelEta2C")->Fill(delEta2, weight);
   } else if (isEC) {
-    m_histograms.at("ElPtRecoEC")->Fill(pt/GeV);
-    m_histograms.at("EovpEC")->Fill(Eovp);
-    m_histograms.at("NumBLHitsEC")->Fill(nBL);
-    m_histograms.at("NumBLHitsOutlsEC")->Fill(nBLHitsOutls);
-    m_histograms.at("NumBLHitsExpEC")->Fill(nBLHitsExp);
-    m_histograms.at("NumPixHitsEC")->Fill(nPix);
-    m_histograms.at("NumPixHitsOutlsEC")->Fill(nPixHitsOutls);
-    m_histograms.at("NumSiHitsEC")->Fill(nSi);
-    m_histograms.at("NumSiHitsOutlsEC")->Fill(nSiHitsOutls);
-    m_histograms.at("DelPhi1EC")->Fill(delPhi1);
-    m_histograms.at("DelPhiRescaled1EC")->Fill(delPhiRescaled1);
-    m_histograms.at("DelPhi2EC")->Fill(delPhi2);
-    m_histograms.at("DelPhiRescaled2EC")->Fill(delPhiRescaled2);
-    m_histograms.at("DelEta2EC")->Fill(delEta2);
+    m_histograms.at("ElPtRecoEC")->Fill(pt/GeV, weight);
+    m_histograms.at("EovpEC")->Fill(Eovp, weight);
+    m_histograms.at("NumBLHitsEC")->Fill(nBL, weight);
+    m_histograms.at("NumBLHitsOutlsEC")->Fill(nBLHitsOutls, weight);
+    m_histograms.at("NumBLHitsExpEC")->Fill(nBLHitsExp, weight);
+    m_histograms.at("NumPixHitsEC")->Fill(nPix, weight);
+    m_histograms.at("NumPixHitsOutlsEC")->Fill(nPixHitsOutls, weight);
+    m_histograms.at("NumSiHitsEC")->Fill(nSi, weight);
+    m_histograms.at("NumSiHitsOutlsEC")->Fill(nSiHitsOutls, weight);
+    m_histograms.at("DelPhi1EC")->Fill(delPhi1, weight);
+    m_histograms.at("DelPhiRescaled1EC")->Fill(delPhiRescaled1, weight);
+    m_histograms.at("DelPhi2EC")->Fill(delPhi2, weight);
+    m_histograms.at("DelPhiRescaled2EC")->Fill(delPhiRescaled2, weight);
+    m_histograms.at("DelEta2EC")->Fill(delEta2, weight);
   }
 }
 

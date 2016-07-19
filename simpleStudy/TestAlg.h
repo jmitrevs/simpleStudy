@@ -51,7 +51,7 @@ public:
   
 private:
 
-  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float pt, float Eres);
+  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float pt, float Eres, float mu, float weight);
   void fillElectronHists(bool isC, bool isEC, 
 			 float eta, float pt, float Eovp,
 			 uint8_t nBL,
@@ -65,7 +65,8 @@ private:
 			 float delPhiRescaled1,
 			 float delPhi2,
 			 float delPhiRescaled2,
-			 float delEta2
+			 float delEta2,
+			 float weight
 			 );
 
   //ToolHandle<IAthElectronIsEMSelector> m_electronSelector;
