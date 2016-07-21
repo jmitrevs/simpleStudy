@@ -113,6 +113,8 @@ private:
   //double m_truthPhotonPtMin;
   bool m_truthMatchPhotons;
   uint16_t m_photonAuthor;
+  float m_muCut; // how to define high mu events
+  bool m_photonRemoveCrack;
 
   std::string m_egammaTruthParticleContainerName;
 

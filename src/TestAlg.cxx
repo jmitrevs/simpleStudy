@@ -127,6 +127,9 @@ TestAlg::TestAlg(const std::string& name,
 
   declareProperty("runEvents", m_runEvents, "events to run over, though NULL is all");
 
+  declareProperty("muCut", m_muCut = 40.0, "Above this mu value we define high mu events");
+  declareProperty("PhotonRevmoveCrack", m_photonRemoveCrack = true, "Remove crack events from plots");
+
   
 //   // Name of the EMTrackFit container
 //   declareProperty("EMTrackFitContainerName",
@@ -248,6 +251,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution"] = new TH1F("EResolution","Raw Energy Resolution;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolutionC"] = new TH1F("EResolutionC","Raw Energy Resolution, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolutionEC"] = new TH1F("EResolutionEC","Raw Energy Resolution, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution_highmu"] = new TH1F("EResolution_highmu","Raw Energy Resolution;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolutionC_highmu"] = new TH1F("EResolutionC_highmu","Raw Energy Resolution, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolutionEC_highmu"] = new TH1F("EResolutionEC_highmu","Raw Energy Resolution, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco"] = new TH1F("EtaReco","Reco Psuedorapidity;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco"] = new TH1F("PtReco","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtRecoC"] = new TH1F("PtRecoC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -261,6 +267,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution0T"] = new TH1F("EResolution0T","Raw Energy Resolution, unconverted;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution0TC"] = new TH1F("EResolution0TC","Raw Energy Resolution, unconverted, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution0TEC"] = new TH1F("EResolution0TEC","Raw Energy Resolution, unconverted, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution0T_highmu"] = new TH1F("EResolution0T_highmu","Raw Energy Resolution, unconverted;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution0TC_highmu"] = new TH1F("EResolution0TC_highmu","Raw Energy Resolution, unconverted, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution0TEC_highmu"] = new TH1F("EResolution0TEC_highmu","Raw Energy Resolution, unconverted, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco0T"] = new TH1F("EtaReco0T","Reco Psuedorapidity, unconverted;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco0T"] = new TH1F("PtReco0T","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco0TC"] = new TH1F("PtReco0TC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -274,6 +283,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution1TSi"] = new TH1F("EResolution1TSi","Raw Energy Resolution, 1-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution1TSiC"] = new TH1F("EResolution1TSiC","Raw Energy Resolution, 1-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution1TSiEC"] = new TH1F("EResolution1TSiEC","Raw Energy Resolution, 1-track Si conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TSi_highmu"] = new TH1F("EResolution1TSi_highmu","Raw Energy Resolution, 1-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TSiC_highmu"] = new TH1F("EResolution1TSiC_highmu","Raw Energy Resolution, 1-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TSiEC_highmu"] = new TH1F("EResolution1TSiEC_highmu","Raw Energy Resolution, 1-track Si conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco1TSi"] = new TH1F("EtaReco1TSi","Reco Psuedorapidity, 1-track Si conversion;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco1TSi"] = new TH1F("PtReco1TSi","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TSiC"] = new TH1F("PtReco1TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -286,6 +298,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TSi"] = new TH1F("EResolution2TSi","Raw Energy Resolution, 2-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TSiC"] = new TH1F("EResolution2TSiC","Raw Energy Resolution, 2-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TSiEC"] = new TH1F("EResolution2TSiEC","Raw Energy Resolution, 2-track Si conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TSi_highmu"] = new TH1F("EResolution2TSi_highmu","Raw Energy Resolution, 2-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TSiC_highmu"] = new TH1F("EResolution2TSiC_highmu","Raw Energy Resolution, 2-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TSiEC_highmu"] = new TH1F("EResolution2TSiEC_highmu","Raw Energy Resolution, 2-track Si conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco2TSi"] = new TH1F("EtaReco2TSi","Reco Psuedorapidity, 2-track Si conversion;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco2TSi"] = new TH1F("PtReco2TSi","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TSiC"] = new TH1F("PtReco2TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -299,6 +314,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution1TTRT"] = new TH1F("EResolution1TTRT","Raw Energy Resolution, 1-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution1TTRTC"] = new TH1F("EResolution1TTRTC","Raw Energy Resolution, 1-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution1TTRTEC"] = new TH1F("EResolution1TTRTEC","Raw Energy Resolution, 1-track TRT conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TTRT_highmu"] = new TH1F("EResolution1TTRT_highmu","Raw Energy Resolution, 1-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TTRTC_highmu"] = new TH1F("EResolution1TTRTC_highmu","Raw Energy Resolution, 1-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution1TTRTEC_highmu"] = new TH1F("EResolution1TTRTEC_highmu","Raw Energy Resolution, 1-track TRT conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco1TTRT"] = new TH1F("EtaReco1TTRT","Reco Psuedorapidity, 1-track TRT conversion;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco1TTRT"] = new TH1F("PtReco1TTRT","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TTRTC"] = new TH1F("PtReco1TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -311,6 +329,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TTRT"] = new TH1F("EResolution2TTRT","Raw Energy Resolution, 2-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TTRTC"] = new TH1F("EResolution2TTRTC","Raw Energy Resolution, 2-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TTRTEC"] = new TH1F("EResolution2TTRTEC","Raw Energy Resolution, 2-track TRT conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TTRT_highmu"] = new TH1F("EResolution2TTRT_highmu","Raw Energy Resolution, 2-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TTRTC_highmu"] = new TH1F("EResolution2TTRTC_highmu","Raw Energy Resolution, 2-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TTRTEC_highmu"] = new TH1F("EResolution2TTRTEC_highmu","Raw Energy Resolution, 2-track TRT conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco2TTRT"] = new TH1F("EtaReco2TTRT","Reco Psuedorapidity, 2-track TRT conversion;#eta_{reco}, End-cap", 100, -3,3);
   m_histograms["PtReco2TTRT"] = new TH1F("PtReco2TTRT","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TTRTC"] = new TH1F("PtReco2TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -323,6 +344,9 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TMix"] = new TH1F("EResolution2TMix","Raw Energy Resolution, 2-track Mix conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TMixC"] = new TH1F("EResolution2TMixC","Raw Energy Resolution, 2-track Mix conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TMixEC"] = new TH1F("EResolution2TMixEC","Raw Energy Resolution, 2-track Mix conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TMix_highmu"] = new TH1F("EResolution2TMix_highmu","Raw Energy Resolution, 2-track Mix conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TMixC_highmu"] = new TH1F("EResolution2TMixC_highmu","Raw Energy Resolution, 2-track Mix conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
+  m_histograms["EResolution2TMixEC_highmu"] = new TH1F("EResolution2TMixEC_highmu","Raw Energy Resolution, 2-track Mix conversion, End-cap;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EtaReco2TMix"] = new TH1F("EtaReco2TMix","Reco Psuedorapidity, 2-track Mix conversion;#eta_{reco}", 100, -3,3);
   m_histograms["PtReco2TMix"] = new TH1F("PtReco2TMix","Reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TMixC"] = new TH1F("PtReco2TMixC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -406,6 +430,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution" , m_histograms["EResolution"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionC" , m_histograms["EResolutionC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionEC" , m_histograms["EResolutionEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution_highmu" , m_histograms["EResolution_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionC_highmu" , m_histograms["EResolutionC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolutionEC_highmu" , m_histograms["EResolutionEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco" , m_histograms["EtaReco"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco" , m_histograms["PtReco"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtRecoC" , m_histograms["PtRecoC"]).ignore();
@@ -418,6 +445,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0T" , m_histograms["EResolution0T"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TC" , m_histograms["EResolution0TC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TEC" , m_histograms["EResolution0TEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0T_highmu" , m_histograms["EResolution0T_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TC_highmu" , m_histograms["EResolution0TC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution0TEC_highmu" , m_histograms["EResolution0TEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco0T" , m_histograms["EtaReco0T"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco0T" , m_histograms["PtReco0T"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco0TC" , m_histograms["PtReco0TC"]).ignore();
@@ -430,6 +460,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSi" , m_histograms["EResolution1TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiC" , m_histograms["EResolution1TSiC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiEC" , m_histograms["EResolution1TSiEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSi_highmu" , m_histograms["EResolution1TSi_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiC_highmu" , m_histograms["EResolution1TSiC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TSiEC_highmu" , m_histograms["EResolution1TSiEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco1TSi" , m_histograms["EtaReco1TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TSi" , m_histograms["PtReco1TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TSiC" , m_histograms["PtReco1TSiC"]).ignore();
@@ -442,6 +475,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSi" , m_histograms["EResolution2TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiC" , m_histograms["EResolution2TSiC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiEC" , m_histograms["EResolution2TSiEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSi_highmu" , m_histograms["EResolution2TSi_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiC_highmu" , m_histograms["EResolution2TSiC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TSiEC_highmu" , m_histograms["EResolution2TSiEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco2TSi" , m_histograms["EtaReco2TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TSi" , m_histograms["PtReco2TSi"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TSiC" , m_histograms["PtReco2TSiC"]).ignore();
@@ -454,6 +490,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRT" , m_histograms["EResolution1TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTC" , m_histograms["EResolution1TTRTC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTEC" , m_histograms["EResolution1TTRTEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRT_highmu" , m_histograms["EResolution1TTRT_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTC_highmu" , m_histograms["EResolution1TTRTC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution1TTRTEC_highmu" , m_histograms["EResolution1TTRTEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco1TTRT" , m_histograms["EtaReco1TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TTRT" , m_histograms["PtReco1TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco1TTRTC" , m_histograms["PtReco1TTRTC"]).ignore();
@@ -466,6 +505,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRT" , m_histograms["EResolution2TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTC" , m_histograms["EResolution2TTRTC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTEC" , m_histograms["EResolution2TTRTEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRT_highmu" , m_histograms["EResolution2TTRT_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTC_highmu" , m_histograms["EResolution2TTRTC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TTRTEC_highmu" , m_histograms["EResolution2TTRTEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco2TTRT" , m_histograms["EtaReco2TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TTRT" , m_histograms["PtReco2TTRT"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TTRTC" , m_histograms["PtReco2TTRTC"]).ignore();
@@ -478,6 +520,9 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMix" , m_histograms["EResolution2TMix"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixC" , m_histograms["EResolution2TMixC"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixEC" , m_histograms["EResolution2TMixEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMix_highmu" , m_histograms["EResolution2TMix_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixC_highmu" , m_histograms["EResolution2TMixC_highmu"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EResolution2TMixEC_highmu" , m_histograms["EResolution2TMixEC_highmu"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/EtaReco2TMix" , m_histograms["EtaReco2TMix"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMix" , m_histograms["PtReco2TMix"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/PtReco2TMixC" , m_histograms["PtReco2TMixC"]).ignore();
@@ -1146,6 +1191,8 @@ void TestAlg::fillPhotonHists(std::string suffix,
 			      float weight)
 {
  
+  if (m_photonRemoveCrack && (!isC && !isEC)) return;
+
   const std::string ptstr = "PtReco" + suffix;
   const std::string etastr = "EtaReco" + suffix;
   const std::string Eresstr = "EResolution" + suffix;
@@ -1156,18 +1203,21 @@ void TestAlg::fillPhotonHists(std::string suffix,
   m_histograms.at(etastr)->Fill(eta, weight);
   m_histograms.at(Eresstr)->Fill(Eres, weight);
   static_cast<TProfile*>(m_histograms.at(Eresstr+"_mu"))->Fill(mu, Eres, weight);
+  if (mu > m_muCut) m_histograms.at(Eresstr+"_highmu")->Fill(Eres, weight);
   if (isC) {
     const std::string EresstrC = Eresstr + "C";
     const std::string ptstrC = ptstr + "C";
     m_histograms.at(EresstrC)->Fill(Eres, weight);
     m_histograms.at(ptstrC)->Fill(pt/GeV, weight);
     static_cast<TProfile*>(m_histograms.at(EresstrC+"_mu"))->Fill(mu, Eres, weight);
+    if (mu > m_muCut) m_histograms.at(EresstrC+"_highmu")->Fill(Eres, weight);
   } else if (isEC) {
     const std::string EresstrEC = Eresstr + "EC";
     const std::string ptstrEC = ptstr + "EC";
     m_histograms.at(EresstrEC)->Fill(Eres, weight);
     m_histograms.at(ptstrEC)->Fill(pt/GeV, weight);
     static_cast<TProfile*>(m_histograms.at(EresstrEC+"_mu"))->Fill(mu, Eres, weight);
+    if (mu > m_muCut) m_histograms.at(EresstrEC+"_highmu")->Fill(Eres, weight);
   }
 }
  
