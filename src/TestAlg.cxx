@@ -251,7 +251,7 @@ StatusCode TestAlg::initialize()
   const Double_t numCellsLow = 0;
   const Double_t numCellsHigh = 300;
 
-  const std::vector<Double_t> cellPtBins = {0, 20, 50, 100, 200, 500, 1000, 10000}; // in GeV
+  const std::vector<Double_t> cellEBins = {0, 20, 50, 100, 200, 500, 1000, 10000}; // in GeV
 
   m_histograms["AverageInteractionsPerCrossing"] = new TH1F("AverageInteractionsPerCrossing", "AverageInteractionsPerCrossing;<#mu>", numMuBins, muLow, muHigh);
 
@@ -271,23 +271,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolutionC_mu"] = new TProfile("EResolutionC_mu","Raw Energy Resolution, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolutionEC_mu"] = new TProfile("EResolutionEC_mu","Raw Energy Resolution, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells"] = new TH2F("NumCells","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL0"] = new TH2F("NumCellsL0","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL1"] = new TH2F("NumCellsL1","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL2"] = new TH2F("NumCellsL2","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL3"] = new TH2F("NumCellsL3","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells"] = new TH2F("NumCells","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL0"] = new TH2F("NumCellsL0","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL1"] = new TH2F("NumCellsL1","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL2"] = new TH2F("NumCellsL2","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL3"] = new TH2F("NumCellsL3","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCellsC"] = new TH2F("NumCellsC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL0C"] = new TH2F("NumCellsL0C","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL1C"] = new TH2F("NumCellsL1C","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL2C"] = new TH2F("NumCellsL2C","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL3C"] = new TH2F("NumCellsL3C","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCellsC"] = new TH2F("NumCellsC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL0C"] = new TH2F("NumCellsL0C","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL1C"] = new TH2F("NumCellsL1C","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL2C"] = new TH2F("NumCellsL2C","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL3C"] = new TH2F("NumCellsL3C","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCellsEC"] = new TH2F("NumCellsEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL0EC"] = new TH2F("NumCellsL0EC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL1EC"] = new TH2F("NumCellsL1EC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL2EC"] = new TH2F("NumCellsL2EC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL3EC"] = new TH2F("NumCellsL3EC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCellsEC"] = new TH2F("NumCellsEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL0EC"] = new TH2F("NumCellsL0EC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL1EC"] = new TH2F("NumCellsL1EC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL2EC"] = new TH2F("NumCellsL2EC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL3EC"] = new TH2F("NumCellsL3EC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   
 
   // only for unconverted
@@ -306,23 +306,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution0TC_mu"] = new TProfile("EResolution0TC_mu","Raw Energy Resolution, unconverted, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution0TEC_mu"] = new TProfile("EResolution0TEC_mu","Raw Energy Resolution, unconverted, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells0T"] = new TH2F("NumCells0T","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL00T"] = new TH2F("NumCellsL00T","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL10T"] = new TH2F("NumCellsL10T","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL20T"] = new TH2F("NumCellsL20T","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL30T"] = new TH2F("NumCellsL30T","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells0T"] = new TH2F("NumCells0T","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL00T"] = new TH2F("NumCellsL00T","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL10T"] = new TH2F("NumCellsL10T","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL20T"] = new TH2F("NumCellsL20T","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL30T"] = new TH2F("NumCellsL30T","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells0TC"] = new TH2F("NumCells0TC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL00TC"] = new TH2F("NumCellsL00TC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL10TC"] = new TH2F("NumCellsL10TC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL20TC"] = new TH2F("NumCellsL20TC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL30TC"] = new TH2F("NumCellsL30TC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells0TC"] = new TH2F("NumCells0TC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL00TC"] = new TH2F("NumCellsL00TC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL10TC"] = new TH2F("NumCellsL10TC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL20TC"] = new TH2F("NumCellsL20TC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL30TC"] = new TH2F("NumCellsL30TC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells0TEC"] = new TH2F("NumCells0TEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL00TEC"] = new TH2F("NumCellsL00TEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL10TEC"] = new TH2F("NumCellsL10TEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL20TEC"] = new TH2F("NumCellsL20TEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL30TEC"] = new TH2F("NumCellsL30TEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells0TEC"] = new TH2F("NumCells0TEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL00TEC"] = new TH2F("NumCellsL00TEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL10TEC"] = new TH2F("NumCellsL10TEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL20TEC"] = new TH2F("NumCellsL20TEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL30TEC"] = new TH2F("NumCellsL30TEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   // only for Si
   m_histograms["EResolution1TSi"] = new TH1F("EResolution1TSi","Raw Energy Resolution, 1-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -340,23 +340,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution1TSiC_mu"] = new TProfile("EResolution1TSiC_mu","Raw Energy Resolution, 1-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution1TSiEC_mu"] = new TProfile("EResolution1TSiEC_mu","Raw Energy Resolution, 1-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells1TSi"] = new TH2F("NumCells1TSi","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TSi"] = new TH2F("NumCellsL01TSi","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TSi"] = new TH2F("NumCellsL11TSi","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TSi"] = new TH2F("NumCellsL21TSi","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TSi"] = new TH2F("NumCellsL31TSi","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TSi"] = new TH2F("NumCells1TSi","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TSi"] = new TH2F("NumCellsL01TSi","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TSi"] = new TH2F("NumCellsL11TSi","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TSi"] = new TH2F("NumCellsL21TSi","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TSi"] = new TH2F("NumCellsL31TSi","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells1TSiC"] = new TH2F("NumCells1TSiC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TSiC"] = new TH2F("NumCellsL01TSiC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TSiC"] = new TH2F("NumCellsL11TSiC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TSiC"] = new TH2F("NumCellsL21TSiC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TSiC"] = new TH2F("NumCellsL31TSiC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TSiC"] = new TH2F("NumCells1TSiC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TSiC"] = new TH2F("NumCellsL01TSiC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TSiC"] = new TH2F("NumCellsL11TSiC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TSiC"] = new TH2F("NumCellsL21TSiC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TSiC"] = new TH2F("NumCellsL31TSiC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells1TSiEC"] = new TH2F("NumCells1TSiEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TSiEC"] = new TH2F("NumCellsL01TSiEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TSiEC"] = new TH2F("NumCellsL11TSiEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TSiEC"] = new TH2F("NumCellsL21TSiEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TSiEC"] = new TH2F("NumCellsL31TSiEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TSiEC"] = new TH2F("NumCells1TSiEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TSiEC"] = new TH2F("NumCellsL01TSiEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TSiEC"] = new TH2F("NumCellsL11TSiEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TSiEC"] = new TH2F("NumCellsL21TSiEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TSiEC"] = new TH2F("NumCellsL31TSiEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   m_histograms["EResolution2TSi"] = new TH1F("EResolution2TSi","Raw Energy Resolution, 2-track Si conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TSiC"] = new TH1F("EResolution2TSiC","Raw Energy Resolution, 2-track Si conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -373,23 +373,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TSiC_mu"] = new TProfile("EResolution2TSiC_mu","Raw Energy Resolution, 2-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution2TSiEC_mu"] = new TProfile("EResolution2TSiEC_mu","Raw Energy Resolution, 2-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells2TSi"] = new TH2F("NumCells2TSi","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TSi"] = new TH2F("NumCellsL02TSi","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TSi"] = new TH2F("NumCellsL12TSi","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TSi"] = new TH2F("NumCellsL22TSi","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TSi"] = new TH2F("NumCellsL32TSi","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TSi"] = new TH2F("NumCells2TSi","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TSi"] = new TH2F("NumCellsL02TSi","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TSi"] = new TH2F("NumCellsL12TSi","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TSi"] = new TH2F("NumCellsL22TSi","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TSi"] = new TH2F("NumCellsL32TSi","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TSiC"] = new TH2F("NumCells2TSiC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TSiC"] = new TH2F("NumCellsL02TSiC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TSiC"] = new TH2F("NumCellsL12TSiC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TSiC"] = new TH2F("NumCellsL22TSiC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TSiC"] = new TH2F("NumCellsL32TSiC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TSiC"] = new TH2F("NumCells2TSiC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TSiC"] = new TH2F("NumCellsL02TSiC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TSiC"] = new TH2F("NumCellsL12TSiC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TSiC"] = new TH2F("NumCellsL22TSiC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TSiC"] = new TH2F("NumCellsL32TSiC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TSiEC"] = new TH2F("NumCells2TSiEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TSiEC"] = new TH2F("NumCellsL02TSiEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TSiEC"] = new TH2F("NumCellsL12TSiEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TSiEC"] = new TH2F("NumCellsL22TSiEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TSiEC"] = new TH2F("NumCellsL32TSiEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TSiEC"] = new TH2F("NumCells2TSiEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TSiEC"] = new TH2F("NumCellsL02TSiEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TSiEC"] = new TH2F("NumCellsL12TSiEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TSiEC"] = new TH2F("NumCellsL22TSiEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TSiEC"] = new TH2F("NumCellsL32TSiEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   // TRT
   m_histograms["EResolution1TTRT"] = new TH1F("EResolution1TTRT","Raw Energy Resolution, 1-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -407,23 +407,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution1TTRTC_mu"] = new TProfile("EResolution1TTRTC_mu","Raw Energy Resolution, 1-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution1TTRTEC_mu"] = new TProfile("EResolution1TTRTEC_mu","Raw Energy Resolution, 1-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells1TTRT"] = new TH2F("NumCells1TTRT","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TTRT"] = new TH2F("NumCellsL01TTRT","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TTRT"] = new TH2F("NumCellsL11TTRT","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TTRT"] = new TH2F("NumCellsL21TTRT","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TTRT"] = new TH2F("NumCellsL31TTRT","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TTRT"] = new TH2F("NumCells1TTRT","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TTRT"] = new TH2F("NumCellsL01TTRT","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TTRT"] = new TH2F("NumCellsL11TTRT","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TTRT"] = new TH2F("NumCellsL21TTRT","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TTRT"] = new TH2F("NumCellsL31TTRT","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells1TTRTC"] = new TH2F("NumCells1TTRTC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TTRTC"] = new TH2F("NumCellsL01TTRTC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TTRTC"] = new TH2F("NumCellsL11TTRTC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TTRTC"] = new TH2F("NumCellsL21TTRTC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TTRTC"] = new TH2F("NumCellsL31TTRTC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TTRTC"] = new TH2F("NumCells1TTRTC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TTRTC"] = new TH2F("NumCellsL01TTRTC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TTRTC"] = new TH2F("NumCellsL11TTRTC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TTRTC"] = new TH2F("NumCellsL21TTRTC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TTRTC"] = new TH2F("NumCellsL31TTRTC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells1TTRTEC"] = new TH2F("NumCells1TTRTEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL01TTRTEC"] = new TH2F("NumCellsL01TTRTEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL11TTRTEC"] = new TH2F("NumCellsL11TTRTEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL21TTRTEC"] = new TH2F("NumCellsL21TTRTEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL31TTRTEC"] = new TH2F("NumCellsL31TTRTEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells1TTRTEC"] = new TH2F("NumCells1TTRTEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL01TTRTEC"] = new TH2F("NumCellsL01TTRTEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL11TTRTEC"] = new TH2F("NumCellsL11TTRTEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL21TTRTEC"] = new TH2F("NumCellsL21TTRTEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL31TTRTEC"] = new TH2F("NumCellsL31TTRTEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   m_histograms["EResolution2TTRT"] = new TH1F("EResolution2TTRT","Raw Energy Resolution, 2-track TRT conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TTRTC"] = new TH1F("EResolution2TTRTC","Raw Energy Resolution, 2-track TRT conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -440,23 +440,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TTRTC_mu"] = new TProfile("EResolution2TTRTC_mu","Raw Energy Resolution, 2-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution2TTRTEC_mu"] = new TProfile("EResolution2TTRTEC_mu","Raw Energy Resolution, 2-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells2TTRT"] = new TH2F("NumCells2TTRT","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TTRT"] = new TH2F("NumCellsL02TTRT","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TTRT"] = new TH2F("NumCellsL12TTRT","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TTRT"] = new TH2F("NumCellsL22TTRT","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TTRT"] = new TH2F("NumCellsL32TTRT","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TTRT"] = new TH2F("NumCells2TTRT","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TTRT"] = new TH2F("NumCellsL02TTRT","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TTRT"] = new TH2F("NumCellsL12TTRT","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TTRT"] = new TH2F("NumCellsL22TTRT","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TTRT"] = new TH2F("NumCellsL32TTRT","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TTRTC"] = new TH2F("NumCells2TTRTC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TTRTC"] = new TH2F("NumCellsL02TTRTC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TTRTC"] = new TH2F("NumCellsL12TTRTC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TTRTC"] = new TH2F("NumCellsL22TTRTC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TTRTC"] = new TH2F("NumCellsL32TTRTC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TTRTC"] = new TH2F("NumCells2TTRTC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TTRTC"] = new TH2F("NumCellsL02TTRTC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TTRTC"] = new TH2F("NumCellsL12TTRTC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TTRTC"] = new TH2F("NumCellsL22TTRTC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TTRTC"] = new TH2F("NumCellsL32TTRTC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TTRTEC"] = new TH2F("NumCells2TTRTEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TTRTEC"] = new TH2F("NumCellsL02TTRTEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TTRTEC"] = new TH2F("NumCellsL12TTRTEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TTRTEC"] = new TH2F("NumCellsL22TTRTEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TTRTEC"] = new TH2F("NumCellsL32TTRTEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TTRTEC"] = new TH2F("NumCells2TTRTEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TTRTEC"] = new TH2F("NumCellsL02TTRTEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TTRTEC"] = new TH2F("NumCellsL12TTRTEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TTRTEC"] = new TH2F("NumCellsL22TTRTEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TTRTEC"] = new TH2F("NumCellsL32TTRTEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   m_histograms["EResolution2TMix"] = new TH1F("EResolution2TMix","Raw Energy Resolution, 2-track Mix conversion;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
   m_histograms["EResolution2TMixC"] = new TH1F("EResolution2TMixC","Raw Energy Resolution, 2-track Mix conversion, Central;(E_{reco} - E_{truth})/E_{truth}", numEResBins, EResLow, EResHigh);
@@ -473,23 +473,23 @@ StatusCode TestAlg::initialize()
   m_histograms["EResolution2TMixC_mu"] = new TProfile("EResolution2TMixC_mu","Raw Energy Resolution, 2-track Mix conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
   m_histograms["EResolution2TMixEC_mu"] = new TProfile("EResolution2TMixEC_mu","Raw Energy Resolution, 2-track Mix conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
 
-  m_histograms["NumCells2TMix"] = new TH2F("NumCells2TMix","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TMix"] = new TH2F("NumCellsL02TMix","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TMix"] = new TH2F("NumCellsL12TMix","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TMix"] = new TH2F("NumCellsL22TMix","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TMix"] = new TH2F("NumCellsL32TMix","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TMix"] = new TH2F("NumCells2TMix","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TMix"] = new TH2F("NumCellsL02TMix","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TMix"] = new TH2F("NumCellsL12TMix","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TMix"] = new TH2F("NumCellsL22TMix","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TMix"] = new TH2F("NumCellsL32TMix","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TMixC"] = new TH2F("NumCells2TMixC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TMixC"] = new TH2F("NumCellsL02TMixC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TMixC"] = new TH2F("NumCellsL12TMixC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TMixC"] = new TH2F("NumCellsL22TMixC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TMixC"] = new TH2F("NumCellsL32TMixC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TMixC"] = new TH2F("NumCells2TMixC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TMixC"] = new TH2F("NumCellsL02TMixC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TMixC"] = new TH2F("NumCellsL12TMixC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TMixC"] = new TH2F("NumCellsL22TMixC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TMixC"] = new TH2F("NumCellsL32TMixC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
-  m_histograms["NumCells2TMixEC"] = new TH2F("NumCells2TMixEC","Number of Cells (all layers);N(all layers);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL02TMixEC"] = new TH2F("NumCellsL02TMixEC","Number of Cells (presampler);N^{cells} (L0);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL12TMixEC"] = new TH2F("NumCellsL12TMixEC","Number of Cells (EM layer 1);N^{cells} (L1);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL22TMixEC"] = new TH2F("NumCellsL22TMixEC","Number of Cells (EM layer 2);N^{cells} (L2);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
-  m_histograms["NumCellsL32TMixEC"] = new TH2F("NumCellsL32TMixEC","Number of Cells (EM layer 3);N^{cells} (L3);p_{T} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellPtBins.size() - 1, &cellPtBins[0]);
+  m_histograms["NumCells2TMixEC"] = new TH2F("NumCells2TMixEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL02TMixEC"] = new TH2F("NumCellsL02TMixEC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL12TMixEC"] = new TH2F("NumCellsL12TMixEC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL22TMixEC"] = new TH2F("NumCellsL22TMixEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["NumCellsL32TMixEC"] = new TH2F("NumCellsL32TMixEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
   // Now for electron histograms 
   m_histograms["ElEtaReco"] = new TH1F("ElEtaReco","Electron reco Psuedorapidity;#eta_{reco}", 100, -3,3);
@@ -1313,12 +1313,12 @@ StatusCode TestAlg::execute()
 	
 
 	// first do general all-photons
-	fillPhotonHists("", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	fillPhotonHists("", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 
 	switch(photonType) {
 	case xAOD::EgammaParameters::unconverted:
 	  m_numUnconverted++;
-	  fillPhotonHists("0T", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("0T", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  if (Eres < -0.95 && isEC) {
 	    ATH_MSG_WARNING("Event " << runNumber << ", " << lumiBlock << ", " << eventNumber 
 			    << ", Eres = " << Eres
@@ -1359,23 +1359,23 @@ StatusCode TestAlg::execute()
 	  break;
 	case xAOD::EgammaParameters::singleSi:
 	  m_numConversionsSingleTrackSi++;
-	  fillPhotonHists("1TSi", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("1TSi", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  break;
 	case xAOD::EgammaParameters::singleTRT:
 	  m_numConversionsSingleTrackTRT++;
-	  fillPhotonHists("1TTRT", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("1TTRT", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleSi:
 	  m_numConversionsDoubleTrackSi++;
-	  fillPhotonHists("2TSi", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("2TSi", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleTRT:
 	  m_numConversionsDoubleTrackTRT++;
-	  fillPhotonHists("2TTRT", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("2TTRT", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  break;
 	case xAOD::EgammaParameters::doubleSiTRT:
 	  m_numConversionsDoubleTrackMix++;
-	  fillPhotonHists("2TMix", isC, isEC, eta, pt, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
+	  fillPhotonHists("2TMix", isC, isEC, eta, pt, Etruth, Eres, mu, numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3, weight);
 	  break;
 	default:
 	  ATH_MSG_ERROR("Uknown photon type: " << photonType);
@@ -1477,7 +1477,8 @@ StatusCode TestAlg::execute()
 
 void TestAlg::fillPhotonHists(std::string suffix, 
 			      bool isC, bool isEC, 
-			      float eta, float pt, float Eres, 
+			      float eta, float pt, float Etruth,
+			      float Eres, 
 			      float mu, 
 			      int numCells,
 			      int numCellsL0,
@@ -1499,6 +1500,7 @@ void TestAlg::fillPhotonHists(std::string suffix,
   const std::string numCellsL3str = "NumCellsL3" + suffix;
 
   const float ptGeV = pt/GeV;
+  const float EtruthGeV = Etruth/GeV;
 
   ATH_MSG_INFO("ptstr = " << ptstr << ", pt/GeV = " << ptGeV);
 
@@ -1508,11 +1510,11 @@ void TestAlg::fillPhotonHists(std::string suffix,
   static_cast<TProfile*>(m_histograms.at(Eresstr+"_mu"))->Fill(mu, Eres, weight);
   if (mu > m_muCut) m_histograms.at(Eresstr+"_highmu")->Fill(Eres, weight);
 
-  static_cast<TH2F*>(m_histograms.at(numCellsstr))->Fill(numCells, ptGeV, weight);
-  static_cast<TH2F*>(m_histograms.at(numCellsL0str))->Fill(numCellsL0, ptGeV, weight);
-  static_cast<TH2F*>(m_histograms.at(numCellsL1str))->Fill(numCellsL1, ptGeV, weight);
-  static_cast<TH2F*>(m_histograms.at(numCellsL2str))->Fill(numCellsL2, ptGeV, weight);
-  static_cast<TH2F*>(m_histograms.at(numCellsL3str))->Fill(numCellsL3, ptGeV, weight);
+  static_cast<TH2F*>(m_histograms.at(numCellsstr))->Fill(numCells, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at(numCellsL0str))->Fill(numCellsL0, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at(numCellsL1str))->Fill(numCellsL1, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at(numCellsL2str))->Fill(numCellsL2, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at(numCellsL3str))->Fill(numCellsL3, EtruthGeV, weight);
 
   if (isC) {
     const std::string EresstrC = Eresstr + "C";
@@ -1529,11 +1531,11 @@ void TestAlg::fillPhotonHists(std::string suffix,
     static_cast<TProfile*>(m_histograms.at(EresstrC+"_mu"))->Fill(mu, Eres, weight);
     if (mu > m_muCut) m_histograms.at(EresstrC+"_highmu")->Fill(Eres, weight);
 
-    static_cast<TH2F*>(m_histograms.at(numCellsstrC))->Fill(numCells, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL0strC))->Fill(numCellsL0, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL1strC))->Fill(numCellsL1, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL2strC))->Fill(numCellsL2, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL3strC))->Fill(numCellsL3, ptGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsstrC))->Fill(numCells, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL0strC))->Fill(numCellsL0, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL1strC))->Fill(numCellsL1, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL2strC))->Fill(numCellsL2, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL3strC))->Fill(numCellsL3, EtruthGeV, weight);
 
   } else if (isEC) {
     const std::string EresstrEC = Eresstr + "EC";
@@ -1550,11 +1552,11 @@ void TestAlg::fillPhotonHists(std::string suffix,
     static_cast<TProfile*>(m_histograms.at(EresstrEC+"_mu"))->Fill(mu, Eres, weight);
     if (mu > m_muCut) m_histograms.at(EresstrEC+"_highmu")->Fill(Eres, weight);
 
-    static_cast<TH2F*>(m_histograms.at(numCellsstrEC))->Fill(numCells, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL0strEC))->Fill(numCellsL0, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL1strEC))->Fill(numCellsL1, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL2strEC))->Fill(numCellsL2, ptGeV, weight);
-    static_cast<TH2F*>(m_histograms.at(numCellsL3strEC))->Fill(numCellsL3, ptGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsstrEC))->Fill(numCells, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL0strEC))->Fill(numCellsL0, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL1strEC))->Fill(numCellsL1, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL2strEC))->Fill(numCellsL2, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at(numCellsL3strEC))->Fill(numCellsL3, EtruthGeV, weight);
 
   }
 }

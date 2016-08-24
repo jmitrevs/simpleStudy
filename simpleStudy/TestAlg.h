@@ -52,7 +52,7 @@ public:
 private:
 
   void fillPhotonHists(std::string suffix, bool isC, bool isEC, 
-		       float eta, float pt, 
+		       float eta, float pt, float Etrue,
 		       float Eres, float mu, 
 		       int numCells,
 		       int numCellsL0,
