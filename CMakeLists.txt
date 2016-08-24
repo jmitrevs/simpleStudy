@@ -20,6 +20,7 @@ atlas_depends_on_subdirs(
    Reconstruction/egamma/egammaEvent
    Tracking/TrkEvent/VxVertex
    PRIVATE
+   Calorimeter/CaloUtils
    Control/AthenaKernel
    Event/EventInfo
    Event/FourMomUtils
@@ -48,5 +49,5 @@ atlas_add_component( simpleStudy
    McParticleEvent McParticleUtils Particle ParticleTruth egammaEvent
    VxVertex AthenaKernel EventInfo FourMomUtils xAODEventInfo xAODEgamma xAODTruth
    AnalysisUtils PATCoreLib ElectronPhotonSelectorToolsLib TrkParticleBase
-   TrkTrack TrkTrackSummary )
+   TrkTrack TrkTrackSummary CaloUtilsLib )
 atlas_install_joboptions( run/*.py )

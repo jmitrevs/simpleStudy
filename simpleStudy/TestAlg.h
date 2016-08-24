@@ -51,7 +51,16 @@ public:
   
 private:
 
-  void fillPhotonHists(std::string suffix, bool isC, bool isEC, float eta, float pt, float Eres, float mu, float weight);
+  void fillPhotonHists(std::string suffix, bool isC, bool isEC, 
+		       float eta, float pt, 
+		       float Eres, float mu, 
+		       int numCells,
+		       int numCellsL0,
+		       int numCellsL1,
+		       int numCellsL2,
+		       int numCellsL3,		       
+		       float weight);
+
   void fillElectronHists(bool isC, bool isEC, 
 			 float eta, float pt, float Eovp,
 			 uint8_t nBL,
