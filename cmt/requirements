@@ -36,6 +36,7 @@ use  xAODTruth                  xAODTruth-*                    Event/xAOD
 use AthenaKernel                AthenaKernel-*                 Control
 
 use FourMomUtils                FourMomUtils-*          Event
+use  CaloUtils                  CaloUtils-*                     Calorimeter
 
 
 use AnalysisUtils AnalysisUtils-* PhysicsAnalysis/AnalysisCommon
