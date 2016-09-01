@@ -38,7 +38,7 @@ atlas_depends_on_subdirs(
 # External dependencies:
 find_package( GSL )
 find_package( HepMC )
-find_package( ROOT COMPONENTS Core Tree MathCore Hist RIO pthread )
+find_package( ROOT COMPONENTS Core Tree MathCore Hist RIO pthread TMVA )
 
 # Component(s) in the package:
 atlas_add_component( simpleStudy
@@ -51,3 +51,7 @@ atlas_add_component( simpleStudy
    AnalysisUtils PATCoreLib ElectronPhotonSelectorToolsLib TrkParticleBase
    TrkTrack TrkTrackSummary CaloUtilsLib )
 atlas_install_joboptions( run/*.py )
+
+atlas_add_executable( TestExe util/TestExe.cxx 
+		      INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
+		      LINK_LIBRARIES ${ROOT_LIBRARIES} )
