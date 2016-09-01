@@ -52,7 +52,7 @@ public:
 private:
 
   void fillPhotonHists(std::string suffix, bool isC, bool isEC, 
-		       float eta, float pt, float Etrue,
+		       float eta, float pt, float Etruth,
 		       float Eres, float mu, 
 		       int numCells,
 		       int numCellsL0,
@@ -62,7 +62,8 @@ private:
 		       float weight);
 
   void fillElectronHists(bool isC, bool isEC, 
-			 float eta, float pt, float Eovp,
+			 float eta, float pt, float Etruth,
+			 float Eovp,
 			 uint8_t nBL,
 			 uint8_t nBLOutliers,
 			 uint8_t nPi,
@@ -75,6 +76,11 @@ private:
 			 float delPhi2,
 			 float delPhiRescaled2,
 			 float delEta2,
+			 int numCells,
+			 int numCellsL0,
+			 int numCellsL1,
+			 int numCellsL2,
+			 int numCellsL3,		       
 			 float weight
 			 );
 
@@ -124,6 +130,8 @@ private:
   uint16_t m_photonAuthor;
   float m_muCut; // how to define high mu events
   bool m_photonRemoveCrack;
+
+  bool m_onlyLookAtSingleClusters; // if true only look at single clus el and ph
 
   std::string m_egammaTruthParticleContainerName;
 

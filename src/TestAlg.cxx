@@ -97,8 +97,8 @@ TestAlg::TestAlg(const std::string& name,
   declareProperty("ElectronAuthor", m_electronAuthor = xAOD::EgammaParameters::AuthorALL);
 
   //declareProperty("TruthElectronPtMin", m_truthElectronPtMin = 5*GeV);
-  declareProperty("TruthMatchElectrons", m_truthMatchElectrons = false, "Require electrons to be truth-matched");
-  declareProperty("TruthMatchElectronAsPhotons", m_truthMatchElectronAsPhotons = true, "Require electrons to be truth-matched to photons");
+  declareProperty("TruthMatchElectrons", m_truthMatchElectrons = true, "Require electrons to be truth-matched");
+  declareProperty("TruthMatchElectronAsPhotons", m_truthMatchElectronAsPhotons = false, "Require electrons to be truth-matched to photons");
 
   declareProperty("PhotonContainerName", m_PhotonContainerName = "Photons");
   declareProperty("PhotonPt",   m_photonPt=10*GeV);
@@ -109,6 +109,9 @@ TestAlg::TestAlg(const std::string& name,
 
  //declareProperty("TruthPhotonPtMin", m_truthPhotonPtMin = 5*GeV);
   declareProperty("TruthMatchPhotons", m_truthMatchPhotons = true, "Require photons to be truth-matched");
+
+  declareProperty("OnlyLookAtSingleClusters", m_onlyLookAtSingleClusters = false, 
+		  "Only make plots for single-cluster electrons and photons");
 
   declareProperty("EgammaTruthContainerName", m_egammaTruthParticleContainerName = "egammaTruthParticles",
     "Name of the output egamma truth particle container");
@@ -247,7 +250,7 @@ StatusCode TestAlg::initialize()
   const Double_t muLow = 0;
   const Double_t muHigh = 60;
 
-  const Int_t numNumCellsBins = 100;
+  const Int_t numNumCellsBins = 300;
   const Double_t numCellsLow = 0;
   const Double_t numCellsHigh = 300;
 
@@ -491,6 +494,7 @@ StatusCode TestAlg::initialize()
   m_histograms["NumCellsL22TMixEC"] = new TH2F("NumCellsL22TMixEC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL32TMixEC"] = new TH2F("NumCellsL32TMixEC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
 
+
   // Now for electron histograms 
   m_histograms["ElEtaReco"] = new TH1F("ElEtaReco","Electron reco Psuedorapidity;#eta_{reco}", 100, -3,3);
   m_histograms["ElPtReco"] = new TH1F("ElPtReco","Electron reco p_{T};p_{T} [GeV]", numPtBins, PtLow, PtHigh);
@@ -524,7 +528,25 @@ StatusCode TestAlg::initialize()
   m_histograms["NumSiHitsOutls"] = new TH1F("NumSiHitsOutls","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
   m_histograms["NumSiHitsOutlsC"] = new TH1F("NumSiHitsOutlsC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
   m_histograms["NumSiHitsOutlsEC"] = new TH1F("NumSiHitsOutlsEC","Electron Number Si Hits + Outliers;N_{hits+outls}", 15, -0.5, 14.5);
-  
+
+  m_histograms["ElNumCells"] = new TH2F("ElNumCells","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL0"] = new TH2F("ElNumCellsL0","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL1"] = new TH2F("ElNumCellsL1","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL2"] = new TH2F("ElNumCellsL2","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL3"] = new TH2F("ElNumCellsL3","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+
+  m_histograms["ElNumCellsC"] = new TH2F("ElNumCellsC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL0C"] = new TH2F("ElNumCellsL0C","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL1C"] = new TH2F("ElNumCellsL1C","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL2C"] = new TH2F("ElNumCellsL2C","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL3C"] = new TH2F("ElNumCellsL3C","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+
+  m_histograms["ElNumCellsEC"] = new TH2F("ElNumCellsEC","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL0EC"] = new TH2F("ElNumCellsL0EC","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL1EC"] = new TH2F("ElNumCellsL1EC","Number of Cells (EM layer 1);N^{cells} (L1);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL2EC"] = new TH2F("ElNumCellsL2EC","Number of Cells (EM layer 2);N^{cells} (L2);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+  m_histograms["ElNumCellsL3EC"] = new TH2F("ElNumCellsL3EC","Number of Cells (EM layer 3);N^{cells} (L3);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
+   
 
   const Int_t numEovpBins = 100;
   const Double_t EovpLow = 0;
@@ -849,6 +871,24 @@ StatusCode TestAlg::initialize()
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2C" , m_histograms["DelEta2C"]).ignore();
   m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/DelEta2EC" , m_histograms["DelEta2EC"]).ignore();
 
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCells" , m_histograms["ElNumCells"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL0" , m_histograms["ElNumCellsL0"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL1" , m_histograms["ElNumCellsL1"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL2" , m_histograms["ElNumCellsL2"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL3" , m_histograms["ElNumCellsL3"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsC" , m_histograms["ElNumCellsC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL0C" , m_histograms["ElNumCellsL0C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL1C" , m_histograms["ElNumCellsL1C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL2C" , m_histograms["ElNumCellsL2C"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL3C" , m_histograms["ElNumCellsL3C"]).ignore();
+
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsEC" , m_histograms["ElNumCellsEC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL0EC" , m_histograms["ElNumCellsL0EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL1EC" , m_histograms["ElNumCellsL1EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL2EC" , m_histograms["ElNumCellsL2EC"]).ignore();
+  m_thistSvc->regHist(std::string("/")+m_histFileName+"/Electron/NumCellsL3EC" , m_histograms["ElNumCellsL3EC"]).ignore();
+
   // initialize some constants
   m_numPhotons = 0;
   m_numUnconverted = 0;
@@ -1077,18 +1117,63 @@ StatusCode TestAlg::execute()
 	   (m_truthMatchElectronAsPhotons && truthType == MCTruthPartClassifier::IsoPhoton))) {
 	
 	m_numElectrons++;
+
+	const auto clus = el->caloCluster();
+	static const SG::AuxElement::Accessor < std::vector< ElementLink< xAOD::CaloClusterContainer > > > caloClusterLinks("constituentClusterLinks");
+	const auto clusLinks = caloClusterLinks(*clus);	
+	const auto numClusters = clusLinks.size();
 	
-	const auto Ereco = el->caloCluster()->rawE();
+	const auto Ereco = clus->rawE();
 	const auto Etruth = (truthParticle) ? truthParticle->e() : 0.0;
 	//const auto Eres = (Ereco - Etruth)/Etruth;
 	const auto eta = el->eta();
-	const auto eta2 = el->caloCluster()->etaBE(2);
+	const auto eta2 = clus->etaBE(2);
 	//const auto etaTruth = (truthParticle) ? truthParticle->eta() : -999.0;
 	const auto Et = Ereco/cosh(eta);
 	const auto EtTruth = (truthParticle) ? truthParticle->pt() : 0.0;
 	const bool isC = std::abs(eta2) <= 1.37;
 	const bool isEC = std::abs(eta2) >= 1.52;
+
+	if (m_onlyLookAtSingleClusters && numClusters != 1) {
+	  static const SG::AuxElement::Accessor<int> nWindowClustersAcc ("nWindowClusters");
+	  const auto nWindowClusters = nWindowClustersAcc(*clus);
+	  static const SG::AuxElement::Accessor<int> nExtraClustersAcc ("nExtraClusters");
+	  const auto nExtraClusters = nExtraClustersAcc(*clus);
+	  ATH_MSG_WARNING("Found an electron with numClusters = " << numClusters 
+			  << ", nWindowClusters = " << nWindowClusters
+			  << ", nExtraClusters = " << nExtraClusters);
+	  return StatusCode::SUCCESS;
+	}
 	
+	// get cell varialbles
+	int numCells = 0;
+	int numCellsL0 = 0;
+	int numCellsL1 = 0;
+	int numCellsL2 = 0;
+	int numCellsL3 = 0;
+
+	xAOD::CaloCluster::const_cell_iterator cell_itr = clus->begin();
+	xAOD::CaloCluster::const_cell_iterator cell_end = clus->end();
+
+	for (; cell_itr != cell_end; ++cell_itr) {
+	  const CaloCell* cell = *cell_itr;
+	  if (!cell)
+	    continue;
+
+	  numCells++;
+	  const auto sampling = cell->caloDDE()->getSampling();
+
+	  if (CaloCell_ID::PreSamplerB == sampling || CaloCell_ID::PreSamplerE == sampling) {
+	    numCellsL0++;
+	  } else if (CaloCell_ID::EMB1 == sampling || CaloCell_ID::EME1 == sampling) {
+	    numCellsL1++;
+	  } else if (CaloCell_ID::EMB2 == sampling || CaloCell_ID::EME2 == sampling) {
+	    numCellsL2++;
+	  } else if (CaloCell_ID::EMB3 == sampling || CaloCell_ID::EME3 == sampling) {
+	    numCellsL3++;
+	  } 
+	} // end of for
+
 	ATH_MSG_INFO("Electron with author " << el->author() << ", Et == " << Et 
 		     << ", eta = " << eta);
 	
@@ -1172,7 +1257,7 @@ StatusCode TestAlg::execute()
 	
 
 	fillElectronHists(isC, isEC, 
-			  eta, Et, Eovp,
+			  eta, Et, Etruth, Eovp,
 			  nBL,
 			  nBLOutliers,
 			  nPi,
@@ -1185,6 +1270,7 @@ StatusCode TestAlg::execute()
 			  delPhi2,
 			  delPhiRescaled2,
 			  delEta2,
+			  numCells, numCellsL0, numCellsL1, numCellsL2, numCellsL3,
 			  weight
 			  );
 
@@ -1254,6 +1340,21 @@ StatusCode TestAlg::execute()
 
 	const auto clus = ph->caloCluster();
 
+	static const SG::AuxElement::Accessor < std::vector< ElementLink< xAOD::CaloClusterContainer > > > caloClusterLinks("constituentClusterLinks");
+	const auto clusLinks = caloClusterLinks(*clus);
+	
+	const auto numClusters = clusLinks.size();
+
+	// if (!(numClusters == 1 && nWindowClusters == 0 && nExtraClusters == 0 ||
+	//       numClusters > 1 && (nWindowClusters || nExtraClusters))) {
+	//   ATH_MSG_ERROR("The cluster links or the counts are wrong!");
+	//   ATH_MSG_ERROR("  numClusters = " << numClusters 
+	// 		<< ", nWindowClusters = " << nWindowClusters
+	// 		<< ", nExtraClusters = " << nExtraClusters);
+	//   return StatusCode::RECOVERABLE;
+	// }
+	    
+
 	const auto photonType = xAOD::EgammaHelpers::conversionType(ph);
 	const auto Ereco = clus->rawE();
 	const auto Etruth = (truthParticle) ? truthParticle->e() : 0.0;
@@ -1265,6 +1366,23 @@ StatusCode TestAlg::execute()
 	const auto ptTruth = (truthParticle) ? truthParticle->pt() : 0.0;
 	const bool isC = std::abs(eta2) <= 1.37;
 	const bool isEC = std::abs(eta2) >= 1.52;
+
+	if ((photonType == xAOD::EgammaParameters::unconverted && ph->vertex() != nullptr) ||
+	    (photonType != xAOD::EgammaParameters::unconverted && ph->vertex() == nullptr)) {
+	  ATH_MSG_FATAL("photonType = " << photonType << ", vertex pointer = " << ph->vertex());
+	  return StatusCode::FAILURE;
+	}
+
+	if (m_onlyLookAtSingleClusters && numClusters != 1) {
+	  static const SG::AuxElement::Accessor<int> nWindowClustersAcc ("nWindowClusters");
+	  const auto nWindowClusters = nWindowClustersAcc(*clus);
+	  static const SG::AuxElement::Accessor<int> nExtraClustersAcc ("nExtraClusters");
+	  const auto nExtraClusters = nExtraClustersAcc(*clus);
+	  ATH_MSG_WARNING("Found a photon of type " << photonType << " with numClusters = " << numClusters 
+			  << ", nWindowClusters = " << nWindowClusters
+			  << ", nExtraClusters = " << nExtraClusters);
+	  return StatusCode::SUCCESS;
+	}
 
 
 	// get cell varialbles
@@ -1294,7 +1412,8 @@ StatusCode TestAlg::execute()
 	  } else if (CaloCell_ID::EMB3 == sampling || CaloCell_ID::EME3 == sampling) {
 	    numCellsL3++;
 	  } 
-	}	
+	} // end of for
+	
 
 	if (pt > 1*TeV) {
 	  ATH_MSG_WARNING("High PT Photon with pt = " << pt
@@ -1562,7 +1681,8 @@ void TestAlg::fillPhotonHists(std::string suffix,
 }
  
 void TestAlg::fillElectronHists(bool isC, bool isEC, 
-				float eta, float pt, float Eovp,
+				float eta, float pt, float Etruth,
+				float Eovp,
 				uint8_t nBL,
 				uint8_t nBLOutliers,
 				uint8_t nPix,
@@ -1575,6 +1695,11 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
 				float delPhi2,
 				float delPhiRescaled2,
 				float delEta2,
+				int numCells,
+				int numCellsL0,
+				int numCellsL1,
+				int numCellsL2,
+				int numCellsL3,		       
 				float weight
 				)
 {
@@ -1584,6 +1709,8 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
   auto nSi = nPix + nSCT;
   auto nSiHitsOutls = nPixHitsOutls + nSCTHitsOutls;
   auto nBLHitsExp = (expectBLayerHit) ? nBLHitsOutls : 1;
+
+  const float EtruthGeV = Etruth/GeV;
 
   m_histograms.at("ElEtaReco")->Fill(eta, weight);
   m_histograms.at("ElPtReco")->Fill(pt/GeV, weight);
@@ -1600,6 +1727,11 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
   m_histograms.at("DelPhi2")->Fill(delPhi2, weight);
   m_histograms.at("DelPhiRescaled2")->Fill(delPhiRescaled2, weight);
   m_histograms.at("DelEta2")->Fill(delEta2, weight);
+  static_cast<TH2F*>(m_histograms.at("ElNumCells"))->Fill(numCells, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at("ElNumCellsL0"))->Fill(numCellsL0, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at("ElNumCellsL1"))->Fill(numCellsL1, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at("ElNumCellsL2"))->Fill(numCellsL2, EtruthGeV, weight);
+  static_cast<TH2F*>(m_histograms.at("ElNumCellsL3"))->Fill(numCellsL3, EtruthGeV, weight);
 
   if (isC) {
     m_histograms.at("ElPtRecoC")->Fill(pt/GeV, weight);
@@ -1616,6 +1748,11 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
     m_histograms.at("DelPhi2C")->Fill(delPhi2, weight);
     m_histograms.at("DelPhiRescaled2C")->Fill(delPhiRescaled2, weight);
     m_histograms.at("DelEta2C")->Fill(delEta2, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsC"))->Fill(numCells, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL0C"))->Fill(numCellsL0, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL1C"))->Fill(numCellsL1, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL2C"))->Fill(numCellsL2, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL3C"))->Fill(numCellsL3, EtruthGeV, weight);
   } else if (isEC) {
     m_histograms.at("ElPtRecoEC")->Fill(pt/GeV, weight);
     m_histograms.at("EovpEC")->Fill(Eovp, weight);
@@ -1631,6 +1768,11 @@ void TestAlg::fillElectronHists(bool isC, bool isEC,
     m_histograms.at("DelPhi2EC")->Fill(delPhi2, weight);
     m_histograms.at("DelPhiRescaled2EC")->Fill(delPhiRescaled2, weight);
     m_histograms.at("DelEta2EC")->Fill(delEta2, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsEC"))->Fill(numCells, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL0EC"))->Fill(numCellsL0, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL1EC"))->Fill(numCellsL1, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL2EC"))->Fill(numCellsL2, EtruthGeV, weight);
+    static_cast<TH2F*>(m_histograms.at("ElNumCellsL3EC"))->Fill(numCellsL3, EtruthGeV, weight);
   }
 }
 
