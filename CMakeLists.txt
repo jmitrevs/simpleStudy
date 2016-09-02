@@ -33,12 +33,13 @@ atlas_depends_on_subdirs(
    Tracking/TrkEvent/TrkParticleBase
    Tracking/TrkEvent/TrkTrack
    Tracking/TrkEvent/TrkTrackLink
-   Tracking/TrkEvent/TrkTrackSummary )
+   Tracking/TrkEvent/TrkTrackSummary
+   Reconstruction/MVAUtils )
 
 # External dependencies:
 find_package( GSL )
 find_package( HepMC )
-find_package( ROOT COMPONENTS Core Tree MathCore Hist RIO pthread TMVA )
+find_package( ROOT COMPONENTS Core Tree MathCore Hist RIO pthread TMVA XMLIO)
 
 # Component(s) in the package:
 atlas_add_component( simpleStudy
@@ -54,4 +55,5 @@ atlas_install_joboptions( run/*.py )
 
 atlas_add_executable( TestExe util/TestExe.cxx 
 		      INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
-		      LINK_LIBRARIES ${ROOT_LIBRARIES} )
+		      LINK_LIBRARIES ${ROOT_LIBRARIES} 
+		      MVAUtils )
