@@ -12,6 +12,7 @@
 
 #include <TXMLEngine.h>
 
+#include "TFile.h"
 
 struct XmlVariableInfo {
   std::string expression;
@@ -117,7 +118,10 @@ int main(int argc, char* argv[])
   if (tbdt) {
     MVAUtils::BDT bdt(tbdt);
     std::cout << "Built the tree" << std::endl;
-    bdt.PrintForest();
+    // bdt.PrintForest();
+    TFile fl("BDT.root", "RECREATE");
+    auto tree = bdt.WriteTree();
+    tree->Write();
   }
   return 0;
 }
