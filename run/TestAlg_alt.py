@@ -1,3 +1,6 @@
+from RecExConfig.RecFlags import rec
+rec.doApplyAODFix.set_Value_and_Lock(True)
+
 from glob import glob
 
 # Set up the reading of a file:
@@ -13,19 +16,19 @@ from glob import glob
 #FNAME = glob("/afs/cern.ch/user/j/jmitrevs/workdir/input/mc12_8TeV.105200.McAtNloJimmy_CT10_ttbar_LeptonFilter.merge.AOD.*/*root*")
 #FNAME = "/afs/cern.ch/atlas/project/rig/referencefiles/MC/valid1.110401.PowhegPythia_P2012_ttbar_nonallhad.recon.RDO.e3099_s2081_r6112_tid04860198_00/RDO.04860198._000028.pool.root.1"
 #FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.DAOD_TRUTH1.e3657_p2324_tid05304593_00/DAOD_TRUTH1.05304593._000060.pool.root.1"
-#FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
+FNAME = "/afs/cern.ch/user/j/jmitrevs/workdir/input/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264_tid05444660_00/AOD.05444660._000447.pool.root.1"
 #FNAME = glob("/home/jmitrevs/workdir/testinput/mc15_13TeV.410000.PowhegPythiaEvtGen_P2012_ttbar_hdamp172p5_nonallhad.merge.AOD.e3698_s2608_s2183_r6630_r6264*/*")
-FNAME = ["../run/AOD.pool.root", 
-         "../run2/AOD.pool.root",
-         "../run3/AOD.pool.root",
-         "../run4/AOD.pool.root",
-         "../run5/AOD.pool.root",
-         "../run6/AOD.pool.root",
+#FNAME = ["../run/AOD.pool.root", 
+#         "../run2/AOD.pool.root",
+#         "../run3/AOD.pool.root",
+#         "../run4/AOD.pool.root",
+#         "../run5/AOD.pool.root",
+#         "../run6/AOD.pool.root",
 #          "../run7/AOD.pool.root",
 #          "../run8/AOD.pool.root",
 #          "../run9/AOD.pool.root",
 #          "../run10/AOD.pool.root",
-       ]
+#       ]
 
 #FNAME = ["../run_orig/AOD.pool.root", 
 #          "../run2_orig/AOD.pool.root",
@@ -51,8 +54,6 @@ FNAME = ["../run/AOD.pool.root",
 
 include( "AthenaPython/iread_file.py" )
 
-from RecExConfig.RecFlags import rec
-#rec.doApplyAODFix.set_Value_and_Lock(True)
 
 #--------------------------------------------------------------
 # Define your Signal Selection Algorithm and Add Tools
