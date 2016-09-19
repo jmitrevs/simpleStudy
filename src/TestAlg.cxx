@@ -1863,7 +1863,7 @@ void TestAlg::fill3DERes(std::string suffix,
     ATH_MSG_WARNING("Having a high eta, putting in last bin.");
     --i;
   }
-  const auto name = base + std::to_string(m_EResAbsEtaBins[i]);
+  const auto name = base + "Etruth" + std::to_string(m_EResAbsEtaBins[i]);
   static_cast<TProfile*>(m_histograms[name])->Fill(EtruthGeV, Eres, weight);
 }
 
