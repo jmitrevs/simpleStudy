@@ -76,7 +76,11 @@ namespace {
 
 TestAlg::TestAlg(const std::string& name, 
 		 ISvcLocator* pSvcLocator) : 
-  AthAlgorithm(name,pSvcLocator)
+  AthAlgorithm(name,pSvcLocator),
+  m_EResEBins{0, 20, 50, 100, 200, 500, 1000, 10000},
+  //m_EResEBins{0, 20, 50, 100, 200, 500, 2000},
+  //m_EResAbsEtaBins{0, 0.1, 0.6, 0.8, 1.15, 1.37, 1.52, 1.81, 2.01, 2.37, 2.47}
+  m_EResAbsEtaBins{0, 0.8, 1.15, 1.37, 1.52, 2.01, 2.47}
 {
 
   declareProperty("HistFileName", m_histFileName = "TestHistograms");
@@ -270,9 +274,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtRecoC"] = new TH1F("PtRecoC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtRecoEC"] = new TH1F("PtRecoEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution_mu"] = new TProfile("EResolution_mu","Raw Energy Resolution;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolutionC_mu"] = new TProfile("EResolutionC_mu","Raw Energy Resolution, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolutionEC_mu"] = new TProfile("EResolutionEC_mu","Raw Energy Resolution, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution_mu"] = new TProfile("EResolution_mu","Raw Energy Resolution;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolutionC_mu"] = new TProfile("EResolutionC_mu","Raw Energy Resolution, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolutionEC_mu"] = new TProfile("EResolutionEC_mu","Raw Energy Resolution, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes(""));
 
   m_histograms["NumCells"] = new TH2F("NumCells","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL0"] = new TH2F("NumCellsL0","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -305,9 +311,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco0TC"] = new TH1F("PtReco0TC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco0TEC"] = new TH1F("PtReco0TEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution0T_mu"] = new TProfile("EResolution0T_mu","Raw Energy Resolution, unconverted;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution0TC_mu"] = new TProfile("EResolution0TC_mu","Raw Energy Resolution, unconverted, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution0TEC_mu"] = new TProfile("EResolution0TEC_mu","Raw Energy Resolution, unconverted, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution0T_mu"] = new TProfile("EResolution0T_mu","Raw Energy Resolution, unconverted;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution0TC_mu"] = new TProfile("EResolution0TC_mu","Raw Energy Resolution, unconverted, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution0TEC_mu"] = new TProfile("EResolution0TEC_mu","Raw Energy Resolution, unconverted, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("0T"));
 
   m_histograms["NumCells0T"] = new TH2F("NumCells0T","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL00T"] = new TH2F("NumCellsL00T","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -339,9 +347,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco1TSiC"] = new TH1F("PtReco1TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TSiEC"] = new TH1F("PtReco1TSiEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution1TSi_mu"] = new TProfile("EResolution1TSi_mu","Raw Energy Resolution, 1-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution1TSiC_mu"] = new TProfile("EResolution1TSiC_mu","Raw Energy Resolution, 1-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution1TSiEC_mu"] = new TProfile("EResolution1TSiEC_mu","Raw Energy Resolution, 1-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TSi_mu"] = new TProfile("EResolution1TSi_mu","Raw Energy Resolution, 1-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution1TSiC_mu"] = new TProfile("EResolution1TSiC_mu","Raw Energy Resolution, 1-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution1TSiEC_mu"] = new TProfile("EResolution1TSiEC_mu","Raw Energy Resolution, 1-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("1TSi"));
 
   m_histograms["NumCells1TSi"] = new TH2F("NumCells1TSi","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL01TSi"] = new TH2F("NumCellsL01TSi","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -372,9 +382,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TSiC"] = new TH1F("PtReco2TSiC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TSiEC"] = new TH1F("PtReco2TSiEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution2TSi_mu"] = new TProfile("EResolution2TSi_mu","Raw Energy Resolution, 2-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TSiC_mu"] = new TProfile("EResolution2TSiC_mu","Raw Energy Resolution, 2-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TSiEC_mu"] = new TProfile("EResolution2TSiEC_mu","Raw Energy Resolution, 2-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TSi_mu"] = new TProfile("EResolution2TSi_mu","Raw Energy Resolution, 2-track Si conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TSiC_mu"] = new TProfile("EResolution2TSiC_mu","Raw Energy Resolution, 2-track Si conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TSiEC_mu"] = new TProfile("EResolution2TSiEC_mu","Raw Energy Resolution, 2-track Si conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("2TSi"));
 
   m_histograms["NumCells2TSi"] = new TH2F("NumCells2TSi","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL02TSi"] = new TH2F("NumCellsL02TSi","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -406,9 +418,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco1TTRTC"] = new TH1F("PtReco1TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco1TTRTEC"] = new TH1F("PtReco1TTRTEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution1TTRT_mu"] = new TProfile("EResolution1TTRT_mu","Raw Energy Resolution, 1-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution1TTRTC_mu"] = new TProfile("EResolution1TTRTC_mu","Raw Energy Resolution, 1-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution1TTRTEC_mu"] = new TProfile("EResolution1TTRTEC_mu","Raw Energy Resolution, 1-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution1TTRT_mu"] = new TProfile("EResolution1TTRT_mu","Raw Energy Resolution, 1-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution1TTRTC_mu"] = new TProfile("EResolution1TTRTC_mu","Raw Energy Resolution, 1-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution1TTRTEC_mu"] = new TProfile("EResolution1TTRTEC_mu","Raw Energy Resolution, 1-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("1TTRT"));
 
   m_histograms["NumCells1TTRT"] = new TH2F("NumCells1TTRT","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL01TTRT"] = new TH2F("NumCellsL01TTRT","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -439,9 +453,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TTRTC"] = new TH1F("PtReco2TTRTC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TTRTEC"] = new TH1F("PtReco2TTRTEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution2TTRT_mu"] = new TProfile("EResolution2TTRT_mu","Raw Energy Resolution, 2-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TTRTC_mu"] = new TProfile("EResolution2TTRTC_mu","Raw Energy Resolution, 2-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TTRTEC_mu"] = new TProfile("EResolution2TTRTEC_mu","Raw Energy Resolution, 2-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TTRT_mu"] = new TProfile("EResolution2TTRT_mu","Raw Energy Resolution, 2-track TRT conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TTRTC_mu"] = new TProfile("EResolution2TTRTC_mu","Raw Energy Resolution, 2-track TRT conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TTRTEC_mu"] = new TProfile("EResolution2TTRTEC_mu","Raw Energy Resolution, 2-track TRT conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("2TTRT"));
 
   m_histograms["NumCells2TTRT"] = new TH2F("NumCells2TTRT","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL02TTRT"] = new TH2F("NumCellsL02TTRT","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -472,9 +488,11 @@ StatusCode TestAlg::initialize()
   m_histograms["PtReco2TMixC"] = new TH1F("PtReco2TMixC","Reco p_{T}, Central;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
   m_histograms["PtReco2TMixEC"] = new TH1F("PtReco2TMixEC","Reco p_{T}, End-cap;p_{T} [GeV]", numPtBins, PtLow, PtHigh);
 
-  m_histograms["EResolution2TMix_mu"] = new TProfile("EResolution2TMix_mu","Raw Energy Resolution, 2-track Mix conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TMixC_mu"] = new TProfile("EResolution2TMixC_mu","Raw Energy Resolution, 2-track Mix conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
-  m_histograms["EResolution2TMixEC_mu"] = new TProfile("EResolution2TMixEC_mu","Raw Energy Resolution, 2-track Mix conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh);
+  m_histograms["EResolution2TMix_mu"] = new TProfile("EResolution2TMix_mu","Raw Energy Resolution, 2-track Mix conversion;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TMixC_mu"] = new TProfile("EResolution2TMixC_mu","Raw Energy Resolution, 2-track Mix conversion, Central;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+  m_histograms["EResolution2TMixEC_mu"] = new TProfile("EResolution2TMixEC_mu","Raw Energy Resolution, 2-track Mix conversion, End-cap;<#mu>;(E_{reco} - E_{truth})/E_{truth}", numMuBins, muLow, muHigh, "s");
+
+  ATH_CHECK(initialize3DERes("2TMix"));
 
   m_histograms["NumCells2TMix"] = new TH2F("NumCells2TMix","Number of Cells (all layers);N(all layers);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
   m_histograms["NumCellsL02TMix"] = new TH2F("NumCellsL02TMix","Number of Cells (presampler);N^{cells} (L0);E^{truth} [GeV]", numNumCellsBins, numCellsLow, numCellsHigh, cellEBins.size() - 1, &cellEBins[0]);
@@ -1130,7 +1148,7 @@ StatusCode TestAlg::execute()
 	const auto eta2 = clus->etaBE(2);
 	//const auto etaTruth = (truthParticle) ? truthParticle->eta() : -999.0;
 	const auto Et = Ereco/cosh(eta);
-	const auto EtTruth = (truthParticle) ? truthParticle->pt() : 0.0;
+	//const auto EtTruth = (truthParticle) ? truthParticle->pt() : 0.0;
 	const bool isC = std::abs(eta2) <= 1.37;
 	const bool isEC = std::abs(eta2) >= 1.52;
 
@@ -1629,6 +1647,8 @@ void TestAlg::fillPhotonHists(std::string suffix,
   static_cast<TProfile*>(m_histograms.at(Eresstr+"_mu"))->Fill(mu, Eres, weight);
   if (mu > m_muCut) m_histograms.at(Eresstr+"_highmu")->Fill(Eres, weight);
 
+  fill3DERes(suffix, Eres, EtruthGeV, std::abs(eta), weight);
+
   static_cast<TH2F*>(m_histograms.at(numCellsstr))->Fill(numCells, EtruthGeV, weight);
   static_cast<TH2F*>(m_histograms.at(numCellsL0str))->Fill(numCellsL0, EtruthGeV, weight);
   static_cast<TH2F*>(m_histograms.at(numCellsL1str))->Fill(numCellsL1, EtruthGeV, weight);
@@ -1796,3 +1816,54 @@ namespace {
     return false;
   }    
 }
+
+StatusCode TestAlg::initialize3DERes(std::string suffix)
+{
+
+  const std::string base = "EResolution3D" + suffix;
+
+  // first make vs eta profile
+  const auto etaname = base + "Eta";
+  m_histograms[etaname] = new TProfile(etaname.c_str(), 
+				       "Raw Energy Resolution;|#eta|;(E_{reco} - E_{truth})/E_{truth}", 
+				       m_EResAbsEtaBins.size() - 1, &m_EResAbsEtaBins[0],
+				       "s");
+  
+  ATH_CHECK(m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/" + etaname,
+				m_histograms[etaname]));
+
+  // then vs pt in all the eta bins
+  for (size_t i = 1; i < m_EResAbsEtaBins.size(); i++) {
+    const auto name = base + std::to_string(m_EResAbsEtaBins[i]);
+    m_histograms[name] = new TProfile(name.c_str(), "Raw Energy Resolution;E_{truth} [GeV];(E_{reco} - E_{truth})/E_{truth}", 
+				      m_EResEBins.size() - 1, &m_EResEBins[0],
+				      "s");
+    ATH_CHECK(m_thistSvc->regHist(std::string("/")+m_histFileName+"/Photon/" + name,
+				  m_histograms[name]));
+  }
+  return StatusCode::SUCCESS;
+}
+
+void TestAlg::fill3DERes(std::string suffix, 
+			 float Eres, float EtruthGeV, float abseta,
+			 float weight)
+{
+  const std::string base = "EResolution3D" + suffix;
+
+  // first make vs eta profile
+  const auto etaname = base + "Eta";
+  static_cast<TProfile*>(m_histograms[etaname])->Fill(abseta, Eres, weight);
+
+  // then vs pt in all the eta bins
+  size_t i = 1;
+  for (; i < m_EResAbsEtaBins.size(); i++) {
+    if (abseta > m_EResAbsEtaBins[i]) break;
+  }
+  if (i == m_EResAbsEtaBins.size()) {
+    ATH_MSG_WARNING("Having a high eta, putting in last bin.");
+    --i;
+  }
+  const auto name = base + std::to_string(m_EResAbsEtaBins[i]);
+  static_cast<TProfile*>(m_histograms[name])->Fill(EtruthGeV, Eres, weight);
+}
+

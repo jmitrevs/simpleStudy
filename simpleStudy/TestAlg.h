@@ -18,6 +18,7 @@
 #include "GaudiKernel/ITHistSvc.h"
 
 #include <string>
+#include <vector>
 #include <cstdint>
 
 //class AtlasDetectorID;
@@ -32,6 +33,8 @@
 //class IAthElectronIsEMSelector;
 //class IAthPhotonIsEMSelector;
 class IAsgSelectionTool;
+
+#include "TH1.h"
 
 class TestAlg : public AthAlgorithm
 {
@@ -50,6 +53,15 @@ public:
   StatusCode          finalize();
   
 private:
+
+  std::vector<Double_t> m_EResEBins; // in GeV
+  std::vector<Double_t> m_EResAbsEtaBins;
+
+  StatusCode initialize3DERes(std::string suffix);
+
+  void fill3DERes(std::string suffix, 
+		  float Eres, float EtruthGeV, float abseta,
+		  float weight);
 
   void fillPhotonHists(std::string suffix, bool isC, bool isEC, 
 		       float eta, float pt, float Etruth,
