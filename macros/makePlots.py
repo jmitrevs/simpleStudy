@@ -121,6 +121,7 @@ def printHisto(histname, hists, inpts, colors):
     isMu = 'EResolution' in histname and "_mu" in histname;
     isRes = 'EResolution' in histname and "_mu" not in histname and "3D" not in histname;
     isEta = 'Eta' in histname and "3D" not in histname;
+    isEtruth = "Etruth" in histname and "3D" in histname
 
     #print "iterate overs",range(len(hists))
 
@@ -130,6 +131,8 @@ def printHisto(histname, hists, inpts, colors):
             hists[i].SetAxisRange(-1.1,0.6)
         if isEta:
             hists[i].Rebin(2)
+        if isEtruth:
+            hists[i].SetAxisRange(0, 1000)
         legend.AddEntry(hists[i], inpts[i], "l")
         # if isMu: 
         #     hists[i].Fit("pol1")
