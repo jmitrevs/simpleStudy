@@ -1834,7 +1834,7 @@ StatusCode TestAlg::initialize3DERes(std::string suffix)
 
   // then vs pt in all the eta bins
   for (size_t i = 1; i < m_EResAbsEtaBins.size(); i++) {
-    const auto name = base + std::to_string(m_EResAbsEtaBins[i]);
+    const auto name = base + "Etruth" + std::to_string(m_EResAbsEtaBins[i]);
     m_histograms[name] = new TProfile(name.c_str(), "Raw Energy Resolution;E_{truth} [GeV];(E_{reco} - E_{truth})/E_{truth}", 
 				      m_EResEBins.size() - 1, &m_EResEBins[0],
 				      "s");
