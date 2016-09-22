@@ -57,6 +57,10 @@ private:
   std::vector<Double_t> m_EResEBins; // in GeV
   std::vector<Double_t> m_EResAbsEtaBins;
 
+  static constexpr int m_numEResBins = 170;
+  static constexpr double m_EResLow = -1.1;
+  static constexpr double m_EResHigh = 0.6;
+
   StatusCode initialize3DERes(std::string suffix);
 
   void fill3DERes(std::string suffix, 

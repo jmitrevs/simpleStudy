@@ -4,6 +4,7 @@ import sys
 import ROOT
 ROOT.gROOT.LoadMacro("AtlasStyle.C") 
 ROOT.SetAtlasStyle()
+import math
 
 #dirnames = ["", "Photon", "Electron"]
 dirnames = ["", "Photon"]
@@ -47,7 +48,7 @@ def NormalizedErrors(tprofin):
          print "Low edge", tprofin.GetBinLowEdge(i), "bool", tprofin.GetBinLowEdge(i) == 1.37, "error",
          errval = tprofin.GetBinError(i)/(tprofin.GetBinContent(i) + 1) if tprofin.GetBinContent(i) != 1 else 0
          print errval
-         errerr = tprofin.GetBinError(i)/tprofin.GetBinEntries(i) if tprofin.GetBinEntries(i) != 0 else 0
+         errerr = errval/math.sqrt(tprofin.GetBinEntries(i)) if tprofin.GetBinEntries(i) != 0 else 0
       newtprof.SetBinContent(i, errval)
       newtprof.SetBinError(i, errerr)
    return newtprof
@@ -98,8 +99,8 @@ def overlayPlots(inpts):
             elif '3D' in histname:
                # also print errors
                printHisto(histname, hists, inpts, colors)
-               errors = map(NormalizedErrors, hists)
-               printHisto(histname+"_err", errors, inpts, colors)
+               #errors = map(NormalizedErrors, hists)
+               #printHisto(histname+"_err", errors, inpts, colors)
             else:
                printHisto(histname, hists, inpts, colors)
 
@@ -119,20 +120,21 @@ def printHisto(histname, hists, inpts, colors):
     legend.SetTextSize(0.038)
 
     isMu = 'EResolution' in histname and "_mu" in histname;
-    isRes = 'EResolution' in histname and "_mu" not in histname and "3D" not in histname;
+    #isRes = 'EResolution' in histname and "_mu" not in histname and "3D" not in histname;
     isEta = 'Eta' in histname and "3D" not in histname;
-    isEtruth = "Etruth" in histname and "3D" in histname
+    #isEtruth = "Etruth" in histname and "3D" in histname
 
     #print "iterate overs",range(len(hists))
 
     for i in range(len(hists)):
         hists[i].SetLineColor(colors[i])            
-        if isRes:
-            hists[i].SetAxisRange(-1.1,0.6)
+        #if isRes:
+        #    hists[i].SetAxisRange(-1.1,0.6)
         if isEta:
             hists[i].Rebin(2)
-        if isEtruth:
-            hists[i].SetAxisRange(0, 1000)
+        #if isEtruth:
+        #    print "isEtruth, histname", histname
+        #    hists[i].SetAxisRange(0, 900)
         legend.AddEntry(hists[i], inpts[i], "l")
         # if isMu: 
         #     hists[i].Fit("pol1")
