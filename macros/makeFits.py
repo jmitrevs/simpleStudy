@@ -149,6 +149,8 @@ def fitHisto(histname, hists, outcsv):
                     fit2sigma, fr2.ParError(2),
                     fit2sigma/(fit2mean + 1), fr2.ParError(2)/(fit2mean + 1)]
 
+      c_paper.Print(histname + "_fit.pdf")
+
       ntot = hist.GetEntries()
       #calcualte tails, first low
       hist.GetXaxis().SetRangeUser(-1.1,fit2mean - TAIL*fit2sigma)
@@ -161,7 +163,6 @@ def fitHisto(histname, hists, outcsv):
 
       outcsv.writerow([suffix, eta, Etruth, mean, rms] + fitresults + [fracTail, tailError])
 
-      c_paper.Print(histname + "_fit.pdf")
    else:
       outcsv.writerow([suffix, eta, Etruth])
 
