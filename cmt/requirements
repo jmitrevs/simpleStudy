@@ -5,35 +5,24 @@ author Jovan Mitrevski <Jovan.Mitrevski@cern.ch>
 public
 use  AtlasPolicy                AtlasPolicy-*
 use  GaudiInterface             GaudiInterface-*                External
-use  Particle                   Particle-*                      Reconstruction
-use  ParticleTruth		ParticleTruth-*			Reconstruction
+#use  Particle                   Particle-*                      Reconstruction
+#use  ParticleTruth		ParticleTruth-*			Reconstruction
 use  StoreGate                  StoreGate-*                     Control
-use  MCTruthClassifier		MCTruthClassifier-*             PhysicsAnalysis
 use  AthenaBaseComps            AthenaBaseComps-*               Control
 
 
-use  egammaEvent                egammaEvent-*                   Reconstruction/egamma
 #use  HepMC			HepMC-* 			Simulation
-use  AtlasHepMC			AtlasHepMC-* 			External
-use  McParticleEvent            McParticleEvent-*               PhysicsAnalysis/TruthParticleID
-use  McParticleUtils            McParticleUtils-*               PhysicsAnalysis/TruthParticleID
-use  GeneratorObjects		GeneratorObjects-*		Generators
 
-use VxVertex			VxVertex-*			Tracking/TrkEvent
-
+use AtlasROOT                  AtlasROOT-*                     External
 
 private
+use  AtlasHepMC			AtlasHepMC-* 			External
+use  GeneratorObjects		GeneratorObjects-*		Generators
+use  MCTruthClassifier		MCTruthClassifier-*             PhysicsAnalysis
 use PATCore                     PATCore-*    PhysicsAnalysis/AnalysisCommon
-use AtlasROOT                  AtlasROOT-*                     External
-use TrkTrackLink		TrkTrackLink-*			Tracking/TrkEvent
-use TrkParticleBase		TrkParticleBase-*		Tracking/TrkEvent
-use TrkTrackSummary		TrkTrackSummary-*		Tracking/TrkEvent
-use TrkTrack			TrkTrack-*			Tracking/TrkEvent
-use  EventInfo                  EventInfo-*                     Event
 use  xAODEgamma                 xAODEgamma-*                    Event/xAOD
 use  xAODEventInfo              xAODEventInfo-*                 Event/xAOD
 use  xAODTruth                  xAODTruth-*                    Event/xAOD
-use AthenaKernel                AthenaKernel-*                 Control
 
 use FourMomUtils                FourMomUtils-*          Event
 use  CaloUtils                  CaloUtils-*                     Calorimeter
@@ -41,7 +30,7 @@ use  CaloUtils                  CaloUtils-*                     Calorimeter
 
 use AnalysisUtils AnalysisUtils-* PhysicsAnalysis/AnalysisCommon
 use  AtlasGSL                   AtlasGSL-*                      External
-use ElectronPhotonSelectorTools ElectronPhotonSelectorTools-*   PhysicsAnalysis/ElectronPhotonID
+#use ElectronPhotonSelectorTools ElectronPhotonSelectorTools-*   PhysicsAnalysis/ElectronPhotonID
 #use PhotonAnalysisUtils         PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
 use  MVAUtils                   MVAUtils-*                      Reconstruction
 
