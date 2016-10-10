@@ -29,7 +29,7 @@ use FourMomUtils                FourMomUtils-*          Event
 
 
 use AnalysisUtils AnalysisUtils-* PhysicsAnalysis/AnalysisCommon
-use  AtlasGSL                   AtlasGSL-*                      External
+#use  AtlasGSL                   AtlasGSL-*                      External
 #use ElectronPhotonSelectorTools ElectronPhotonSelectorTools-*   PhysicsAnalysis/ElectronPhotonID
 #use PhotonAnalysisUtils         PhotonAnalysisUtils-*           PhysicsAnalysis/StandardModelPhys
 use  MVAUtils                   MVAUtils-*                      Reconstruction
