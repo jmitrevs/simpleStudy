@@ -70,6 +70,8 @@ private:
   void fillPhotonHists(std::string suffix, bool isC, bool isEC, 
 		       float eta, float pt, float Etruth,
 		       float Eres, float mu, 
+		       float widths1,
+		       float weta1,
 		       int numCells,
 		       int numCellsL0,
 		       int numCellsL1,
@@ -143,6 +145,7 @@ private:
   int m_photonIsEM;
   //double m_truthPhotonPtMin;
   bool m_truthMatchPhotons;
+  bool m_truthMatchConversions; //< Additionally check that converted/unonverted match truth
   uint16_t m_photonAuthor;
   float m_muCut; // how to define high mu events
   bool m_photonRemoveCrack;
